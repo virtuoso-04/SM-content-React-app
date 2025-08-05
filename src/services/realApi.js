@@ -87,6 +87,19 @@ export const apiCall = async (tool, input) => {
         requestData = { message: input.trim() };
         break;
         
+      // Handle GameForge requests - format: gamedev/endpoint
+      case 'gamedev/story':
+      case 'gamedev/dialogue':
+      case 'gamedev/mechanics':
+      case 'gamedev/code':
+      case 'gamedev/explain':
+        if (!input || typeof input !== 'string' || input.trim().length === 0) {
+          throw new Error('Please enter a prompt');
+        }
+        endpoint = `/api/${tool}`;
+        requestData = { prompt: input.trim() };
+        break;
+        
       default:
         throw new Error('Unknown tool specified');
     }
