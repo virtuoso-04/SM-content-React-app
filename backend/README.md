@@ -8,6 +8,7 @@ A FastAPI-based backend service that provides AI-powered content tools using Goo
 - **Idea Generation**: Create innovative ideas based on topics or prompts
 - **Content Refinement**: Improve text quality, grammar, and style
 - **AI Chat**: Interactive conversation with AI assistant
+- **GameForge AI**: Specialized game development content generation tools
 - **CORS Support**: Configured for frontend integration
 - **Error Handling**: Comprehensive error handling and logging
 
@@ -22,6 +23,13 @@ A FastAPI-based backend service that provides AI-powered content tools using Goo
 - `POST /api/generate-ideas` - Generate ideas for a topic
 - `POST /api/refine-content` - Refine and improve content
 - `POST /api/chat` - Chat with AI assistant
+
+### GameForge Tools
+- `POST /api/gamedev/story` - Generate game narratives and storylines
+- `POST /api/gamedev/dialogue` - Create character dialogues and conversations
+- `POST /api/gamedev/mechanics` - Design gameplay systems and mechanics
+- `POST /api/gamedev/code` - Generate game code snippets or pseudocode
+- `POST /api/gamedev/explain` - Explain game development concepts
 
 ## Installation
 
@@ -104,6 +112,41 @@ curl -X POST "http://localhost:8000/api/refine-content" \
 curl -X POST "http://localhost:8000/api/chat" \
      -H "Content-Type: application/json" \
      -d '{"message": "Hello, how can you help me?"}'
+```
+
+### Generate Game Story
+```bash
+curl -X POST "http://localhost:8000/api/gamedev/story" \
+     -H "Content-Type: application/json" \
+     -d '{"game_genre": "fantasy", "length": "medium"}'
+```
+
+### Generate Game Dialogue
+```bash
+curl -X POST "http://localhost:8000/api/gamedev/dialogue" \
+     -H "Content-Type: application/json" \
+     -d '{"characters": ["hero", "villain"], "tone": "dramatic"}'
+```
+
+### Design Game Mechanics
+```bash
+curl -X POST "http://localhost:8000/api/gamedev/mechanics" \
+     -H "Content-Type: application/json" \
+     -d '{"mechanic_type": "puzzle", "difficulty": "hard"}'
+```
+
+### Generate Game Code
+```bash
+curl -X POST "http://localhost:8000/api/gamedev/code" \
+     -H "Content-Type: application/json" \
+     -d '{"programming_language": "python", "concept": "class structure for a game character"}'
+```
+
+### Explain Game Concept
+```bash
+curl -X POST "http://localhost:8000/api/gamedev/explain" \
+     -H "Content-Type: application/json" \
+     -d '{"concept": "level design", "details": "3 levels with increasing difficulty"}'
 ```
 
 ## Error Handling
