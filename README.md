@@ -10,10 +10,12 @@ A modern full-stack web application featuring AI-powered content creation tools 
   - **Idea Generator** - Generate creative ideas for any topic
   - **Content Refiner** - Improve and polish your writing
   - **AI Chatbot** - Interactive conversation with Gemini AI
+  - **GameForge AI** - Specialized tools for game development
 - **📱 Responsive Design** - Works seamlessly on mobile and desktop
 - **💾 History Persistence** - All tool outputs saved locally
 - **🎨 Modern UI** - Beautiful gradients and smooth animations
 - **⚡ Real AI Integration** - Powered by Google Gemini 2.0 Flash model
+- **📝 Markdown Formatting** - Properly formatted responses with code highlighting
 
 ## 🛠 Tech Stack
 
@@ -23,6 +25,7 @@ A modern full-stack web application featuring AI-powered content creation tools 
 - Tailwind CSS - Utility-first CSS framework
 - React Router Dom - Client-side routing
 - React Icons - Beautiful icon library
+- React Markdown - Markdown rendering with formatting
 
 **Backend**
 - FastAPI - Modern Python web framework
@@ -47,6 +50,7 @@ SM-content-React-app/
 │   │   ├── ContentRefiner.js   # ✨ Content improvement tool
 │   │   ├── ErrorBoundary.js    # 🛡️ Error handling wrapper
 │   │   ├── FormattedAIResponse.js # 📝 AI response formatter
+│   │   ├── GameForge.js        # 🎮 Game development tools
 │   │   ├── Header.js           # 🎯 App header with user info
 │   │   ├── IdeaGenerator.js    # 💡 Idea generation tool
 │   │   ├── Loader.js           # ⏳ Loading component
@@ -165,6 +169,11 @@ npm start
 - `POST /api/generate-ideas` - Generate ideas for a topic
 - `POST /api/refine-content` - Refine and improve content
 - `POST /api/chat` - Chat with AI assistant
+- `POST /api/gamedev/narrative` - Game narrative assistant
+- `POST /api/gamedev/dialogue` - Game dialogue generation
+- `POST /api/gamedev/mechanics` - Game mechanics tuning
+- `POST /api/gamedev/code` - Game code assistant
+- `POST /api/gamedev/concept` - Game concept explanation
 
 Visit `http://localhost:8000/docs` for interactive API documentation.
 
@@ -199,8 +208,18 @@ REACT_APP_API_URL=http://localhost:8000
 
 1. **Sign In** - Use Google authentication to access the app
 2. **Navigate** - Use the sidebar to switch between AI tools
-3. **Create Content** - Use any of the 4 AI tools powered by Gemini AI
+3. **Create Content** - Use any of the AI tools powered by Gemini AI
 4. **View History** - All your work is automatically saved locally
+
+### 🎮 GameForge AI Tools
+
+GameForge AI provides specialized assistance for game developers:
+
+- **Narrative Assistant** - Create compelling game stories and worlds
+- **Dialogue Crafter** - Generate authentic character dialogue
+- **Mechanics Tuner** - Design and balance game mechanics
+- **Code Assistant** - Get help with game development code
+- **Concept Explainer** - Learn about game design concepts
 
 ## 🛡️ Features
 
@@ -208,6 +227,8 @@ REACT_APP_API_URL=http://localhost:8000
 - **Responsive Design** - Mobile-first design with beautiful gradients
 - **Real-time AI** - Actual AI-generated content, not mock responses
 - **Local Storage** - Client-side persistence for user convenience
+- **Markdown Rendering** - Properly formatted text with code highlighting
+- **Response Streaming** - Real-time display of AI responses as they generate
 
 ## 🚀 Deployment
 
