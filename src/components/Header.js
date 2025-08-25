@@ -17,9 +17,9 @@ const Header = () => {
       <div className="flex items-center justify-between">
         <div className="ml-12 md:ml-0">
           <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          Reely.AI  
+          Shyamsung AI assistant
           </h1>
-          <p className="text-xs md:text-sm text-gray-600"> Smart Content Studio</p>
+          <p className="text-xs md:text-sm text-gray-600">All in one companion for creators</p>
         </div>
         
         <div className="flex items-center gap-2 md:gap-4">

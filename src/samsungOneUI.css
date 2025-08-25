@@ -1,0 +1,525 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 
+  Samsung One UI Design System (One UI 6.0)
+  Based on official Samsung Design System guidelines
+*/
+
+:root {
+  /* Primary Colors */
+  --oneui-primary: #1A73E8; /* Samsung's primary blue (Samsung Blue) */
+  --oneui-primary-light: #D0E1FD; /* Light blue for backgrounds */
+  --oneui-primary-dark: #0B5CB6; /* Darker blue for active states */
+  
+  /* Neutral Colors */
+  --oneui-neutral-0: #FFFFFF; /* White */
+  --oneui-neutral-50: #F7F8FA; /* Background color */
+  --oneui-neutral-100: #EEEFF2; /* Subtle backgrounds */
+  --oneui-neutral-200: #DDDFE4; /* Borders, dividers */
+  --oneui-neutral-300: #C8CCD4; /* Disabled states */
+  --oneui-neutral-400: #A3A9B4; /* Secondary text */
+  --oneui-neutral-500: #7E8593; /* Placeholders */
+  --oneui-neutral-600: #5B616E; /* Tertiary text */
+  --oneui-neutral-700: #3D4251; /* Secondary content */
+  --oneui-neutral-800: #22252F; /* Primary content */
+  --oneui-neutral-900: #131519; /* Emphasized content */
+  
+  /* Semantic Colors */
+  --oneui-red: #F53E3E; /* Error, delete */
+  --oneui-green: #2DB843; /* Success, confirmed */
+  --oneui-yellow: #FFAB0C; /* Warning, pending */
+  --oneui-blue: #1A73E8; /* Information, new */
+  
+  /* Elevation Values (shadows) */
+  --oneui-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --oneui-elevation-2: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --oneui-elevation-3: 0 4px 8px rgba(0, 0, 0, 0.05);
+  --oneui-elevation-4: 0 8px 16px rgba(0, 0, 0, 0.05);
+  
+  /* Border Radius Values */
+  --oneui-radius-small: 6px;
+  --oneui-radius-medium: 12px;
+  --oneui-radius-large: 16px;
+  --oneui-radius-xl: 24px;
+  --oneui-radius-full: 999px;
+  
+  /* Spacing Scale (in pixels) */
+  --oneui-space-xs: 4px;
+  --oneui-space-sm: 8px;
+  --oneui-space-md: 16px;
+  --oneui-space-lg: 24px;
+  --oneui-space-xl: 32px;
+  --oneui-space-xxl: 48px;
+}
+
+/* Base Elements (One UI Style) */
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent; /* Remove tap highlight on Samsung browsers */
+}
+
+body {
+  font-family: 'SamsungSharpSans', 'SamsungOne', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--oneui-neutral-800);
+  background-color: var(--oneui-neutral-50);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 16px;
+  /* Samsung's focus on content: comfortable reading */
+  text-size-adjust: 100%;
+}
+
+/* One UI Typography Scale */
+h1, .oneui-h1 {
+  font-size: 28px;
+  line-height: 1.3;
+  font-weight: 600;
+  margin-bottom: var(--oneui-space-md);
+  color: var(--oneui-neutral-900);
+}
+
+h2, .oneui-h2 {
+  font-size: 24px;
+  line-height: 1.35;
+  font-weight: 600;
+  margin-bottom: var(--oneui-space-sm);
+  color: var(--oneui-neutral-900);
+}
+
+h3, .oneui-h3 {
+  font-size: 20px;
+  line-height: 1.4;
+  font-weight: 600;
+  margin-bottom: var(--oneui-space-sm);
+  color: var(--oneui-neutral-800);
+}
+
+h4, .oneui-h4 {
+  font-size: 18px;
+  line-height: 1.4;
+  font-weight: 500;
+  margin-bottom: var(--oneui-space-xs);
+  color: var(--oneui-neutral-800);
+}
+
+p, .oneui-body {
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--oneui-neutral-700);
+  margin-bottom: var(--oneui-space-md);
+}
+
+.oneui-caption {
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--oneui-neutral-600);
+}
+
+.oneui-small {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--oneui-neutral-500);
+}
+
+/* Custom animations */
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out both; /* One UI uses shorter, subtler animations */
+  }
+  
+  .animate-pop {
+    animation: popIn 0.3s cubic-bezier(0.2, 0, 0, 1) both;
+  }
+  
+  .animate-slide-in {
+    animation: slideIn 0.3s cubic-bezier(0.2, 0, 0, 1) both;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.25s cubic-bezier(0.2, 0, 0, 1) both;
+  }
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+  }
+  to { 
+    opacity: 1; 
+  }
+}
+
+@keyframes popIn {
+  0% { 
+    opacity: 0; 
+    transform: scale(0.97); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: scale(1); 
+  }
+}
+
+@keyframes slideIn {
+  0% { 
+    opacity: 0; 
+    transform: translateY(12px); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes slideUp {
+  0% { 
+    opacity: 0; 
+    transform: translateY(8px); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+/* One UI Component Styles */
+.oneui-container {
+  padding: var(--oneui-space-md);
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* Card Component - One UI 6.0 */
+.oneui-card {
+  background-color: var(--oneui-neutral-0);
+  border-radius: var(--oneui-radius-large);
+  padding: var(--oneui-space-lg);
+  margin-bottom: var(--oneui-space-md);
+  box-shadow: var(--oneui-elevation-1);
+  border: 1px solid var(--oneui-neutral-100);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.oneui-card:hover {
+  box-shadow: var(--oneui-elevation-2);
+}
+
+.oneui-card-header {
+  margin-bottom: var(--oneui-space-md);
+}
+
+.oneui-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--oneui-neutral-900);
+  margin-bottom: var(--oneui-space-xs);
+}
+
+.oneui-card-subtitle {
+  font-size: 14px;
+  color: var(--oneui-neutral-600);
+}
+
+/* Button Styles - One UI 6.0 */
+.oneui-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px; /* Samsung's touch target height */
+  padding: 0 var(--oneui-space-lg);
+  border-radius: var(--oneui-radius-full); /* Samsung uses pill buttons */
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  min-width: 64px;
+  border: none;
+  user-select: none;
+}
+
+.oneui-button:active {
+  transform: scale(0.98); /* Subtle feedback on tap */
+}
+
+.oneui-button-primary {
+  background-color: var(--oneui-primary);
+  color: white;
+}
+
+.oneui-button-primary:hover, 
+.oneui-button-primary:focus {
+  background-color: var(--oneui-primary-dark);
+}
+
+.oneui-button-secondary {
+  background-color: var(--oneui-neutral-100);
+  color: var(--oneui-neutral-800);
+}
+
+.oneui-button-secondary:hover, 
+.oneui-button-secondary:focus {
+  background-color: var(--oneui-neutral-200);
+}
+
+.oneui-button-outline {
+  background-color: transparent;
+  border: 1px solid var(--oneui-neutral-300);
+  color: var(--oneui-neutral-800);
+}
+
+.oneui-button-outline:hover, 
+.oneui-button-outline:focus {
+  border-color: var(--oneui-primary);
+  color: var(--oneui-primary);
+}
+
+.oneui-button-icon {
+  padding: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Disabled state */
+.oneui-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Form Elements - One UI 6.0 */
+.oneui-input {
+  height: 48px;
+  width: 100%;
+  border-radius: var(--oneui-radius-medium);
+  padding: 0 var(--oneui-space-md);
+  border: 1.5px solid var(--oneui-neutral-200);
+  background-color: var(--oneui-neutral-0);
+  color: var(--oneui-neutral-800);
+  font-size: 16px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.oneui-input:focus {
+  border-color: var(--oneui-primary);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--oneui-primary-light);
+}
+
+.oneui-input::placeholder {
+  color: var(--oneui-neutral-500);
+}
+
+.oneui-textarea {
+  min-height: 96px;
+  padding: var(--oneui-space-md);
+  resize: vertical;
+  border-radius: var(--oneui-radius-medium);
+  border: 1.5px solid var(--oneui-neutral-200);
+  font-size: 16px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.oneui-textarea:focus {
+  border-color: var(--oneui-primary);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--oneui-primary-light);
+}
+
+.oneui-label {
+  display: block;
+  margin-bottom: var(--oneui-space-xs);
+  color: var(--oneui-neutral-700);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.oneui-input-group {
+  margin-bottom: var(--oneui-space-lg);
+}
+
+/* Samsung One UI custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--oneui-neutral-100);
+  border-radius: var(--oneui-radius-small);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--oneui-neutral-300);
+  border-radius: var(--oneui-radius-small);
+  border: 2px solid var(--oneui-neutral-100);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--oneui-neutral-400);
+}
+
+/* One UI Feedback States */
+.oneui-alert {
+  padding: var(--oneui-space-md);
+  border-radius: var(--oneui-radius-medium);
+  margin-bottom: var(--oneui-space-md);
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--oneui-space-sm);
+}
+
+.oneui-alert-info {
+  background-color: rgba(26, 115, 232, 0.08);
+  border: 1px solid rgba(26, 115, 232, 0.16);
+  color: var(--oneui-blue);
+}
+
+.oneui-alert-success {
+  background-color: rgba(45, 184, 67, 0.08);
+  border: 1px solid rgba(45, 184, 67, 0.16);
+  color: var(--oneui-green);
+}
+
+.oneui-alert-warning {
+  background-color: rgba(255, 171, 12, 0.08);
+  border: 1px solid rgba(255, 171, 12, 0.16);
+  color: var(--oneui-yellow);
+}
+
+.oneui-alert-error {
+  background-color: rgba(245, 62, 62, 0.08);
+  border: 1px solid rgba(245, 62, 62, 0.16);
+  color: var(--oneui-red);
+}
+
+/* One UI Navigation Components */
+.oneui-navbar {
+  display: flex;
+  align-items: center;
+  height: 60px;
+  background-color: var(--oneui-neutral-0);
+  padding: 0 var(--oneui-space-md);
+  box-shadow: var(--oneui-elevation-1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid var(--oneui-neutral-100);
+}
+
+.oneui-navbar-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--oneui-primary);
+}
+
+.oneui-navbar-subtitle {
+  font-size: 14px;
+  color: var(--oneui-neutral-600);
+  margin-top: 2px;
+}
+
+.oneui-tab-bar {
+  display: flex;
+  background-color: var(--oneui-neutral-0);
+  border-radius: var(--oneui-radius-large);
+  padding: var(--oneui-space-xs);
+  margin-bottom: var(--oneui-space-lg);
+  box-shadow: var(--oneui-elevation-1);
+}
+
+.oneui-tab {
+  flex: 1;
+  padding: var(--oneui-space-sm) var(--oneui-space-md);
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--oneui-neutral-700);
+  border-radius: var(--oneui-radius-medium);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.oneui-tab.active {
+  background-color: var(--oneui-primary);
+  color: white;
+}
+
+/* One UI dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --oneui-primary: #4285F4; /* Lighter blue in dark mode */
+    --oneui-primary-light: #1F2532; /* Darker blue background for dark mode */
+    --oneui-primary-dark: #8AB4F8; /* Lighter blue for hover in dark mode */
+    
+    --oneui-neutral-0: #121212; /* Dark mode background */
+    --oneui-neutral-50: #1F1F1F;
+    --oneui-neutral-100: #282828;
+    --oneui-neutral-200: #333333;
+    --oneui-neutral-300: #444444;
+    --oneui-neutral-400: #666666;
+    --oneui-neutral-500: #888888;
+    --oneui-neutral-600: #AAAAAA;
+    --oneui-neutral-700: #CCCCCC;
+    --oneui-neutral-800: #E0E0E0;
+    --oneui-neutral-900: #F5F5F5;
+  }
+  
+  body {
+    background-color: var(--oneui-neutral-0);
+    color: var(--oneui-neutral-800);
+  }
+  
+  .oneui-button-primary {
+    background-color: var(--oneui-primary);
+  }
+  
+  .oneui-button-secondary {
+    background-color: var(--oneui-neutral-200);
+    color: var(--oneui-neutral-700);
+  }
+  
+  .oneui-input, .oneui-textarea {
+    background-color: var(--oneui-neutral-100);
+    border-color: var(--oneui-neutral-300);
+    color: var(--oneui-neutral-800);
+  }
+  
+  .oneui-card {
+    background-color: var(--oneui-neutral-100);
+    border-color: var(--oneui-neutral-200);
+  }
+}
+
+/* Samsung Galaxy Z Fold/Flip specific media queries */
+@media screen and (max-width: 280px) {
+  /* Ultra-narrow width for folded state */
+  .oneui-card {
+    padding: var(--oneui-space-sm);
+  }
+  
+  body {
+    font-size: 14px;
+  }
+}
+
+/* Samsung DeX mode optimization */
+@media screen and (min-width: 1024px) {
+  .oneui-card {
+    border-radius: var(--oneui-radius-xl);
+    padding: var(--oneui-space-xl);
+  }
+  
+  .oneui-button {
+    padding: 0 var(--oneui-space-xl);
+  }
+}

@@ -70,7 +70,10 @@ A modern full-stack web application featuring AI-powered content creation tools 
 - **💾 History Persistence** - All tool outputs saved locally
 - **🎨 Modern UI** - Beautiful gradients and smooth animations
 - **⚡ Real AI Integration** - Powered by Google Gemini 2.0 Flash model
+- **📝 Markdown Formatting** - Properly formatted responses with code highlighting
 - **🔄 Real-time Updates** - Instant feedback and content generation
+- **Optimized Performance** - Fast loading and response times
+- **Accessibility** - WCAG-compliant components and keyboard navigation
 
 ## 🛠 Tech Stack
 
@@ -80,6 +83,7 @@ A modern full-stack web application featuring AI-powered content creation tools 
 - Tailwind CSS - Utility-first CSS framework
 - React Router Dom - Client-side routing
 - React Icons - Beautiful icon library
+- React Markdown - Markdown rendering with formatting
 - LocalStorage API - Client-side data persistence
 
 **Backend**
@@ -91,51 +95,50 @@ A modern full-stack web application featuring AI-powered content creation tools 
 
 ## 📁 Project Structure
 
-```
 SM-content-React-app/
-├── 📁 public/                   # Static assets and PWA files
-│   ├── index.html              # Main HTML template
-│   ├── manifest.json           # PWA manifest
-│   ├── favicon.ico             # App favicon
-│   ├── logo192.png             # App logo (192px)
-│   ├── logo512.png             # App logo (512px)
-│   └── robots.txt              # Search engine crawling rules
-├── 📁 src/                      # Frontend source code
-│   ├── 📁 components/           # React components (alphabetically organized)
-│   │   ├── AIChat.js           # 🤖 AI chat assistant interface
-│   │   ├── ContentRefiner.js   # ✨ Content improvement tool
-│   │   ├── ErrorBoundary.js    # 🛡️ Error handling wrapper
+├── 📁 public/                     # Static assets and PWA files
+│   ├── index.html                # Main HTML template
+│   ├── manifest.json             # PWA manifest
+│   ├── favicon.ico               # App favicon
+│   ├── logo192.png               # App logo (192px)
+│   ├── logo512.png               # App logo (512px)
+│   └── robots.txt                # Search engine crawling rules
+├── 📁 src/                        # Frontend source code
+│   ├── 📁 components/              # React components (alphabetically organized)
+│   │   ├── AIChat.js             # 🤖 AI chat assistant interface
+│   │   ├── ContentRefiner.js     # ✨ Content improvement tool
+│   │   ├── ErrorBoundary.js      # 🛡️ Error handling wrapper
 │   │   ├── FormattedAIResponse.js # 📝 AI response formatter
-│   │   ├── GameForge/          # 🎮 Game development tools
-│   │   │   ├── CodeGenerator.js # 💻 Code snippet generator
+│   │   ├── GameForge/            # 🎮 Game development tools
+│   │   │   ├── CodeGenerator.js  # 💻 Code snippet generator
 │   │   │   ├── DialogueCrafter.js # 💬 Character dialogue tool
-│   │   │   ├── GameplayTuner.js # 🎯 Mechanic balancing tool
+│   │   │   ├── GameplayTuner.js  # 🎯 Mechanic balancing tool
 │   │   │   └── NarrativeBuilder.js # 📚 Game narrative creator
-│   │   ├── Header.js           # 🎯 App header with user info
-│   │   ├── IdeaGenerator.js    # 💡 Idea generation tool
-│   │   ├── Loader.js           # ⏳ Loading component
-│   │   ├── Sidebar.js          # 📋 Navigation sidebar
-│   │   └── Summarizer.js       # 📄 Text summarization tool
-│   ├── 📁 services/             # External services
-│   │   ├── firebase.js         # 🔐 Firebase configuration
-│   │   └── realApi.js          # 🔗 API integration with backend
-│   ├── App.js                  # Main app component with routing
-│   ├── index.js                # React app entry point
-│   ├── index.css               # Global styles and animations
-│   └── service-worker.js       # PWA service worker
-├── 📁 backend/                  # Python FastAPI backend
-│   ├── main.py                 # FastAPI application
-│   ├── requirements.txt        # Python dependencies
-│   ├── start.sh                # Backend startup script
-│   ├── .env.template           # Environment variables template
-│   └── README.md               # Backend documentation
-├── package.json                # Frontend dependencies and scripts
-├── package-lock.json           # Locked dependency versions
-├── tailwind.config.js          # Tailwind CSS configuration
-├── postcss.config.js           # PostCSS configuration
-├── .gitignore                  # Git ignore rules
-└── DESIGN.md                   # Architecture documentation
-```
+│   │   ├── Header.js             # 🎯 App header with user info
+│   │   ├── IdeaGenerator.js      # 💡 Idea generation tool
+│   │   ├── Loader.js             # ⏳ Loading component
+│   │   ├── Sidebar.js            # 📋 Navigation sidebar
+│   │   └── Summarizer.js         # 📄 Text summarization tool
+│   ├── 📁 services/               # External services
+│   │   ├── firebase.js           # 🔐 Firebase configuration
+│   │   └── realApi.js            # 🔗 API integration with backend
+│   ├── App.js                    # Main app component with routing
+│   ├── index.js                  # React app entry point
+│   ├── index.css                 # Global styles and animations
+│   └── service-worker.js         # PWA service worker
+├── 📁 backend/                    # Python FastAPI backend
+│   ├── main.py                   # FastAPI application
+│   ├── requirements.txt          # Python dependencies
+│   ├── start.sh                  # Backend startup script
+│   ├── .env.template             # Environment variables template
+│   └── README.md                 # Backend documentation
+├── package.json                  # Frontend dependencies and scripts
+├── package-lock.json             # Locked dependency versions
+├── tailwind.config.js            # Tailwind CSS configuration
+├── postcss.config.js             # PostCSS configuration
+├── .gitignore                    # Git ignore rules
+└── DESIGN.md                     # Architecture documentation
+
 
 ### 🗂️ File Organization Principles
 
@@ -159,169 +162,186 @@ SM-content-React-app/
 1. **Navigate to backend directory**
    ```bash
    cd backend
-   ```
+Run the setup script
 
-2. **Run the setup script**
-   ```bash
-   ./start.sh
-   ```
+Bash
 
-   Or **manual setup**:
-   ```bash
-   # Create virtual environment
-   python3 -m venv venv
-   source venv/bin/activate
-   
-   # Install dependencies
-   pip install -r requirements.txt
-   
-   # Setup environment variables
-   cp .env.template .env
-   # Edit .env and add your Gemini API key
-   
-   # Start the server
-   uvicorn main:app --reload --host 0.0.0.0 --port 8000
-   ```
+./start.sh
+Or manual setup:
 
-3. **Add your Gemini API Key to `backend/.env`**
-   ```
-   GEMINI_API_KEY=your-actual-api-key-here
-   ```
+Bash
 
-### Frontend Setup
+# Create virtual environment
+python3 -m venv venv
+source venv/bin/activate
 
-1. **Install dependencies**
-   ```bash
-   npm install
-   ```
+# Install dependencies
+pip install -r requirements.txt
 
-2. **Start the development server**
-   ```bash
-   npm start
-   ```
+# Setup environment variables
+cp .env.template .env
+# Edit .env and add your Gemini API key
 
-3. **Open your browser**
-   Navigate to `http://localhost:3000`
+# Start the server
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+Add your Gemini API Key to backend/.env
 
-### Running the Application
+GEMINI_API_KEY=your-actual-api-key-here
+Frontend Setup
+Install dependencies
 
+npm start
+Open your browser
+Navigate to http://localhost:3000
+
+Running the Application
 You'll need two terminal windows:
 
-**Terminal 1 (Backend):**
-```bash
+Terminal 1 (Backend):
+
+
 cd backend && ./start.sh
-```
+Terminal 2 (Frontend):
 
-**Terminal 2 (Frontend):**
-```bash
 npm start
-```
+Access Points:
 
-**Access Points:**
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:8000
-- API Documentation: http://localhost:8000/docs
+Frontend: http://localhost:3000
 
-## 📋 API Endpoints
+Backend API: http://localhost:8000
 
-### Core API
-- `GET /` - Health check
-- `GET /health` - Detailed health information
-- `POST /api/summarize` - Summarize text content
-- `POST /api/generate-ideas` - Generate ideas for a topic
-- `POST /api/refine-content` - Refine and improve content
-- `POST /api/chat` - Chat with AI assistant
+API Documentation: http://localhost:8000/docs
 
-### GameForge API
-- `POST /api/gameforge/narrative` - Generate game narratives and storylines
-- `POST /api/gameforge/dialogue` - Create character dialogue and interactions
-- `POST /api/gameforge/mechanics` - Balance and tune gameplay mechanics
-- `POST /api/gameforge/code` - Generate code snippets for game features
+📋 API Endpoints
+Core API
+GET / - Health check
 
-Visit `http://localhost:8000/docs` for interactive API documentation.
+GET /health - Detailed health information
 
-## ⚙️ Configuration
+POST /api/summarize - Summarize text content
 
-### Environment Variables
+POST /api/generate-ideas - Generate ideas for a topic
 
-**Backend (`backend/.env`):**
-```
+POST /api/refine-content - Refine and improve content
+
+POST /api/chat - Chat with AI assistant
+
+POST /api/gamedev/narrative - Game narrative assistant
+
+POST /api/gamedev/dialogue - Game dialogue generation
+
+POST /api/gamedev/mechanics - Game mechanics tuning
+
+POST /api/gamedev/code - Game code assistant
+
+POST /api/gamedev/concept - Game concept explanation
+
+GameForge API
+POST /api/gameforge/narrative - Generate game narratives and storylines
+
+POST /api/gameforge/dialogue - Create character dialogue and interactions
+
+POST /api/gameforge/mechanics - Balance and tune gameplay mechanics
+
+POST /api/gameforge/code - Generate code snippets for game features
+
+Visit http://localhost:8000/docs for interactive API documentation.
+
+⚙️ Configuration
+Environment Variables
+Backend (backend/.env):
+
 GEMINI_API_KEY=your-gemini-api-key-here
 ENVIRONMENT=development
-```
+Frontend (optional .env):
 
-**Frontend (optional `.env`):**
-```
 REACT_APP_API_URL=http://localhost:8000
-```
+Available Scripts
+Frontend:
 
-### Available Scripts
+npm start - Start development server
 
-**Frontend:**
-- `npm start` - Start development server
-- `npm run build` - Build for production
-- `npm test` - Run tests
+npm run build - Build for production
 
-**Backend:**
-- `./start.sh` - Start backend with setup
-- `uvicorn main:app --reload` - Development mode
-- `uvicorn main:app` - Production mode
+npm test - Run tests
 
-## 🎯 Usage
+Backend:
 
-1. **Sign In** - Use Google authentication to access the app
-2. **Navigate** - Use the sidebar to switch between AI tools
-3. **Create Content** - Use any of the 4 AI tools powered by Gemini AI
-4. **View History** - All your work is automatically saved locally
+./start.sh - Start backend with setup
 
-## 🛡️ Features
+uvicorn main:app --reload - Development mode
 
-- **Error Handling** - Comprehensive error boundaries and user feedback
-- **Responsive Design** - Mobile-first design with beautiful gradients
-- **Real-time AI** - Actual AI-generated content, not mock responses
-- **Local Storage** - Client-side persistence for user convenience
-- **Optimized Performance** - Fast loading and response times
-- **Accessibility** - WCAG-compliant components and keyboard navigation
+uvicorn main:app - Production mode
 
-## 🚀 Deployment
+🎯 Usage
+Sign In - Use Google authentication to access the app
 
-### Frontend Production Build
-```bash
+Navigate - Use the sidebar to switch between AI tools
+
+Create Content - Use any of the AI tools powered by Gemini AI
+
+View History - All your work is automatically saved locally
+
+🎮 GameForge AI Tools
+GameForge AI provides specialized assistance for game developers:
+
+Narrative Assistant - Create compelling game stories and worlds
+
+Dialogue Crafter - Generate authentic character dialogue
+
+Mechanics Tuner - Design and balance game mechanics
+
+Code Assistant - Get help with game development code
+
+Concept Explainer - Learn about game design concepts
+
+🛡️ Features
+Error Handling - Comprehensive error boundaries and user feedback
+
+Responsive Design - Mobile-first design with beautiful gradients
+
+Real-time AI - Actual AI-generated content, not mock responses
+
+Local Storage - Client-side persistence for user convenience
+
+Markdown Rendering - Properly formatted text with code highlighting
+
+Response Streaming - Real-time display of AI responses as they generate
+
+Optimized Performance - Fast loading and response times
+
+Accessibility - WCAG-compliant components and keyboard navigation
+
+🚀 Deployment
+Frontend Production Build
+Bash
+
 npm run build
-```
+Backend Production
+Bash
 
-### Backend Production
-```bash
 cd backend
 uvicorn main:app --host 0.0.0.0 --port 8000
-```
+Updating the Application
+Bash
 
-### Updating the Application
-```bash
 # Pull the latest changes
 git pull
 
 # Update dependencies
 npm install
 cd backend && pip install -r requirements.txt
-```
-
-## 🔄 Version Control
-
+🔄 Version Control
 This project uses Git for version control. To get the latest updates:
 
-```bash
-git pull
-```
+Bash
 
+git pull
 After pulling updates, remember to check for any new dependencies that need to be installed.
 
-## License
-
+License
 This project is licensed under the MIT License.
 
----
+Note: Both frontend and backend services must be running for full functionality.
 
-**Note**: Both frontend and backend services must be running for full functionality.
-
-**Last Updated**: August 12, 2025
+Last Updated: August 12, 2025

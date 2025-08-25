@@ -1,7 +1,7 @@
 # Smart Content Studio AI - Design Document
 
 ## Overview
-Smart Content Studio AI is a full-stack web application that provides AI-powered content tools including text summarization, idea generation, content refinement, and conversational AI chat. The application uses a React frontend with Firebase authentication and a Python FastAPI backend integrated with Google's Gemini 2.0 Flash AI model.
+Smart Content Studio AI is a full-stack web application that provides AI-powered content tools including text summarization, idea generation, content refinement, conversational AI chat, and game development assistance through GameForge AI. The application uses a React frontend with Firebase authentication and a Python FastAPI backend integrated with Google's Gemini 2.0 Flash AI model.
 
 ## Architecture
 
@@ -36,6 +36,7 @@ Smart Content Studio AI is a full-stack web application that provides AI-powered
 - **Tailwind CSS**: Utility-first styling framework
 - **React Router DOM**: Client-side routing
 - **React Icons**: Icon library
+- **React Markdown**: Markdown rendering for AI responses with proper formatting
 
 ### Component Structure
 ```
@@ -51,6 +52,8 @@ src/
 │   ├── IdeaGenerator.js  # Idea generation tool
 │   ├── ContentRefiner.js # Content refinement tool
 │   ├── Chatbot.js        # AI chat interface
+│   ├── GameForge.js      # Game development AI tools
+│   ├── FormattedAIResponse.js # Markdown renderer for AI responses
 │   ├── Loader.js         # Loading spinner component
 │   └── ErrorBoundary.js  # Error handling wrapper
 ├── services/
@@ -72,7 +75,7 @@ src/
 #### Component Architecture
 - **Functional Components**: Using React hooks for modern, clean code
 - **Component Isolation**: Each AI tool is a separate component with its own state
-- **Reusable Components**: Shared Loader and ErrorBoundary components
+- **Reusable Components**: Shared Loader, ErrorBoundary, and FormattedAIResponse components
 - **Responsive Design**: Mobile-first approach using Tailwind CSS
 
 #### API Integration
@@ -80,6 +83,14 @@ src/
 - **Error Handling**: Comprehensive error handling with user-friendly messages
 - **Loading States**: Visual feedback during API requests
 - **Fallback System**: Mock API available as fallback during development
+- **Response Formatting**: Markdown rendering for rich text display
+
+#### GameForge AI Integration
+- **Tool Specialization**: Five distinct tools with dedicated interfaces
+- **Custom Prompting**: Specialized prompts for each game development domain
+- **Consistent UI**: Unified design language across all GameForge tools
+- **Response Formatting**: Proper rendering of code blocks and formatted text
+- **Tool Selection**: Intuitive navigation between different game development tools
 
 ## Backend Architecture
 
@@ -100,6 +111,11 @@ POST /api/summarize       # Text summarization
 POST /api/generate-ideas  # Idea generation
 POST /api/refine-content  # Content refinement
 POST /api/chat           # AI conversation
+POST /api/gamedev/narrative   # Game narrative assistant
+POST /api/gamedev/dialogue    # Game dialogue generation
+POST /api/gamedev/mechanics   # Game mechanics tuning
+POST /api/gamedev/code        # Game code assistant
+POST /api/gamedev/concept     # Game concept explanation
 ```
 
 #### Request/Response Models
@@ -117,6 +133,10 @@ class ContentRefinerRequest(BaseModel):
 
 class ChatbotRequest(BaseModel):
     message: str
+    
+class GameDevRequest(BaseModel):
+    prompt: str
+    tool: str  # narrative, dialogue, mechanics, code, or concept
 
 # Output Model
 class APIResponse(BaseModel):
@@ -137,6 +157,12 @@ class APIResponse(BaseModel):
 - **Idea Generator**: Emphasis on creativity and diverse perspectives
 - **Content Refiner**: Instruction-based refinement with tone adaptation
 - **Chatbot**: Conversational and helpful assistant persona
+- **GameForge AI Tools**:
+  - **Narrative Assistant**: Tailored for story arcs, character development, and world-building
+  - **Dialogue Crafter**: Optimized for character voices, emotional dynamics, and dialogue flow
+  - **Mechanics Tuner**: Specialized for game balance, player engagement, and system design
+  - **Code Assistant**: Structured for game programming patterns, optimization, and implementation
+  - **Concept Explainer**: Focused on clear explanations of game design concepts with examples
 
 ## Authentication & Security
 
@@ -195,6 +221,7 @@ dolze-2/
 - Implemented loading states with visual feedback
 - Added error boundaries to gracefully handle failures
 - Provided clear error messages with actionable guidance
+- Implemented streaming response display for real-time feedback
 
 ### Challenge 3: State Management Across Tools
 **Problem**: Managing state for multiple AI tools while keeping them isolated.
@@ -212,6 +239,15 @@ dolze-2/
 - Template files for easy setup
 - Comprehensive documentation and startup scripts
 
+### Challenge 5: Formatted AI Response Rendering
+**Problem**: AI responses contain Markdown and code that needs proper formatting.
+
+**Solution**:
+- Implemented FormattedAIResponse component with React Markdown
+- Added Tailwind Typography plugin for consistent styling
+- Created streaming capability for real-time response display
+- Custom styling for code blocks and other Markdown elements
+
 ## Future Enhancements
 
 ### Planned Features
@@ -220,6 +256,9 @@ dolze-2/
 3. **Rate Limiting**: API rate limiting and usage tracking
 4. **Caching**: Response caching for improved performance
 5. **Advanced AI Features**: Tool chaining and workflow automation
+6. **GameForge Expansion**: Additional specialized tools for level design, sound effects, and art direction
+7. **Collaborative Editing**: Real-time collaboration for team game development
+8. **Project Management**: Game development project tracking and milestone management
 
 ### Scalability Considerations
 1. **Microservices**: Split AI tools into separate services
@@ -227,7 +266,12 @@ dolze-2/
 3. **Cloud Deployment**: AWS/GCP deployment with auto-scaling
 4. **CDN Integration**: Static asset optimization
 5. **Database Sharding**: User data partitioning for scale
+6. **Stream Processing**: Improved response streaming architecture
 
 ## Conclusion
 
-The Smart Content Studio AI application demonstrates a modern full-stack architecture with clean separation of concerns, comprehensive error handling, and user-focused design. The React frontend provides an intuitive interface while the FastAPI backend efficiently integrates with AI services. The modular design allows for easy extension and maintenance, making it suitable for both development and production environments.
+The Smart Content Studio AI application demonstrates a modern full-stack architecture with clean separation of concerns, comprehensive error handling, and user-focused design. The React frontend provides an intuitive interface while the FastAPI backend efficiently integrates with AI services. 
+
+The addition of GameForge AI has expanded the application's capabilities into the game development domain, providing specialized tools for narrative creation, dialogue writing, mechanics tuning, code assistance, and concept explanation. The implementation of FormattedAIResponse with Markdown rendering has significantly improved the user experience by displaying properly formatted content with code highlighting and structured text.
+
+The modular design allows for easy extension and maintenance, making it suitable for both development and production environments. Future enhancements will focus on expanding GameForge AI's capabilities and improving the collaborative aspects of game development assistance.
