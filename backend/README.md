@@ -1,201 +1,249 @@
-# Smart Content Studio AI - Backend API
+Smart Content Studio AI - Backend API
+A FastAPI-based backend service that provides AI-powered content tools using Google's Gemini 2.0 Flash model. This backend powers the Smart Content Studio AI web application, including both content creation tools and GameForge AI for game developers.
 
-A FastAPI-based backend service that provides AI-powered content tools using Google's Gemini 2.0 Flash model.
+Features
+Content Creation Tools
+Text Summarization: Generate concise summaries of long text content
 
-## Features
+Idea Generation: Create innovative ideas based on topics or prompts
 
-- **Text Summarization**: Generate concise summaries of long text content
-- **Idea Generation**: Create innovative ideas based on topics or prompts
-- **Content Refinement**: Improve text quality, grammar, and style
-- **AI Chat**: Interactive conversation with AI assistant
-- **GameForge AI**: Specialized game development content generation tools
-- **CORS Support**: Configured for frontend integration
-- **Error Handling**: Comprehensive error handling and logging
+Content Refinement: Improve text quality, grammar, and style
 
-## API Endpoints
+AI Chat: Interactive conversation with AI assistant
 
-### Health Check
-- `GET /` - Basic health check
-- `GET /health` - Detailed health information
+GameForge AI Tools
+Narrative Builder: Create adaptive game narratives and storylines
 
-### AI Tools
-- `POST /api/summarize` - Summarize text content
-- `POST /api/generate-ideas` - Generate ideas for a topic
-- `POST /api/refine-content` - Refine and improve content
-- `POST /api/chat` - Chat with AI assistant
+Dialogue Crafter: Generate realistic character dialogue and interactions
 
-### GameForge Tools
-- `POST /api/gamedev/story` - Generate game narratives and storylines
-- `POST /api/gamedev/dialogue` - Create character dialogues and conversations
-- `POST /api/gamedev/mechanics` - Design gameplay systems and mechanics
-- `POST /api/gamedev/code` - Generate game code snippets or pseudocode
-- `POST /api/gamedev/explain` - Explain game development concepts
+Gameplay Mechanic Tuner: Balance and refine game mechanics
 
-## Installation
+Code Snippet Generator: Create code samples for game features
 
-1. **Create a virtual environment** (recommended):
-   ```bash
-   cd backend
-   python -m venv venv
-   source venv/bin/activate  # On macOS/Linux
-   # or
-   venv\Scripts\activate  # On Windows
-   ```
+Concept Explainer: Explain game development concepts
 
-2. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
+System Features
+CORS Support: Configured for frontend integration
 
-3. **Set up environment variables**:
-   ```bash
-   cp .env.template .env
-   ```
-   
-   Edit `.env` and add your Gemini API key:
-   ```
-   GEMINI_API_KEY=your-actual-gemini-api-key-here
-   ```
+Error Handling: Comprehensive error handling and logging
 
-## Getting a Gemini API Key
+Rate Limiting: Protection against excessive API usage
 
-1. Go to [Google AI Studio](https://aistudio.google.com/app/apikey)
-2. Sign in with your Google account
-3. Click "Create API Key"
-4. Copy the generated key and add it to your `.env` file
+Input Validation: Secure request validation using Pydantic
 
-## Running the Server
+API Endpoints
+Health Check
+GET / - Basic health check
 
-### Development Mode
-```bash
+GET /health - Detailed health information
+
+Content Creation Tools
+POST /api/summarize - Summarize text content
+
+POST /api/generate-ideas - Generate ideas for a topic
+
+POST /api/refine-content - Refine and improve content
+
+POST /api/chat - Chat with AI assistant
+
+GameForge AI Tools
+POST /api/gameforge/narrative - Generate game narratives and storylines
+
+POST /api/gameforge/dialogue - Create character dialogue and interactions
+
+POST /api/gameforge/mechanics - Balance and tune gameplay mechanics
+
+POST /api/gameforge/code - Generate code snippets for game features
+
+POST /api/gamedev/explain - Explain game development concepts
+
+Installation
+Create a virtual environment (recommended):
+
+Bash
+
+cd backend
+python -m venv venv
+source venv/bin/activate  # On macOS/Linux
+# or
+venv\Scripts\activate  # On Windows
+Install dependencies:
+
+Bash
+
+pip install -r requirements.txt
+Set up environment variables:
+
+Bash
+
+cp .env.template .env
+Edit .env and add your Gemini API key:
+
+GEMINI_API_KEY=your-actual-gemini-api-key-here
+Getting a Gemini API Key
+Go to Google AI Studio
+
+Sign in with your Google account
+
+Click "Create API Key"
+
+Copy the generated key and add it to your .env file
+
+Running the Server
+Development Mode
+Bash
+
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
-```
+Production Mode
+Bash
 
-### Production Mode
-```bash
 uvicorn main:app --host 0.0.0.0 --port 8000
-```
+The API will be available at http://localhost:8000
 
-The API will be available at `http://localhost:8000`
-
-## API Documentation
-
+API Documentation
 Once the server is running, you can access:
-- **Interactive API docs**: http://localhost:8000/docs
-- **Alternative docs**: http://localhost:8000/redoc
 
-## Request/Response Examples
+Interactive API docs: http://localhost:8000/docs
 
-### Summarize Text
-```bash
+Alternative docs: http://localhost:8000/redoc
+
+Request/Response Examples
+Content Creation Tools
+Summarize Text
+Bash
+
 curl -X POST "http://localhost:8000/api/summarize" \
      -H "Content-Type: application/json" \
      -d '{"text": "Your long text content here..."}'
-```
+Generate Ideas
+Bash
 
-### Generate Ideas
-```bash
 curl -X POST "http://localhost:8000/api/generate-ideas" \
      -H "Content-Type: application/json" \
      -d '{"topic": "sustainable technology"}'
-```
+Refine Content
+Bash
 
-### Refine Content
-```bash
 curl -X POST "http://localhost:8000/api/refine-content" \
      -H "Content-Type: application/json" \
      -d '{"text": "Content to refine", "instruction": "make it more formal"}'
-```
+Chat
+Bash
 
-### Chat
-```bash
 curl -X POST "http://localhost:8000/api/chat" \
      -H "Content-Type: application/json" \
      -d '{"message": "Hello, how can you help me?"}'
-```
+GameForge AI Tools
+Generate Game Narrative
+Bash
 
-### Generate Game Story
-```bash
-curl -X POST "http://localhost:8000/api/gamedev/story" \
+curl -X POST "http://localhost:8000/api/gameforge/narrative" \
      -H "Content-Type: application/json" \
-     -d '{"game_genre": "fantasy", "length": "medium"}'
-```
+     -d '{"genre": "sci-fi", "setting": "post-apocalyptic", "characters": 3}'
+Create Character Dialogue
+Bash
 
-### Generate Game Dialogue
-```bash
-curl -X POST "http://localhost:8000/api/gamedev/dialogue" \
+curl -X POST "http://localhost:8000/api/gameforge/dialogue" \
      -H "Content-Type: application/json" \
-     -d '{"characters": ["hero", "villain"], "tone": "dramatic"}'
-```
+     -d '{"character": "Commander Shepard", "situation": "first contact with alien species", "tone": "diplomatic"}'
+Tune Game Mechanics
+Bash
 
-### Design Game Mechanics
-```bash
-curl -X POST "http://localhost:8000/api/gamedev/mechanics" \
+curl -X POST "http://localhost:8000/api/gameforge/mechanics" \
      -H "Content-Type: application/json" \
-     -d '{"mechanic_type": "puzzle", "difficulty": "hard"}'
-```
+     -d '{"mechanic": "weapon damage", "current_values": {"pistol": 10, "rifle": 20}, "goal": "balance for pvp"}'
+Generate Game Code
+Bash
 
-### Generate Game Code
-```bash
-curl -X POST "http://localhost:8000/api/gamedev/code" \
+curl -X POST "http://localhost:8000/api/gameforge/code" \
      -H "Content-Type: application/json" \
-     -d '{"programming_language": "python", "concept": "class structure for a game character"}'
-```
+     -d '{"language": "javascript", "framework": "phaser", "feature": "player movement"}'
+Explain Game Concept
+Bash
 
-### Explain Game Concept
-```bash
 curl -X POST "http://localhost:8000/api/gamedev/explain" \
      -H "Content-Type: application/json" \
      -d '{"concept": "level design", "details": "3 levels with increasing difficulty"}'
-```
-
-## Error Handling
-
+Error Handling
 The API includes comprehensive error handling:
-- **400**: Bad Request (invalid input)
-- **500**: Internal Server Error (AI service issues)
-- **504**: Gateway Timeout (AI service timeout)
 
-## Dependencies
+400: Bad Request (invalid input)
 
-- **FastAPI**: Modern web framework for building APIs
-- **Uvicorn**: ASGI server for running FastAPI
-- **httpx**: HTTP client for making requests to Gemini API
-- **Pydantic**: Data validation using Python type annotations
-- **python-dotenv**: Load environment variables from .env file
+500: Internal Server Error (AI service issues)
 
-## Development
+504: Gateway Timeout (AI service timeout)
 
-### Code Structure
-```
+Dependencies
+FastAPI: Modern web framework for building APIs
+
+Uvicorn: ASGI server for running FastAPI
+
+httpx: HTTP client for making requests to Gemini API
+
+Pydantic: Data validation using Python type annotations
+
+python-dotenv: Load environment variables from .env file
+
+logging: Standard Python logging for error tracking
+
+Development
+Code Structure
 backend/
 ├── main.py              # Main FastAPI application
+├── api/                 # API endpoints
+│   ├── content.py       # Content creation endpoints
+│   └── gameforge.py     # GameForge AI endpoints
+├── services/            # Service layer
+│   ├── ai_service.py    # Gemini AI integration
+│   └── prompt_service.py # Prompt engineering
+├── models/              # Data models
+│   ├── requests.py      # Request models
+│   └── responses.py     # Response models
 ├── requirements.txt     # Python dependencies
 ├── .env.template        # Environment variables template
-├── .gitignore          # Git ignore rules
-└── README.md           # This file
-```
+├── .gitignore           # Git ignore rules
+└── README.md            # This file
+Adding New Endpoints
+Define request/response models using Pydantic
 
-### Adding New Endpoints
-1. Define request/response models using Pydantic
-2. Create the endpoint function with proper error handling
-3. Add the Gemini API call with appropriate prompting
-4. Update this README with the new endpoint documentation
+Create the endpoint function with proper error handling
 
-## Security Notes
+Add the Gemini API call with appropriate prompting
 
-- Keep your Gemini API key secure and never commit it to version control
-- The API key is loaded from environment variables
-- CORS is configured for local development (adjust for production)
+Update this README with the new endpoint documentation
 
-## Troubleshooting
+Security Notes
+Keep your Gemini API key secure and never commit it to version control
 
-### Common Issues
+The API key is loaded from environment variables
 
-1. **Import errors**: Make sure you've activated your virtual environment and installed dependencies
-2. **API key errors**: Verify your Gemini API key is correctly set in the `.env` file
-3. **CORS issues**: Check that your frontend URL is included in the CORS origins list
-4. **Port conflicts**: Change the port number if 8000 is already in use
+CORS is configured for local development (adjust for production)
 
-### Logs
+Troubleshooting
+Common Issues
+Import errors: Make sure you've activated your virtual environment and installed dependencies
+
+API key errors: Verify your Gemini API key is correctly set in the .env file
+
+CORS issues: Check that your frontend URL is included in the CORS origins list
+
+Port conflicts: Change the port number if 8000 is already in use
+
+Logs
 The application uses Python's logging module. Check the console output for detailed error messages and debugging information.
+
+Version Control
+This backend is part of the Smart Content Studio AI project. To get the latest updates:
+
+Bash
+
+# Navigate to the project root
+cd ..
+
+# Pull the latest changes
+git pull
+
+# Update backend dependencies
+cd backend
+pip install -r requirements.txt
+Last Updated: August 12, 2025
