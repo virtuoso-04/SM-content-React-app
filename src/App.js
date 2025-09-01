@@ -9,6 +9,7 @@ import Summarizer from './components/Summarizer';
 import IdeaGenerator from './components/IdeaGenerator';
 import ContentRefiner from './components/ContentRefiner';
 import Chatbot from './components/Chatbot';
+import GameForge from './components/GameForge';
 import ErrorBoundary from './components/ErrorBoundary';
 
 // Auth context for global user state
@@ -177,6 +178,7 @@ function Dashboard() {
               <Route path="/idea-generator" element={<IdeaGenerator />} />
               <Route path="/content-refiner" element={<ContentRefiner />} />
               <Route path="/chatbot" element={<Chatbot />} />
+              <Route path="/gameforge" element={<GameForge />} />
               <Route path="*" element={<Navigate to="/summarizer" replace />} />
             </Routes>
           </div>
@@ -207,6 +209,7 @@ function App() {
             <Route path="/idea-generator" element={<Navigate to="/dashboard/idea-generator" replace />} />
             <Route path="/content-refiner" element={<Navigate to="/dashboard/content-refiner" replace />} />
             <Route path="/chatbot" element={<Navigate to="/dashboard/chatbot" replace />} />
+            <Route path="/gameforge" element={<Navigate to="/dashboard/gameforge" replace />} />
             {/* Default route goes to dashboard/summarizer */}
             <Route path="/" element={<Navigate to="/dashboard/summarizer" replace />} />
           </Routes>

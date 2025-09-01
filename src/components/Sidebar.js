@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { NavLink } from 'react-router-dom';
 import { MdSummarize, MdMenu, MdClose } from 'react-icons/md';
-import { FaLightbulb, FaComments } from 'react-icons/fa';
+import { FaLightbulb, FaComments, FaGamepad } from 'react-icons/fa';
 import { TbAdjustmentsHorizontal } from 'react-icons/tb';
 
 const navItems = [
@@ -9,6 +9,7 @@ const navItems = [
   { name: 'Idea Generator', path: '/dashboard/idea-generator', icon: <FaLightbulb size={24} /> },
   { name: 'Content Refiner', path: '/dashboard/content-refiner', icon: <TbAdjustmentsHorizontal size={24} /> },
   { name: 'Chatbot', path: '/dashboard/chatbot', icon: <FaComments size={24} /> },
+  { name: 'GameForge AI', path: '/dashboard/gameforge', icon: <FaGamepad size={24} /> },
 ];
 
 const Sidebar = () => {

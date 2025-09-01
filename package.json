@@ -4,11 +4,13 @@
   "description": "AI-powered content creation tools with Google Firebase authentication and FastAPI backend",
   "private": true,
   "dependencies": {
+    "@tailwindcss/typography": "^0.5.16",
     "cra-template-pwa": "2.0.0",
     "firebase": "^12.1.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.1",
     "react-icons": "^5.5.0",
+    "react-markdown": "^10.1.0",
     "react-router-dom": "^6.30.1",
     "react-scripts": "5.0.1"
   },

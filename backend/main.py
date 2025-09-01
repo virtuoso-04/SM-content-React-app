@@ -11,6 +11,7 @@ import os
 import logging
 from typing import Optional
 from dotenv import load_dotenv
+import uvicorn
 
 # Load environment variables from .env file
 load_dotenv()
@@ -58,6 +59,9 @@ class ChatbotRequest(BaseModel):
 
 class APIResponse(BaseModel):
     output: str
+    
+class GameDevRequest(BaseModel):
+    prompt: str
 
 # Helper function to call Gemini API
 async def call_gemini_api(prompt: str) -> str:
@@ -286,6 +290,104 @@ async def chat_with_ai(request: ChatbotRequest):
 async def validation_exception_handler(request, exc):
     return HTTPException(status_code=400, detail="Invalid request data")
 
+@app.post("/api/gamedev/story", response_model=APIResponse)
+async def gamedev_story(request: GameDevRequest):
+    try:
+        prompt = f"""
+        You are a creative narrative designer for video games.
+
+        Generate a compelling backstory, quest idea, or world-building concept based on the following prompt:
+
+        {request.prompt.strip()}
+
+        Response should include:
+        - Title
+        - Setting
+        - Main conflict or hook
+        - Suggested gameplay elements
+        """
+        output = await call_gemini_api(prompt)
+        return APIResponse(output=output)
+    except Exception as e:
+        logger.error(f"GameDev Story error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to generate story content")
+
+@app.post("/api/gamedev/dialogue", response_model=APIResponse)
+async def gamedev_dialogue(request: GameDevRequest):
+    try:
+        prompt = f"""
+        You are a professional NPC dialogue writer for a fantasy RPG.
+
+        Based on the input below, generate a short, flavorful dialogue (4–6 lines) between an NPC and the player.
+
+        Context: {request.prompt.strip()}
+
+        Ensure the dialogue:
+        - Has character personality
+        - Uses natural tone and speech
+        - Can be directly used in a quest or interaction
+        """
+        output = await call_gemini_api(prompt)
+        return APIResponse(output=output)
+    except Exception as e:
+        logger.error(f"GameDev Dialogue error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to generate dialogue")
+
+@app.post("/api/gamedev/mechanics", response_model=APIResponse)
+async def gamedev_mechanics(request: GameDevRequest):
+    try:
+        prompt = f"""
+        You are a gameplay systems designer.
+
+        Based on the game concept provided below, suggest 2–3 unique gameplay mechanics or balancing ideas:
+
+        {request.prompt.strip()}
+
+        Include:
+        - Name of each mechanic
+        - Brief description
+        - Optional: balancing tips
+        """
+        output = await call_gemini_api(prompt)
+        return APIResponse(output=output)
+    except Exception as e:
+        logger.error(f"GameDev Mechanics error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to suggest game mechanics")
+
+@app.post("/api/gamedev/code", response_model=APIResponse)
+async def gamedev_code(request: GameDevRequest):
+    try:
+        prompt = f"""
+        You are a game developer assistant specialized in Unity (C#) and Godot (GDScript).
+
+        Based on this request: "{request.prompt.strip()}"
+
+        Provide a clear, short code snippet with comments. Mention the engine used and context of use.
+        """
+        output = await call_gemini_api(prompt)
+        return APIResponse(output=output)
+    except Exception as e:
+        logger.error(f"GameDev Code error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to generate code snippet")
+
+@app.post("/api/gamedev/explain", response_model=APIResponse)
+async def gamedev_explain(request: GameDevRequest):
+    try:
+        prompt = f"""
+        You are an expert game engine educator.
+
+        Explain the following concept in simple, beginner-friendly terms with real-life analogies:
+
+        "{request.prompt.strip()}"
+
+        Use line breaks and bullet points to improve readability.
+        """
+        output = await call_gemini_api(prompt)
+        return APIResponse(output=output)
+    except Exception as e:
+        logger.error(f"GameDev Explain error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to explain concept")
+
+
 if __name__ == "__main__":
-    import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
