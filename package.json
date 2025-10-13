@@ -4,7 +4,7 @@
   "description": "AI-powered content creation tools with Google Firebase authentication and FastAPI backend",
   "private": true,
   "dependencies": {
-    "@tailwindcss/typography": "^0.5.16",
+    "@tailwindcss/typography": "^0.5.18",
     "cra-template-pwa": "2.0.0",
     "firebase": "^12.1.0",
     "react": "^19.1.0",
