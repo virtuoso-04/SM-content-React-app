@@ -1,15 +1,25 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDheCljDezTBz8CXDACEoY8jKZQQPeE2qg",
-    authDomain: "reely-84e2d.firebaseapp.com",
-    projectId: "reely-84e2d",
-    storageBucket: "reely-84e2d.firebasestorage.app",
-    messagingSenderId: "418706365543",
-    appId: "1:418706365543:web:9093a1904fcba9db7988c2"
-  };
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID
+};
+
+const missingKeys = Object.entries(firebaseConfig)
+  .filter(([, value]) => !value)
+  .map(([key]) => key);
+
+if (missingKeys.length) {
+  throw new Error(
+    `Missing Firebase configuration values: ${missingKeys.join(', ')}. ` +
+    'Add them to your environment (see .env.example).'
+  );
+}
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-export const provider = new GoogleAuthProvider();

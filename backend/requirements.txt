@@ -1,6 +1,24 @@
-fastapi==0.104.1
+# Smart Content Studio AI - Backend Dependencies
+# Clean, minimal dependencies for production
+
+# Core FastAPI framework
+fastapi==0.115.0
 uvicorn[standard]==0.24.0
+
+# HTTP client and utilities
 httpx==0.25.2
 pydantic==2.8.2
 python-multipart==0.0.6
 python-dotenv==1.0.0
+google-generativeai==0.8.3
+langchain-core==0.3.8
+langchain-community==0.3.5
+langchain-groq==0.1.3
+langchain-mistralai==0.1.7
+
+# No paid APIs required!
+# All AI models use free tiers:
+# - Gemini: Free tier from Google AI Studio
+# - Groq: Free 14,400 requests/day
+# - Mistral: Free tier available
+# - Pollinations.AI: 100% free image generation

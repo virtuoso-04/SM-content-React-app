@@ -1,163 +1,169 @@
-import React, { useState, useEffect, createContext, useContext } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { auth, provider } from './services/firebase';
-import { signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth';
-import Header from './components/Header';
+import React, { createContext, useState, useEffect, useContext, useMemo, useCallback } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { auth } from './services/firebase';
+import { onAuthStateChanged, signOut as firebaseSignOut } from 'firebase/auth';
 import Sidebar from './components/Sidebar';
-import Loader from './components/Loader';
+import Header from './components/Header';
 import Summarizer from './components/Summarizer';
 import IdeaGenerator from './components/IdeaGenerator';
 import ContentRefiner from './components/ContentRefiner';
 import Chatbot from './components/Chatbot';
+import DashboardHome from './components/DashboardHome';
 import ErrorBoundary from './components/ErrorBoundary';
+import ImageGenerator from './components/ImageGenerator';
 
-// Auth context for global user state
-const AuthContext = createContext(null);
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
+// Create context for auth
+const AuthContext = createContext();
 
+export const useAuth = () => useContext(AuthContext);
+
+// AuthProvider component
 function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [authLoading, setAuthLoading] = useState(false);
-  const [authError, setAuthError] = useState('');
 
   useEffect(() => {
-    // Listen for auth state changes
-    let unsubscribe;
-    try {
-      unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-        try {
-          setUser(firebaseUser);
-          setLoading(false);
-        } catch (error) {
-          console.error('Error setting user state:', error);
-          setLoading(false);
-        }
-      });
-    } catch (error) {
-      console.error('Error setting up auth listener:', error);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
       setLoading(false);
-    }
-    
-    return () => {
-      if (unsubscribe) {
-        try {
-          unsubscribe();
-        } catch (error) {
-          console.error('Error unsubscribing from auth listener:', error);
-        }
-      }
-    };
+    });
+    return unsubscribe;
   }, []);
 
-  // Google Sign-In
-  const signIn = async () => {
-    setAuthError('');
-    setAuthLoading(true);
-    try {
-      await signInWithPopup(auth, provider);
-    } catch (err) {
-      console.error('Sign in error:', err);
-      if (err.code === 'auth/popup-blocked') {
-        setAuthError('Popup blocked. Please allow popups and try again.');
-      } else if (err.code === 'auth/cancelled-popup-request') {
-        setAuthError('Sign in was cancelled.');
-      } else if (err.code === 'auth/network-request-failed') {
-        setAuthError('Network error. Please check your connection.');
-      } else {
-        setAuthError(err.message || 'Sign in failed. Please try again.');
-      }
-    } finally {
-      setAuthLoading(false);
-    }
-  };
+  const logout = useCallback(async () => {
+    await firebaseSignOut(auth);
+  }, []);
 
-  // Sign Out
-  const signOutUser = async () => {
-    setAuthError('');
-    setAuthLoading(true);
-    try {
-      await signOut(auth);
-    } catch (err) {
-      console.error('Sign out error:', err);
-      setAuthError(err.message || 'Sign out failed. Please try again.');
-    } finally {
-      setAuthLoading(false);
-    }
-  };
+  const value = useMemo(() => ({
+    currentUser,
+    loading,
+    logout
+  }), [currentUser, loading, logout]);
 
   return (
-    <AuthContext.Provider value={{ user, signIn, signOut: signOutUser, authLoading, authError }}>
-      {loading ? <Loader /> : children}
+    <AuthContext.Provider value={value}>
+      {!loading && children}
     </AuthContext.Provider>
   );
 }
 
-// Protected route wrapper
+// PrivateRoute component
 function PrivateRoute({ children }) {
-  const { user } = useAuth();
-  const location = useLocation();
-  if (!user) return <Navigate to="/login" state={{ from: location }} replace />;
-  return children;
+  const { currentUser } = useAuth();
+  return currentUser ? children : <Navigate to="/login" />;
 }
 
-// Login page
+// Login Component
 function Login() {
-  const { signIn, user, authLoading, authError } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
+  const { currentUser } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLogin, setIsLogin] = useState(true);
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Redirect to dashboard if already logged in
-  React.useEffect(() => {
-    if (user) {
-      const from = location.state?.from?.pathname || '/dashboard/summarizer';
-      navigate(from, { replace: true });
+  useEffect(() => {
+    if (currentUser) {
+      navigate('/dashboard');
     }
-  }, [user, navigate, location]);
+  }, [currentUser, navigate]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setIsLoading(true);
+
+    try {
+      if (isLogin) {
+        const { signInWithEmailAndPassword } = await import('firebase/auth');
+        await signInWithEmailAndPassword(auth, email, password);
+      } else {
+        const { createUserWithEmailAndPassword } = await import('firebase/auth');
+        await createUserWithEmailAndPassword(auth, email, password);
+      }
+      navigate('/dashboard');
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-purple-100">
-      <div className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-8 max-w-md w-full mx-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 relative overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-emerald-200 to-teal-300 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-br from-cyan-200 to-blue-300 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-br from-teal-200 to-emerald-300 rounded-full blur-3xl"></div>
+      </div>
+
+      <div className="glass-strong apple-shadow-2xl rounded-3xl p-8 max-w-md w-full mx-4 relative z-10 border border-emerald-100/50">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Smart Content Studio
+          <h1 className="text-4xl font-black bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent mb-2 tracking-tight">
+            SM Content
           </h1>
-          <p className="text-gray-600 text-lg">Your AI-powered content companion</p>
+          <p className="text-gray-600 font-medium">
+            {isLogin ? 'Sign in to continue' : 'Create your account'}
+          </p>
         </div>
-        
-        <div className="space-y-6">
-          <div className="text-center">
-            <p className="text-gray-700 mb-6">Sign in with Google to access powerful AI tools</p>
-            <button
-              onClick={signIn}
-              disabled={authLoading}
-              className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-60 disabled:transform-none flex items-center justify-center gap-3"
-            >
-              {authLoading && (
-                <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              )}
-              <svg className="w-5 h-5" viewBox="0 0 24 24">
-                <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-              </svg>
-              Sign in with Google
-            </button>
+
+        {error && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
+            {error}
           </div>
-          
-          {authError && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-red-700 text-center">
-              {authError}
-            </div>
-          )}
-        </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-2">
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300 bg-white/90 backdrop-blur-sm font-medium"
+              placeholder="you@example.com"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="password" className="block text-sm font-bold text-gray-700 mb-2">
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength="6"
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300 bg-white/90 backdrop-blur-sm font-medium"
+              placeholder="••••••••"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-white font-bold py-3 px-4 rounded-xl apple-shadow-lg hover:apple-shadow-xl active:scale-98 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isLoading ? 'Loading...' : (isLogin ? 'Sign In' : 'Sign Up')}
+          </button>
+        </form>
+
+        <button
+          onClick={() => {
+            setIsLogin(!isLogin);
+            setError('');
+          }}
+          className="w-full mt-4 text-sm text-gray-600 hover:text-emerald-600 font-bold transition-colors duration-300"
+        >
+          {isLogin ? "Don't have an account? Sign Up" : 'Already have an account? Sign In'}
+        </button>
       </div>
     </div>
   );
@@ -165,27 +171,63 @@ function Login() {
 
 // Main dashboard layout
 function Dashboard() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isChatbotPage = location.pathname === '/dashboard/chatbot';
+
   return (
-    <div className="min-h-screen flex bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen flex bg-gradient-to-br from-emerald-50/30 via-teal-50/20 to-cyan-50/30 relative overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-40">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-emerald-200 to-teal-200 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-br from-cyan-200 to-blue-200 rounded-full blur-3xl"></div>
+      </div>
+      
       <Sidebar />
-      <div className="flex-1 flex flex-col md:ml-0">
+      <div className="flex-1 flex flex-col md:ml-20 relative z-10">
         <Header />
         <main className="flex-1 p-4 md:p-8">
-          <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-xl p-6 md:p-8 h-full min-h-[600px]">
+          <div className="glass-strong apple-shadow-xl rounded-3xl p-6 md:p-8 h-full min-h-[600px] border border-emerald-100/50">
             <Routes>
+              <Route path="/" element={<DashboardHome />} />
               <Route path="/summarizer" element={<Summarizer />} />
               <Route path="/idea-generator" element={<IdeaGenerator />} />
               <Route path="/content-refiner" element={<ContentRefiner />} />
+              <Route path="/image-generator" element={<ImageGenerator />} />
               <Route path="/chatbot" element={<Chatbot />} />
-              <Route path="*" element={<Navigate to="/summarizer" replace />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </div>
         </main>
       </div>
+
+      <button
+        onClick={() => {
+          if (isChatbotPage) {
+            document.querySelector('input[type="text"]')?.focus();
+          } else {
+            navigate('/dashboard/chatbot');
+          }
+        }}
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 text-white apple-shadow-xl hover:apple-shadow-2xl transform hover:scale-110 active:scale-95 transition-all duration-300 z-50 group flex items-center justify-center"
+        aria-label="Open AI Chatbot"
+      >
+        <svg className="w-7 h-7 sm:w-8 sm:h-8 group-hover:scale-110 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
+        
+        {!isChatbotPage && (
+          <span className="absolute inset-0 rounded-full bg-emerald-500 opacity-75 animate-ping"></span>
+        )}
+        
+        <span className="hidden sm:block absolute bottom-full mb-2 right-0 px-3 py-1.5 bg-gray-900 text-white text-xs font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap apple-shadow-lg">
+          {isChatbotPage ? 'Focus Input' : 'AI Chatbot'}
+        </span>
+      </button>
     </div>
   );
 }
 
+// Main App component
 function App() {
   return (
     <ErrorBoundary>
@@ -193,7 +235,6 @@ function App() {
         <AuthProvider>
           <Routes>
             <Route path="/login" element={<Login />} />
-            {/* Dashboard and tools */}
             <Route
               path="/dashboard/*"
               element={
@@ -202,12 +243,11 @@ function App() {
                 </PrivateRoute>
               }
             />
-            {/* Redirect top-level tool routes to dashboard equivalents */}
             <Route path="/summarizer" element={<Navigate to="/dashboard/summarizer" replace />} />
             <Route path="/idea-generator" element={<Navigate to="/dashboard/idea-generator" replace />} />
             <Route path="/content-refiner" element={<Navigate to="/dashboard/content-refiner" replace />} />
+            <Route path="/image-generator" element={<Navigate to="/dashboard/image-generator" replace />} />
             <Route path="/chatbot" element={<Navigate to="/dashboard/chatbot" replace />} />
-            {/* Default route goes to dashboard/summarizer */}
             <Route path="/" element={<Navigate to="/dashboard/summarizer" replace />} />
           </Routes>
         </AuthProvider>

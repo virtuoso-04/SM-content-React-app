@@ -1,53 +1,71 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useAuth } from '../App';
 
 const Header = () => {
-  const { user, signOut, authLoading, authError } = useAuth();
+  const { currentUser, logout } = useAuth();
+  const [signingOut, setSigningOut] = useState(false);
+  const [logoutError, setLogoutError] = useState('');
 
   const handleSignOut = useCallback(async () => {
     try {
-      await signOut();
+      setLogoutError('');
+      setSigningOut(true);
+      await logout();
     } catch (error) {
       console.error('Sign out failed:', error);
+      setLogoutError('Sign out failed. Please try again.');
+    } finally {
+      setSigningOut(false);
     }
-  }, [signOut]);
+  }, [logout]);
   
   return (
-    <header className="bg-white/90 backdrop-blur-lg border-b border-gray-200 px-4 md:px-6 py-4">
-      <div className="flex items-center justify-between">
-        <div className="ml-12 md:ml-0">
-          <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          Reely.AI  
-          </h1>
-          <p className="text-xs md:text-sm text-gray-600"> Smart Content Studio</p>
+    <header className="glass-strong apple-shadow-lg sticky top-0 z-30 px-4 md:px-8 py-5 border-b border-emerald-100/50">
+      <div className="flex items-center justify-between max-w-7xl mx-auto">
+        <div className="ml-12 md:ml-0 flex items-center gap-3">
+          {/* Premium Logo Icon */}
+          <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 flex items-center justify-center apple-shadow">
+            <svg className="w-5 h-5 md:w-6 md:h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <div>
+            <h1 className="text-xl md:text-2xl font-extrabold bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent">
+              Reely.AI  
+            </h1>
+            <p className="text-xs md:text-sm text-gray-600 font-semibold">Smart Content Studio</p>
+          </div>
         </div>
         
-        <div className="flex items-center gap-2 md:gap-4">
-          {user && (
-            <div className="hidden sm:flex items-center gap-3">
-              {user.photoURL && (
+        <div className="flex items-center gap-3 md:gap-4">
+          {currentUser && (
+            <div className="hidden sm:flex items-center gap-3 glass-subtle px-4 py-2.5 rounded-2xl apple-shadow border border-emerald-100/50">
+              {currentUser.photoURL && (
                 <img 
-                  src={user.photoURL} 
+                  src={currentUser.photoURL} 
                   alt="Profile" 
-                  className="w-8 h-8 rounded-full border-2 border-gray-200"
+                  className="w-10 h-10 rounded-full border-2 border-emerald-200 apple-shadow"
                 />
               )}
               <div className="text-right">
-                <p className="text-sm font-medium text-gray-900">
-                  {user.displayName || user.email}
+                <p className="text-sm font-bold text-gray-900">
+                  {currentUser.displayName || currentUser.email}
                 </p>
-                <p className="text-xs text-gray-500">Authenticated</p>
+                <div className="flex items-center gap-1.5">
+                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                  <p className="text-xs text-emerald-600 font-semibold">Active</p>
+                </div>
               </div>
             </div>
           )}
           
           <button
             onClick={handleSignOut}
-            disabled={authLoading}
-            className="px-3 md:px-4 py-2 text-sm rounded-lg bg-gradient-to-r from-red-500 to-pink-500 text-white font-medium shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-300 disabled:opacity-60 disabled:transform-none"
+            disabled={!currentUser || signingOut}
+            className="px-5 py-2.5 text-sm rounded-xl bg-gradient-to-r from-gray-600 to-gray-700 text-white font-bold apple-shadow hover:apple-shadow-lg transform hover:scale-105 active:scale-95 transition-all duration-200 disabled:opacity-60 disabled:transform-none hover:-translate-y-0.5"
             aria-label="Sign out of account"
           >
-            {authLoading && (
+            {signingOut && (
               <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin inline-block mr-2" />
             )}
             Sign Out
@@ -55,9 +73,9 @@ const Header = () => {
         </div>
       </div>
       
-      {authError && (
-        <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-          {authError}
+      {logoutError && (
+        <div className="mt-3 p-3 glass-subtle border-red-200 rounded-xl text-red-700 text-sm apple-shadow animate-shake">
+          {logoutError}
         </div>
       )}
     </header>

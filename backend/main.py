@@ -1,6 +1,6 @@
 """
 Smart Content Studio AI - FastAPI Backend
-Main FastAPI application with AI-powered endpoints using Gemini API
+Clean, robust backend with multi-model AI routing
 """
 
 from fastapi import FastAPI, HTTPException
@@ -11,281 +11,539 @@ import os
 import logging
 from typing import Optional
 from dotenv import load_dotenv
+from model_router import router, TaskType
 
-# Load environment variables from .env file
+# Load environment variables
 load_dotenv()
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
+# Configure structured logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 logger = logging.getLogger(__name__)
 
 # Initialize FastAPI app
 app = FastAPI(
     title="Smart Content Studio AI API",
-    description="Backend API for AI-powered content tools using Gemini 2.0 Flash",
-    version="1.0.0"
+    description="Backend API for AI-powered content tools with intelligent multi-model routing",
+    version="2.0.0",
+    docs_url="/docs",
+    redoc_url="/redoc"
 )
 
-# CORS configuration to allow frontend requests
+# CORS configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:3001", "http://127.0.0.1:3001", "http://localhost:3002", "http://127.0.0.1:3002"],  # React dev server
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:3001",
+        "http://127.0.0.1:3001"
+    ],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
 
 # Gemini API configuration
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
-# Print API key length for debugging (not the actual key for security)
-print(f"API Key loaded: {'Yes - Length: ' + str(len(GEMINI_API_KEY)) if GEMINI_API_KEY else 'No - Empty'}")
-# Update to a stable model version
+if not GEMINI_API_KEY:
+    logger.warning("⚠️  GEMINI_API_KEY not found in environment")
+else:
+    logger.info(f"✅ API Key loaded (length: {len(GEMINI_API_KEY)})")
+
 GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent"
 
-# Request/Response models
+# ============================================================================
+# REQUEST/RESPONSE MODELS
+# ============================================================================
+
 class SummarizerRequest(BaseModel):
     text: str
+    
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "text": "Your long text to summarize here..."
+            }
+        }
 
 class IdeaGeneratorRequest(BaseModel):
     topic: str
+    
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "topic": "AI in healthcare"
+            }
+        }
 
 class ContentRefinerRequest(BaseModel):
     text: str
     instruction: Optional[str] = ""
+    
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "text": "Your content to refine",
+                "instruction": "Make it more professional"
+            }
+        }
 
 class ChatbotRequest(BaseModel):
     message: str
+    
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "message": "What is machine learning?"
+            }
+        }
+
+class ImageGenerationRequest(BaseModel):
+    prompt: str
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "prompt": "Create a cinematic portrait of an astronaut walking on Mars"
+            }
+        }
+
+class SmartRouteRequest(BaseModel):
+    prompt: str
+    task_type: Optional[str] = None
+    speed_priority: Optional[bool] = False
+    quality_priority: Optional[bool] = True
+    
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "prompt": "Write a Python function to sort a list",
+                "quality_priority": True
+            }
+        }
 
 class APIResponse(BaseModel):
     output: str
+    model_used: Optional[str] = None
+    provider: Optional[str] = None
 
-# Helper function to call Gemini API
-async def call_gemini_api(prompt: str) -> str:
+class SmartRouteResponse(APIResponse):
+    success: bool
+    task_type: Optional[str] = None
+    fallback: Optional[bool] = False
+
+# ============================================================================
+# HELPER FUNCTIONS
+# ============================================================================
+
+async def call_gemini_api(prompt: str, temperature: float = 0.7) -> str:
     """
-    Makes a request to the Gemini API with the provided prompt
+    Call Gemini API with robust error handling
+    
+    Args:
+        prompt: The prompt to send to Gemini
+        temperature: Control randomness (0.0-1.0)
+        
+    Returns:
+        Generated text response
+        
+    Raises:
+        HTTPException: On API errors
     """
+    if not GEMINI_API_KEY:
+        raise HTTPException(
+            status_code=500,
+            detail="Gemini API key not configured. Please add GEMINI_API_KEY to .env file"
+        )
+    
     try:
         headers = {
             "Content-Type": "application/json",
         }
         
-        payload = {
-            "contents": [{
-                "parts": [{
-                    "text": prompt
-                }]
-            }],
+        request_body = {
+            "contents": [
+                {
+                    "parts": [
+                        {"text": prompt}
+                    ]
+                }
+            ],
             "generationConfig": {
-                "temperature": 0.7,
-                "topK": 64,
+                "temperature": temperature,
+                "topK": 40,
                 "topP": 0.95,
-                "maxOutputTokens": 8192,
+                "maxOutputTokens": 2048,
             }
         }
         
-        # Make API request to Gemini
-        async with httpx.AsyncClient(timeout=30.0) as client:
+        async with httpx.AsyncClient(timeout=60.0) as client:
             response = await client.post(
                 f"{GEMINI_API_URL}?key={GEMINI_API_KEY}",
                 headers=headers,
-                json=payload
+                json=request_body
             )
             
             if response.status_code != 200:
-                logger.error(f"Gemini API error: {response.status_code} - {response.text}")
+                error_detail = response.text
+                logger.error(f"Gemini API error {response.status_code}: {error_detail}")
                 raise HTTPException(
-                    status_code=500, 
+                    status_code=500,
                     detail=f"AI service error: {response.status_code}"
                 )
             
             result = response.json()
             
-            # Extract text from Gemini response
             if "candidates" in result and len(result["candidates"]) > 0:
-                if "content" in result["candidates"][0]:
-                    return result["candidates"][0]["content"]["parts"][0]["text"]
-            
-            raise HTTPException(status_code=500, detail="Unexpected AI service response format")
-            
+                text = result["candidates"][0]["content"]["parts"][0]["text"]
+                return text.strip()
+            else:
+                logger.error(f"Unexpected API response: {result}")
+                raise HTTPException(
+                    status_code=500,
+                    detail="Unexpected response from AI service"
+                )
+                
     except httpx.TimeoutException:
         logger.error("Gemini API timeout")
-        raise HTTPException(status_code=504, detail="AI service timeout")
+        raise HTTPException(
+            status_code=504,
+            detail="AI service timeout. Please try again."
+        )
+    except httpx.RequestError as e:
+        logger.error(f"Request error: {str(e)}")
+        raise HTTPException(
+            status_code=503,
+            detail="Unable to connect to AI service"
+        )
+    except HTTPException:
+        raise
     except Exception as e:
-        logger.error(f"Gemini API call failed: {str(e)}")
-        raise HTTPException(status_code=500, detail="AI service unavailable")
+        logger.error(f"Unexpected error: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail="An unexpected error occurred"
+        )
 
-# API Endpoints
+# ============================================================================
+# HEALTH & INFO ENDPOINTS
+# ============================================================================
 
 @app.get("/")
 async def root():
-    """Health check endpoint"""
-    return {"message": "Smart Content Studio AI API is running!"}
+    """Root endpoint with API information"""
+    return {
+        "name": "Smart Content Studio AI API",
+        "version": "2.0.0",
+        "status": "operational",
+        "features": [
+            "Text summarization",
+            "Idea generation",
+            "Content refinement",
+            "AI chatbot",
+            "Multi-model smart routing"
+        ],
+        "endpoints": {
+            "docs": "/docs",
+            "health": "/health"
+        }
+    }
 
 @app.get("/health")
 async def health_check():
-    """Detailed health check"""
+    """Health check endpoint"""
     return {
         "status": "healthy",
-        "service": "Smart Content Studio AI API",
-        "version": "1.0.0"
+        "gemini_configured": bool(GEMINI_API_KEY),
+        "multi_model_available": True
     }
+
+# ============================================================================
+# CORE AI ENDPOINTS
+# ============================================================================
 
 @app.post("/api/summarize", response_model=APIResponse)
 async def summarize_text(request: SummarizerRequest):
     """
-    Summarize the provided text using Gemini AI
+    Summarize long text into concise key points
+    
+    **Input:** Text to summarize
+    **Output:** Concise summary with main points
     """
     try:
         if not request.text or not request.text.strip():
-            raise HTTPException(status_code=400, detail="Please provide text to summarize")
+            raise HTTPException(status_code=400, detail="Text is required")
         
-        prompt = f"""
-        Please provide a concise and comprehensive summary of the following text. 
-        Focus on the main points, key concepts, and important details. 
-        Make the summary clear, well-structured, and easy to understand.
+        if len(request.text.strip()) < 10:
+            raise HTTPException(status_code=400, detail="Text is too short to summarize")
         
-        Format your response with:
-        - Use emojis where appropriate to make it more engaging 📝
-        - Break down complex information into bullet points when helpful
-        - Use proper formatting with line breaks for readability
+        prompt = f"""Summarize the following text concisely, highlighting the main points and key information:
+
+Text:
+{request.text}
+
+Provide a clear, structured summary."""
         
-        Text to summarize:
-        {request.text.strip()}
-        """
+        summary = await call_gemini_api(prompt, temperature=0.5)
+        logger.info(f"✅ Summarized {len(request.text)} chars")
         
-        summary = await call_gemini_api(prompt)
-        return APIResponse(output=summary)
+        return APIResponse(output=summary, model_used="gemini-2.5-flash", provider="gemini")
         
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Summarizer error: {str(e)}")
+        logger.error(f"Summarization error: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to summarize text")
 
 @app.post("/api/generate-ideas", response_model=APIResponse)
 async def generate_ideas(request: IdeaGeneratorRequest):
     """
-    Generate creative ideas based on the provided topic using Gemini AI
+    Generate creative ideas based on a topic
+    
+    **Input:** Topic or subject
+    **Output:** List of creative, actionable ideas
     """
     try:
         if not request.topic or not request.topic.strip():
-            raise HTTPException(status_code=400, detail="Please provide a topic or prompt")
+            raise HTTPException(status_code=400, detail="Topic is required")
         
-        prompt = f"""
-        Generate 5-7 creative and diverse ideas related to the following topic: "{request.topic.strip()}"
+        prompt = f"""Generate 5-7 creative, unique, and actionable ideas about: {request.topic}
+
+Requirements:
+- Each idea should be practical and implementable
+- Include brief explanations
+- Be innovative and engaging
+- Cover different angles or approaches
+
+Format each idea clearly with a title and description."""
         
-        Please provide:
-        - Creative and innovative approaches
-        - Different perspectives and angles
-        - Practical and actionable ideas
-        - Mix of beginner and advanced concepts
+        ideas = await call_gemini_api(prompt, temperature=0.9)
+        logger.info(f"✅ Generated ideas for: {request.topic}")
         
-        Format the response with:
-        - Use appropriate emojis to make each idea engaging 💡
-        - Format as a numbered list with brief explanations for each idea
-        - Make it visually appealing and easy to scan
-        - Use proper formatting with line breaks for readability
-        """
-        
-        ideas = await call_gemini_api(prompt)
-        return APIResponse(output=ideas)
+        return APIResponse(output=ideas, model_used="gemini-2.5-flash", provider="gemini")
         
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Idea generator error: {str(e)}")
+        logger.error(f"Idea generation error: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to generate ideas")
 
 @app.post("/api/refine-content", response_model=APIResponse)
 async def refine_content(request: ContentRefinerRequest):
     """
-    Refine and improve the provided content using Gemini AI
+    Refine and improve content based on instructions
+    
+    **Input:** Content to refine + optional instructions
+    **Output:** Improved, polished content
     """
     try:
         if not request.text or not request.text.strip():
-            raise HTTPException(status_code=400, detail="Please provide content to refine")
+            raise HTTPException(status_code=400, detail="Content is required")
         
-        # Build prompt based on instruction
-        if request.instruction and request.instruction.strip():
-            prompt = f"""
-            Please refine and improve the following content based on this specific instruction: "{request.instruction.strip()}"
-            
-            Content to refine:
-            {request.text.strip()}
-            
-            Please ensure the refined content:
-            - Follows the specific instruction provided
-            - Maintains the original meaning and intent
-            - Improves clarity, flow, and readability
-            - Uses appropriate tone and style
-            - Include relevant emojis where appropriate to enhance engagement ✨
-            - Use proper formatting with line breaks and structure for better readability
-            """
-        else:
-            prompt = f"""
-            Please refine and improve the following content for better clarity, flow, and readability:
-            
-            Content to refine:
-            {request.text.strip()}
-            
-            Please ensure the refined content:
-            - Maintains the original meaning and intent
-            - Improves grammar and sentence structure
-            - Enhances clarity and coherence
-            - Uses appropriate tone and style
-            - Include relevant emojis where appropriate to enhance engagement ✨
-            - Use proper formatting with line breaks and structure for better readability
-            """
+        instruction_text = f"\n\nSpecific instruction: {request.instruction}" if request.instruction else ""
         
-        refined_content = await call_gemini_api(prompt)
-        return APIResponse(output=refined_content)
+        prompt = f"""Refine and improve the following content. Make it more engaging, clear, and professional.{instruction_text}
+
+Original content:
+{request.text}
+
+Refined version:"""
+        
+        refined = await call_gemini_api(prompt, temperature=0.7)
+        logger.info(f"✅ Refined content ({len(request.text)} chars)")
+        
+        return APIResponse(output=refined, model_used="gemini-2.5-flash", provider="gemini")
         
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Content refiner error: {str(e)}")
+        logger.error(f"Content refinement error: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to refine content")
 
 @app.post("/api/chat", response_model=APIResponse)
 async def chat_with_ai(request: ChatbotRequest):
     """
-    Chat with AI assistant using Gemini AI
+    Chat with AI assistant
+    
+    **Input:** User message
+    **Output:** AI response
     """
     try:
         if not request.message or not request.message.strip():
-            raise HTTPException(status_code=400, detail="Please enter a message")
+            raise HTTPException(status_code=400, detail="Message is required")
         
-        prompt = f"""
-        You are a helpful AI assistant for the Smart Content Studio application. 
-        Please respond to the user's message in a friendly, informative, and engaging way.
+        prompt = f"""You are a helpful AI assistant for Smart Content Studio. 
+Respond to the user's message in a friendly, informative, and concise way.
+
+User message: {request.message}
+
+Your response:"""
         
-        User message: {request.message.strip()}
+        response = await call_gemini_api(prompt, temperature=0.8)
+        logger.info(f"✅ Chat response generated")
         
-        Please provide a thoughtful response that:
-        - Addresses the user's question or comment directly
-        - Is helpful and informative
-        - Maintains a conversational and friendly tone
-        - Uses appropriate emojis to make the response more engaging (but don't overuse them)
-        - Uses proper formatting with line breaks, bullet points, or numbered lists when helpful
-        - Encourages further discussion if appropriate
-        
-        Format your response to be visually appealing and easy to read.
-        """
-        
-        response = await call_gemini_api(prompt)
-        return APIResponse(output=response)
+        return APIResponse(output=response, model_used="gemini-2.5-flash", provider="gemini")
         
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Chatbot error: {str(e)}")
+        logger.error(f"Chat error: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to process chat message")
 
-# Error handler for validation errors
-@app.exception_handler(422)
-async def validation_exception_handler(request, exc):
-    return HTTPException(status_code=400, detail="Invalid request data")
+# ============================================================================
+# MULTI-MODEL SMART ROUTING
+# ============================================================================
+
+@app.post("/api/generate-image", response_model=APIResponse)
+async def generate_image(request: ImageGenerationRequest):
+    """Generate an image URL using the multi-model router."""
+    try:
+        if not request.prompt or not request.prompt.strip():
+            raise HTTPException(status_code=400, detail="Prompt is required")
+
+        result = await router.route_and_execute(
+            prompt=request.prompt.strip(),
+            task_type=TaskType.IMAGE_GENERATION,
+            preferences={"quality_priority": True}
+        )
+
+        logger.info(
+            f"✅ Image generated via {result['model_used']} ({result['provider']})"
+        )
+
+        return APIResponse(
+            output=result["output"],
+            model_used=result.get("model_used"),
+            provider=result.get("provider")
+        )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Image generation error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to generate image")
+
+@app.post("/api/smart-route", response_model=SmartRouteResponse)
+async def smart_route(request: SmartRouteRequest):
+    """
+    Intelligent multi-model routing endpoint
+    
+    Automatically selects the best AI model based on task type:
+    - Code generation → Llama 3.3 70B (Groq)
+    - Technical writing → Llama 3.3 70B or Mistral Large
+    - Analysis → Gemini 2.0 Flash Thinking
+    - Summarization → Gemini 2.5 Flash (fastest)
+    - Creative writing → Gemini 2.0 Flash Thinking
+    - Image generation → Pollinations.AI
+    
+    Falls back to Gemini if other models unavailable.
+    """
+    try:
+        if not request.prompt or not request.prompt.strip():
+            raise HTTPException(status_code=400, detail="Prompt is required")
+        
+        # Convert task_type string to enum
+        task_type = None
+        if request.task_type:
+            normalized_task = request.task_type.strip().lower().replace(" ", "_").replace("-", "_")
+            try:
+                task_type = TaskType(normalized_task)
+            except ValueError:
+                logger.warning(f"Invalid task_type: {request.task_type}")
+        
+        # Build preferences
+        preferences = {
+            "speed_priority": request.speed_priority,
+            "quality_priority": request.quality_priority
+        }
+        
+        # Route and execute
+        result = await router.route_and_execute(
+            prompt=request.prompt.strip(),
+            task_type=task_type,
+            preferences=preferences
+        )
+        
+        logger.info(f"✅ Smart route: {result['model_used']} ({result['provider']}) - Task: {result['task_type']}")
+        
+        return SmartRouteResponse(**result)
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Smart routing error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Routing failed: {str(e)}")
+
+@app.get("/api/available-models")
+async def get_available_models():
+    """
+    Get list of available AI models, their capabilities, and usage statistics
+    
+    Returns:
+    - models: List of configured models with quality scores and strengths
+    - usage_stats: Per-model usage counts by task type
+    """
+    try:
+        return {
+            "models": router.get_available_models(),
+            "usage_stats": router.get_usage_stats()
+        }
+    except Exception as e:
+        logger.error(f"Error fetching models: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to fetch model information")
+
+# ============================================================================
+# ERROR HANDLERS
+# ============================================================================
+
+@app.exception_handler(404)
+async def not_found_handler(request, exc):
+    """Custom 404 handler"""
+    return {
+        "error": "Endpoint not found",
+        "message": "The requested endpoint does not exist",
+        "docs": "/docs"
+    }
+
+@app.exception_handler(500)
+async def internal_error_handler(request, exc):
+    """Custom 500 handler"""
+    logger.error(f"Internal error: {str(exc)}")
+    return {
+        "error": "Internal server error",
+        "message": "An unexpected error occurred. Please try again."
+    }
+
+# ============================================================================
+# STARTUP/SHUTDOWN EVENTS
+# ============================================================================
+
+@app.on_event("startup")
+async def startup_event():
+    """Run on application startup"""
+    logger.info("🚀 Smart Content Studio AI Backend starting...")
+    logger.info(f"📋 Gemini API: {'✅ Configured' if GEMINI_API_KEY else '❌ Not configured'}")
+    logger.info(f"🤖 Multi-model routing: ✅ Active")
+    logger.info(f"📚 API Documentation: http://localhost:8000/docs")
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Run on application shutdown"""
+    logger.info("🛑 Smart Content Studio AI Backend shutting down...")
+
+# ============================================================================
+# RUN SERVER
+# ============================================================================
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(
+        "main:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=True,
+        log_level="info"
+    )

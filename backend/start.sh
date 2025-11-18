@@ -1,8 +1,10 @@
 #!/bin/bash
 
-# Smart Content Studio AI Backend Startup Script
+# Smart Content Studio AI Backend - Startup Script
+# Clean, robust backend with multi-model AI routing
 
 echo "🚀 Starting Smart Content Studio AI Backend..."
+echo ""
 
 # Check if virtual environment exists
 if [ ! -d "venv" ]; then
@@ -14,33 +16,30 @@ fi
 echo "🔧 Activating virtual environment..."
 source venv/bin/activate
 
-# Install/update dependencies
+# Install dependencies
 echo "📥 Installing dependencies..."
-pip install --upgrade pip
-pip install -r requirements.txt
+pip install -r requirements.txt --quiet
 
-# Check if .env file exists
+# Check for .env file
 if [ ! -f ".env" ]; then
-    echo "⚠️  No .env file found. Creating from template..."
-    cp .env.template .env
-    echo "📝 Please edit .env file and add your Gemini API key before running the server."
-    echo "   Get your API key from: https://aistudio.google.com/app/apikey"
-    exit 1
+    echo ""
+    echo "⚠️  WARNING: .env file not found!"
+    echo "📝 Please create .env file with your API keys:"
+    echo ""
+    echo "GEMINI_API_KEY=your_key_here"
+    echo "GROQ_API_KEY=your_key_here"
+    echo "MISTRAL_API_KEY=your_key_here"
+    echo ""
+    read -p "Press Enter to continue anyway..."
 fi
 
-# Check if Gemini API key is set
-if grep -q "your-gemini-api-key-here" .env; then
-    echo "⚠️  Please set your Gemini API key in the .env file"
-    echo "   Get your API key from: https://aistudio.google.com/app/apikey"
-    exit 1
-fi
-
-echo "✅ Backend setup complete!"
-echo "🌐 Starting server on http://localhost:8000"
-echo "📚 API docs will be available at http://localhost:8000/docs"
 echo ""
-echo "Press Ctrl+C to stop the server"
+echo "✅ Setup complete!"
+echo "🌐 Starting server at http://localhost:8000"
+echo "📚 API Docs at http://localhost:8000/docs"
+echo ""
+echo "Press Ctrl+C to stop"
 echo ""
 
-# Start the server
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+# Start the FastAPI server
+python main.py

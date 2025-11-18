@@ -1,12 +1,15 @@
 // Real API service for Smart Content Studio AI tools
 // This service connects to the FastAPI backend
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const DEFAULT_API_BASE_URL = 'http://localhost:8000';
+const normalizedBaseUrl = (process.env.REACT_APP_API_BASE_URL || DEFAULT_API_BASE_URL).replace(/\/$/, '');
+const API_BASE_URL = normalizedBaseUrl;
 
 // Helper function to make API requests
 const makeApiRequest = async (endpoint, data) => {
   try {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    const url = endpoint.startsWith('/') ? `${API_BASE_URL}${endpoint}` : `${API_BASE_URL}/${endpoint}`;
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -85,6 +88,41 @@ export const apiCall = async (tool, input) => {
         }
         endpoint = '/api/chat';
         requestData = { message: input.trim() };
+        break;
+
+      case 'image-generator':
+        if (!input || typeof input !== 'string' || input.trim().length === 0) {
+          throw new Error('Please describe the image you want to generate');
+        }
+        endpoint = '/api/generate-image';
+        requestData = { prompt: input.trim() };
+        break;
+      
+      // Smart routing with multi-model system
+      case 'smart-route':
+        if (typeof input === 'string') {
+          if (!input || input.trim().length === 0) {
+            throw new Error('Please enter a prompt');
+          }
+          endpoint = '/api/smart-route';
+          requestData = { 
+            prompt: input.trim(),
+            quality_priority: true
+          };
+        } else if (typeof input === 'object') {
+          if (!input.prompt || input.prompt.trim().length === 0) {
+            throw new Error('Please enter a prompt');
+          }
+          endpoint = '/api/smart-route';
+          requestData = {
+            prompt: input.prompt.trim(),
+            task_type: input.task_type || null,
+            speed_priority: input.speed_priority || false,
+            quality_priority: input.quality_priority !== undefined ? input.quality_priority : true
+          };
+        } else {
+          throw new Error('Invalid input for smart routing');
+        }
         break;
         
       default:
