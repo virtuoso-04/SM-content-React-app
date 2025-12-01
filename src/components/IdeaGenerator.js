@@ -53,33 +53,34 @@ const IdeaGenerator = () => {
   };
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex items-center gap-4 mb-6">
-        <div className="p-3 rounded-2xl bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg">
-          <FaLightbulb size={32} />
+    <div className="flex h-full flex-col text-slate-100">
+      <div className="mb-6 flex items-center gap-4">
+        <div className="rounded-2xl border border-white/20 bg-gradient-to-br from-amber-400/60 to-orange-500/60 p-3 text-white shadow-[0_20px_60px_rgba(251,191,36,0.35)]">
+          <FaLightbulb size={28} />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">Idea Generator</h2>
-          <p className="text-gray-600">Spark creativity with AI-powered brainstorming</p>
+          <h2 className="text-2xl font-semibold text-white">Idea Generator</h2>
+          <p className="text-sm text-slate-300">Spark creativity with AI-powered brainstorming</p>
         </div>
       </div>
-      
-      <div className="flex-1 flex flex-col gap-6">
-        <div className="space-y-4">
+
+      <div className="flex flex-1 flex-col gap-6">
+        <div className="glass-panel border-white/10 bg-white/5 p-5">
           <label className="block">
-            <span className="text-sm font-medium text-gray-700 mb-2 block">Topic or Prompt</span>
+            <span className="mb-2 block text-sm font-semibold uppercase tracking-[0.3em] text-slate-300">Topic or Prompt</span>
             <textarea
-              className="w-full h-32 rounded-lg border border-gray-300 p-4 focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all resize-none bg-gray-50 text-gray-900"
+              className="glass-input w-full resize-none border-white/15 bg-white/5 p-4 text-base text-white"
               placeholder="Enter your topic (e.g., 'blog post about sustainable living', 'social media captions for a coffee shop')"
               value={input}
-              onChange={e => setInput(e.target.value)}
+              onChange={(e) => setInput(e.target.value)}
+              rows={6}
             />
           </label>
-          
+
           <button
             onClick={handleGenerate}
             disabled={loading || !input.trim()}
-            className="w-full py-3 rounded-lg bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-yellow-300 disabled:opacity-50 disabled:transform-none disabled:cursor-not-allowed"
+            className="mt-4 w-full rounded-2xl border border-transparent bg-gradient-to-r from-[#FEE140] via-[#FA709A] to-[#FEE140] px-6 py-3 font-semibold text-slate-900 shadow-[0_25px_80px_rgba(250,112,154,0.35)] transition hover:translate-y-[-1px] disabled:opacity-40"
           >
             {loading ? (
               <div className="flex items-center justify-center gap-2">
@@ -93,32 +94,32 @@ const IdeaGenerator = () => {
         </div>
 
         {error && (
-          <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+          <div className="rounded-2xl border border-rose-400/40 bg-rose-500/10 p-4 text-sm text-rose-100">
             {error}
           </div>
         )}
 
         {output && (
-          <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg animate-fade-in">
-            <h3 className="font-semibold text-gray-800 mb-2">Generated Ideas:</h3>
-            <div className="text-gray-700">
+          <div className="glass-panel border-white/10 bg-white/5 p-5 animate-fade-in">
+            <h3 className="mb-2 font-semibold text-white">Generated Ideas:</h3>
+            <div className="text-slate-200">
               <FormattedAIResponse content={output} />
             </div>
           </div>
         )}
 
         {history.length > 0 && (
-          <div className="space-y-3">
-            <h3 className="font-semibold text-gray-800">Previous Ideas</h3>
-            <div className="space-y-3 max-h-60 overflow-y-auto">
+          <div className="glass-panel border-white/10 bg-white/5 p-5">
+            <h3 className="mb-3 font-semibold text-white">Previous Ideas</h3>
+            <div className="max-h-60 space-y-3 overflow-y-auto pr-1">
               {history.map((item, idx) => (
-                <div key={idx} className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                  <div className="text-xs text-gray-500 mb-2">{item.date}</div>
-                  <div className="text-sm text-gray-600 mb-2">
-                    <span className="font-medium">Topic:</span> {item.input}
+                <div key={idx} className="rounded-2xl border border-white/10 bg-white/5 p-3">
+                  <div className="mb-2 text-xs text-slate-400">{item.date}</div>
+                  <div className="mb-2 text-sm text-slate-300">
+                    <span className="font-semibold text-white">Topic:</span> {item.input}
                   </div>
-                  <div className="text-sm text-gray-800">
-                    <span className="font-medium">Ideas:</span> {item.output}
+                  <div className="text-sm text-slate-100">
+                    <span className="font-semibold text-white">Ideas:</span> {item.output}
                   </div>
                 </div>
               ))}

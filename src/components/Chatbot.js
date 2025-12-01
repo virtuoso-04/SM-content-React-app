@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { apiCall } from '../services/realApi';
 import Loader from './Loader';
 import { FaComments, FaUser, FaRobot } from 'react-icons/fa';
+import FormattedAIResponse from './FormattedAIResponse';
 
 const STORAGE_KEY = 'chatbot_history';
 
@@ -10,7 +11,16 @@ const Chatbot = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [history, setHistory] = useState([]);
+  const [tone, setTone] = useState('friendly');
+  const [creativity, setCreativity] = useState(0.7);
   const chatEndRef = useRef(null);
+  
+  const toneOptions = [
+    { value: 'friendly', label: 'Friendly', description: 'Warm and conversational' },
+    { value: 'professional', label: 'Professional', description: 'Executive-ready' },
+    { value: 'playful', label: 'Playful', description: 'Energetic & emoji-rich' },
+    { value: 'expert', label: 'Expert', description: 'Insightful & authoritative' },
+  ];
 
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -42,8 +52,12 @@ const Chatbot = () => {
     setLoading(true);
     
     try {
-      const res = await apiCall('chatbot', userMessage);
-      const newEntry = { user: userMessage, bot: res.output };
+      const res = await apiCall('chatbot', {
+        message: userMessage,
+        tone,
+        creativity,
+      });
+      const newEntry = { user: userMessage, bot: res.output, tone, creativity };
       const updatedHistory = [...history, newEntry];
       setHistory(updatedHistory);
       
@@ -61,7 +75,7 @@ const Chatbot = () => {
     } finally {
       setLoading(false);
     }
-  }, [input, history]);
+  }, [input, history, tone, creativity]);
 
   const handleKeyDown = useCallback((e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -80,132 +94,91 @@ const Chatbot = () => {
   }, []);
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between mb-6">
+    <div className="flex h-full flex-col text-slate-100">
+      <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-r from-green-500 to-blue-500 text-white shadow-lg">
-            <FaComments size={32} />
+          <div className="rounded-2xl border border-white/20 bg-gradient-to-r from-emerald-400/60 to-cyan-500/60 p-3 text-white shadow-[0_20px_60px_rgba(34,197,94,0.35)]">
+            <FaComments size={28} />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">🤖 AI Chatbot</h2>
-            <p className="text-gray-600">Have a friendly conversation with our AI assistant 💬</p>
+            <h2 className="text-2xl font-semibold text-white">🤖 AI Chatbot</h2>
+            <p className="text-sm text-slate-300">Have a friendly conversation with our AI assistant 💬</p>
           </div>
         </div>
-        
+
         {history.length > 0 && (
           <button
             onClick={clearHistory}
-            className="px-3 py-1 text-sm bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors"
+            className="rounded-2xl border border-white/15 bg-white/5 px-3 py-1 text-sm text-slate-200 transition hover:border-cyan-300/50"
           >
             Clear Chat
           </button>
         )}
       </div>
-      
-      <div className="flex-1 flex flex-col gap-4">
-        <div className="flex-1 bg-gray-50 rounded-lg p-4 overflow-y-auto space-y-4 min-h-0">
+
+      <div className="flex flex-1 flex-col gap-4">
+        <div className="glass-panel min-h-0 flex-1 space-y-4 overflow-y-auto border-white/10 bg-white/5 p-4">
           {history.length === 0 ? (
-            <div className="flex items-center justify-center h-full text-gray-400">
+            <div className="flex h-full items-center justify-center text-slate-400">
               <div className="text-center">
-                <FaComments size={48} className="mx-auto mb-3 opacity-50" />
-                <p className="text-lg mb-2">👋 Start a conversation!</p>
+                <FaComments size={48} className="mx-auto mb-3 opacity-60" />
+                <p className="mb-2 text-lg">👋 Start a conversation!</p>
                 <p className="text-sm">Ask me anything about content creation, writing, or just chat! 💬</p>
               </div>
             </div>
           ) : (
-            history.map((item, idx) => (
+            history.map((item, idx) => {
+              const entryTone = item.tone || 'friendly';
+              const entryCreativity = typeof item.creativity === 'number' ? Math.round(item.creativity * 100) : null;
+              const toneLabel = toneOptions.find((opt) => opt.value === entryTone)?.label || 'Friendly';
+              return (
               <div key={idx} className="space-y-3">
-                {/* User message */}
                 <div className="flex justify-end">
-                  <div className="flex items-start gap-2 max-w-[80%]">
-                    <div className="bg-blue-500 text-white rounded-lg px-4 py-2 shadow-md">
+                  <div className="flex max-w-[80%] items-start gap-2">
+                    <div className="rounded-2xl border border-cyan-300/40 bg-gradient-to-r from-cyan-400/40 to-blue-500/40 px-4 py-2 text-white shadow-lg">
                       {item.user}
                     </div>
-                    <div className="p-1 bg-blue-100 rounded-full">
-                      <FaUser size={12} className="text-blue-600" />
+                    <div className="rounded-full border border-white/10 bg-white/10 p-1">
+                      <FaUser size={12} className="text-white" />
                     </div>
                   </div>
                 </div>
-                
-                {/* Bot message */}
+
                 <div className="flex justify-start">
-                  <div className="flex items-start gap-2 max-w-[80%]">
-                    <div className="p-1 bg-green-100 rounded-full">
-                      <FaRobot size={12} className="text-green-600" />
+                  <div className="flex max-w-[80%] items-start gap-2">
+                    <div className="rounded-full border border-white/10 bg-white/10 p-1">
+                      <FaRobot size={12} className="text-emerald-200" />
                     </div>
-                    <div className="bg-white text-gray-800 rounded-lg px-4 py-2 shadow-md border">
-                      <div className="whitespace-pre-wrap break-words leading-relaxed">
-                        {item.bot.split('\n').map((line, lineIdx) => {
-                          // Handle bullet points
-                          if (line.trim().startsWith('•') || line.trim().startsWith('-') || line.trim().startsWith('*')) {
-                            return (
-                              <div key={lineIdx} className="flex items-start gap-2 my-2">
-                                <span className="text-blue-500 font-bold mt-1 text-sm">•</span>
-                                <span className="text-sm leading-relaxed">{line.replace(/^[\s•\-*]+/, '')}</span>
-                              </div>
-                            );
-                          }
-                          // Handle numbered lists
-                          else if (/^\s*\d+\./.test(line)) {
-                            return (
-                              <div key={lineIdx} className="my-2">
-                                <span className="font-semibold text-blue-600 text-sm">{line.match(/^\s*\d+\./)[0]}</span>
-                                <span className="ml-1 text-sm leading-relaxed">{line.replace(/^\s*\d+\.\s*/, '')}</span>
-                              </div>
-                            );
-                          }
-                          // Handle bold text (wrapped in **)
-                          else if (line.includes('**')) {
-                            const parts = line.split('**');
-                            return (
-                              <div key={lineIdx} className="my-1">
-                                {parts.map((part, partIdx) => 
-                                  partIdx % 2 === 1 ? 
-                                    <strong key={partIdx} className="font-semibold text-gray-900">{part}</strong> : 
-                                    <span key={partIdx} className="text-sm leading-relaxed">{part}</span>
-                                )}
-                              </div>
-                            );
-                          }
-                          // Handle code blocks (wrapped in ```)
-                          else if (line.trim().startsWith('```')) {
-                            return (
-                              <div key={lineIdx} className="bg-gray-100 rounded p-2 my-2 font-mono text-xs overflow-x-auto">
-                                {line.replace(/```/g, '')}
-                              </div>
-                            );
-                          }
-                          // Regular lines
-                          else if (line.trim()) {
-                            return (
-                              <div key={lineIdx} className="my-1 text-sm leading-relaxed">
-                                {line}
-                              </div>
-                            );
-                          }
-                          // Empty lines for spacing
-                          else {
-                            return <div key={lineIdx} className="h-3"></div>;
-                          }
-                        })}
+                    <div className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-slate-200 shadow-md">
+                      <div className="mb-2 flex flex-wrap items-center gap-2 text-xs uppercase tracking-wide text-slate-300">
+                        <span className="glass-chip text-emerald-200">
+                          {toneLabel} tone
+                        </span>
+                        {entryCreativity !== null && (
+                          <span className="glass-chip text-cyan-200">
+                            Creativity {entryCreativity}%
+                          </span>
+                        )}
                       </div>
+                      <FormattedAIResponse content={item.bot} />
                     </div>
                   </div>
                 </div>
               </div>
-            ))
+              );
+            })
           )}
           
           {loading && (
             <div className="flex justify-start">
               <div className="flex items-start gap-2">
-                <div className="p-1 bg-green-100 rounded-full">
-                  <FaRobot size={12} className="text-green-600" />
+                <div className="rounded-full border border-white/10 bg-white/10 p-1">
+                  <FaRobot size={12} className="text-emerald-200" />
                 </div>
-                <div className="bg-white text-gray-800 rounded-lg px-4 py-2 shadow-md border">
+                <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-slate-200 shadow-md">
                   <div className="flex items-center gap-2">
                     <Loader />
-                    <span className="text-gray-500 text-sm">AI is thinking... 🤔</span>
+                    <span className="text-sm text-slate-400">AI is thinking... 🤔</span>
                   </div>
                 </div>
               </div>
@@ -217,17 +190,58 @@ const Chatbot = () => {
         
         <div className="space-y-3">
           {error && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+            <div className="rounded-2xl border border-rose-400/40 bg-rose-500/10 p-3 text-sm text-rose-100">
               {error}
             </div>
           )}
-          
-          <div className="flex gap-3">
+
+          <div className="grid gap-3 md:grid-cols-[1.2fr_1fr]">
+            <div className="glass-panel border-white/10 bg-white/5 p-4">
+              <label htmlFor="tone" className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-300">
+                Response tone
+              </label>
+              <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                {toneOptions.map((option) => (
+                  <button
+                    key={option.value}
+                    type="button"
+                    onClick={() => setTone(option.value)}
+                    className={`rounded-2xl border px-3 py-2 text-left text-sm transition-all ${
+                      tone === option.value
+                        ? 'border-cyan-300/70 bg-gradient-to-r from-cyan-500/30 via-sky-500/20 to-indigo-500/20 text-white'
+                        : 'border-white/10 text-slate-200 hover:border-cyan-200/40'
+                    }`}
+                  >
+                    <div className="font-semibold">{option.label}</div>
+                    <div className="text-xs text-slate-400">{option.description}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="glass-panel border-white/10 bg-white/5 p-4">
+              <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.3em] text-slate-300">
+                Creativity
+                <span className="text-cyan-200">{Math.round(creativity * 100)}%</span>
+              </div>
+              <input
+                type="range"
+                min={0}
+                max={100}
+                value={Math.round(creativity * 100)}
+                onChange={(e) => setCreativity(parseInt(e.target.value, 10) / 100)}
+                className="mt-3 w-full accent-cyan-300"
+              />
+              <p className="mt-1 text-xs text-slate-400">Lower = precise • Higher = imaginative</p>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-3 sm:flex-row">
             <textarea
-              className="flex-1 rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none bg-white text-gray-900 min-h-[44px] max-h-24"
+              className="glass-input flex-1 border-white/15 bg-white/5 p-3 text-base text-white"
               placeholder="Type your message... 💭"
               value={input}
-              onChange={e => setInput(e.target.value)}
+              onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               disabled={loading}
               maxLength={500}
@@ -237,7 +251,7 @@ const Chatbot = () => {
             <button
               onClick={handleSend}
               disabled={loading || !input.trim()}
-              className="px-6 py-3 rounded-lg bg-gradient-to-r from-green-500 to-blue-500 text-white font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-50 disabled:transform-none disabled:cursor-not-allowed"
+              className="rounded-2xl border border-transparent bg-gradient-to-r from-[#A6FFCB] via-[#12D8FA] to-[#1FA2FF] px-6 py-3 font-semibold text-slate-900 shadow-[0_25px_80px_rgba(15,118,230,0.35)] transition hover:translate-y-[-1px] disabled:opacity-40"
             >
               Send
             </button>

@@ -122,27 +122,27 @@ const GameForge = () => {
   };
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex items-center gap-4 mb-6">
-        <div className="p-3 rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg">
-          <FaGamepad size={32} />
+    <div className="flex h-full flex-col text-slate-100">
+      <div className="mb-6 flex items-center gap-4">
+        <div className="rounded-2xl border border-white/20 bg-gradient-to-br from-blue-500/60 to-violet-500/60 p-3 text-white shadow-[0_20px_60px_rgba(99,102,241,0.35)]">
+          <FaGamepad size={28} />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">GameForge AI</h2>
-          <p className="text-gray-600">Generate game content with AI assistance</p>
+          <h2 className="text-2xl font-semibold text-white">GameForge AI</h2>
+          <p className="text-sm text-slate-300">Generate game content with AI assistance</p>
         </div>
       </div>
-      
-      <div className="flex-1 flex flex-col gap-6">
-        <div className="flex flex-wrap gap-2 mb-4">
-          {tools.map(tool => (
+
+      <div className="flex flex-1 flex-col gap-6">
+        <div className="mb-2 flex flex-wrap gap-2">
+          {tools.map((tool) => (
             <button
               key={tool.id}
               onClick={() => setActiveTool(tool.id)}
-              className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                tool.id === activeTool 
-                  ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-md' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              className={`rounded-2xl px-4 py-2 text-sm font-medium transition-all ${
+                tool.id === activeTool
+                  ? 'border border-cyan-300/70 bg-gradient-to-r from-cyan-500/30 via-blue-500/20 to-indigo-500/20 text-white shadow-lg'
+                  : 'border border-white/10 bg-white/5 text-slate-200 hover:border-cyan-200/40'
               }`}
             >
               {tool.name}
@@ -150,34 +150,33 @@ const GameForge = () => {
           ))}
         </div>
 
-        {/* Tool description */}
-        <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
-          <h3 className="font-medium text-blue-800 mb-1">
-            {tools.find(t => t.id === activeTool)?.name}
+        <div className="glass-panel border-white/10 bg-white/5 p-4">
+          <h3 className="mb-1 text-base font-semibold text-white">
+            {tools.find((t) => t.id === activeTool)?.name}
           </h3>
-          <p className="text-sm text-blue-700">
-            {tools.find(t => t.id === activeTool)?.description}
+          <p className="text-sm text-slate-300">
+            {tools.find((t) => t.id === activeTool)?.description}
           </p>
         </div>
 
-        <div className="space-y-4">
+        <div className="glass-panel border-white/10 bg-white/5 p-5">
           <label className="block">
-            <span className="text-sm font-medium text-gray-700 mb-2 block">
-              Your input for {tools.find(t => t.id === activeTool)?.name}
+            <span className="mb-2 block text-sm font-semibold uppercase tracking-[0.3em] text-slate-300">
+              Your input for {tools.find((t) => t.id === activeTool)?.name}
             </span>
             <textarea
               rows={4}
-              className="w-full rounded-lg border border-gray-300 p-4 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none bg-gray-50 text-gray-900"
-              placeholder={tools.find(t => t.id === activeTool)?.placeholder}
+              className="glass-input w-full resize-none border-white/15 bg-white/5 p-4 text-base text-white"
+              placeholder={tools.find((t) => t.id === activeTool)?.placeholder}
               value={input}
-              onChange={e => setInput(e.target.value)}
+              onChange={(e) => setInput(e.target.value)}
             />
           </label>
-          
+
           <button
             onClick={handleGenerate}
             disabled={loading || !input.trim()}
-            className="w-full py-3 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-50 disabled:transform-none disabled:cursor-not-allowed"
+            className="mt-4 w-full rounded-2xl border border-transparent bg-gradient-to-r from-[#A6FFCB] via-[#12D8FA] to-[#1FA2FF] px-6 py-3 font-semibold text-slate-900 shadow-[0_25px_80px_rgba(15,118,230,0.35)] transition hover:translate-y-[-1px] disabled:opacity-40"
           >
             {loading ? (
               <div className="flex items-center justify-center gap-2">
@@ -191,37 +190,35 @@ const GameForge = () => {
         </div>
 
         {error && (
-          <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+          <div className="rounded-2xl border border-rose-400/40 bg-rose-500/10 p-4 text-sm text-rose-100">
             {error}
           </div>
         )}
 
         {output && (
-          <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg animate-fade-in">
-            <h3 className="font-semibold text-gray-800 mb-2">Generated Content:</h3>
-            <div className="text-gray-700">
+          <div className="glass-panel border-white/10 bg-white/5 p-5 animate-fade-in">
+            <h3 className="mb-2 font-semibold text-white">Generated Content:</h3>
+            <div className="text-slate-200">
               <FormattedAIResponse content={output} />
             </div>
           </div>
         )}
 
         {history.length > 0 && (
-          <div className="space-y-3">
-            <h3 className="font-semibold text-gray-800">Previous Generations</h3>
-            <div className="space-y-3 max-h-60 overflow-y-auto">
+          <div className="glass-panel border-white/10 bg-white/5 p-5">
+            <h3 className="mb-3 font-semibold text-white">Previous Generations</h3>
+            <div className="max-h-60 space-y-3 overflow-y-auto pr-1">
               {history.map((item, idx) => (
-                <div key={idx} className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-xs text-gray-500">{item.date}</span>
-                    <span className="text-xs font-medium bg-blue-100 text-blue-800 rounded-full px-2 py-1">
-                      {item.tool}
-                    </span>
+                <div key={idx} className="rounded-2xl border border-white/10 bg-white/5 p-3">
+                  <div className="mb-2 flex items-center justify-between text-xs text-slate-400">
+                    <span>{item.date}</span>
+                    <span className="glass-chip text-cyan-100">{item.tool}</span>
                   </div>
-                  <div className="text-sm text-gray-600 mb-2">
-                    <span className="font-medium">Prompt:</span> {item.input}
+                  <div className="mb-2 text-sm text-slate-300">
+                    <span className="font-semibold text-white">Prompt:</span> {item.input}
                   </div>
-                  <div className="text-sm text-gray-800 line-clamp-3">
-                    <span className="font-medium">Output:</span> {item.output?.substring(0, 100)}...
+                  <div className="text-sm text-slate-100">
+                    <span className="font-semibold text-white">Output:</span> {item.output?.substring(0, 100)}...
                   </div>
                 </div>
               ))}
