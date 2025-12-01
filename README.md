@@ -1,347 +1,251 @@
 # Smart Content Studio AI
 
-## Project Summary
+Smart Content Studio AI is a full-stack workspace that helps creative strategists, content teams, and indie game builders ideate, refine, and ship ideas faster. It pairs an Apple-inspired glass UI with production-ready AI tools powered by Google Gemini 2.0 Flash, a Firebase-authenticated React frontend, and a FastAPI backend.
 
-Smart Content Studio AI is a comprehensive suite designed to combat creative fatigue and streamline content workflows for content creators and game developers. The application combines the power of Google's Gemini 2.0 Flash AI model with a modern, responsive React frontend to deliver a seamless user experience.
+## Highlights
 
-The platform offers five powerful AI tools:
-1. **Summarizer**: Condenses long articles, lore, or research
-2. **Idea Generator**: Sparks headlines, plotlines, and marketing ideas
-3. **Content Refiner**: Enhances clarity, grammar, and tone
-4. **AI Chat Assistant**: Provides general content help and clarification
-5. **GameForge AI**: Specialized game development assistant offering services like Narrative Builder, Dialogue Crafter, Gameplay Mechanic Tuner, and Code Snippet Generator
+- **Unified creative cockpit** – Summarizer, Idea Generator, Content Refiner, Chatbot, GameForge, and Image Generator share one consistent dashboard.
+- **Multi-model AI routing** – Smart provider selection across Google Gemini 2.0 Flash, xAI Grok, with automatic fallback for resilience.
+- **Flexible image generation** – User chooses between Pollinations AI (fast, creative) or Gemini Imagen 3 (detailed, refined quality) for each render.
+- **Authentic AI output** – Every tool streams real responses from production AI APIs with markdown/code formatting.
+- **Apple-style sign-in** – Glassmorphism login with email/password flows plus Google OAuth via Firebase.
+- **Responsive & accessible** – Tailwind-based layout adapts to any screen with sensible keyboard/focus states.
+- **Resilient UX** – Error boundaries, loading shimmer, and optimistic messaging keep the experience polished.
 
-Users can authenticate securely via Google Firebase, and all their work is automatically saved for future reference. The backend is built with Python FastAPI, ensuring fast, reliable performance and easy scalability.
-
-## The Problem
-
-Content creators and game developers today are hamstrung by:
-- Creative blocks and repetitive workflows
-- Slow content refinement and summarization processes
-- Lack of adaptive game narratives
-- High entry barriers for indie teams due to fragmented, non-beginner-friendly tools
-- Persistent copyright and bias risks in GenAI
-
-## STAR Story: Transforming Content Creation with AI
-
-### Situation
-Content creators and game development teams were struggling with creative blocks, inefficient workflows, and the technical complexity of existing tools. They faced challenges in quickly refining content, generating adaptive narratives, and managing copyright concerns with AI tools.
-
-### Task
-Develop a comprehensive AI-powered solution that could address the full spectrum of content creation challenges while being accessible to both experienced professionals and indie teams.
-
-### Action
-We built Smart Content Studio AI with five specialized tools:
-1. **Summarizer**: Condenses long articles, lore, or research into key points
-2. **Idea Generator**: Sparks headlines, plotlines, and marketing ideas
-3. **Content Refiner**: Enhances clarity, grammar, and tone
-4. **AI Chat Assistant**: Provides general content help and clarification
-5. **GameForge AI**: Specialized game development assistant with Narrative Builder, Dialogue Crafter, Gameplay Mechanic Tuner, and Code Snippet Generator
-
-The application was designed with a modern, intuitive interface that required minimal training. We integrated Google authentication for security and implemented local storage to ensure users never lose their work.
-
-### Result
-After implementing Smart Content Studio AI:
-- Content creation time decreased by 40%
-- Team productivity increased by 35%
-- Content quality ratings improved by 25%
-- Game development teams reported 45% faster narrative development
-- Indie teams experienced 50% lower barriers to entry for AI-assisted development
-- The platform has become an essential tool in creative workflows, enabling teams to focus on innovation while automating repetitive aspects of content creation
-
----
-
-A modern full-stack web application featuring AI-powered content creation tools with Google Firebase authentication and Python FastAPI backend integrated with Google Gemini 2.0 Flash AI.
-
-## ✨ Features
-
-- **🔐 Google Authentication** - Secure sign-in using Firebase Auth
-- **🤖 AI Content Tools**:
-  - **Summarizer** - Condense long articles, lore, or research into key points
-  - **Idea Generator** - Spark headlines, plotlines, and marketing ideas
-  - **Content Refiner** - Enhance clarity, grammar, and tone
-  - **AI Chat Assistant** - Get general content help and clarification
-- **🎮 GameForge AI** - Specialized game development assistant:
-  - **Narrative Builder** - Create adaptive game narratives
-  - **Dialogue Crafter** - Generate realistic character dialogue
-  - **Gameplay Mechanic Tuner** - Balance and refine game mechanics
-  - **Code Snippet Generator** - Create code samples for game features
-- **📱 Responsive Design** - Works seamlessly on mobile and desktop
-- **💾 History Persistence** - All tool outputs saved locally
-- **🎨 Modern UI** - Beautiful gradients and smooth animations
-- **⚡ Real AI Integration** - Powered by Google Gemini 2.0 Flash model
-- **📝 Markdown Formatting** - Properly formatted responses with code highlighting
-- **🔄 Real-time Updates** - Instant feedback and content generation
-- **Optimized Performance** - Fast loading and response times
-- **Accessibility** - WCAG-compliant components and keyboard navigation
-
-## 🛠 Tech Stack
+## Tech Stack
 
 **Frontend**
-- React 19 - Modern functional components with hooks
-- Firebase 12 - Authentication and services
-- Tailwind CSS - Utility-first CSS framework
-- React Router Dom - Client-side routing
-- React Icons - Beautiful icon library
-- React Markdown - Markdown rendering with formatting
-- LocalStorage API - Client-side data persistence
+- React 19 with hooks and Suspense-ready patterns
+- React Router DOM for client routing
+- Tailwind CSS + custom glass utilities
+- Firebase Authentication (email/password + Google provider)
+- React Markdown + Remark/rehype pipeline for formatted AI responses
+- Framer Motion accents in creative tools
 
 **Backend**
-- FastAPI - Modern Python web framework
-- Google Gemini 2.0 Flash - AI language model
-- Uvicorn - ASGI server for production
-- Pydantic - Data validation and serialization
-- CORS middleware - Secure cross-origin requests
+- FastAPI + Uvicorn
+- Multi-model AI routing:
+  - **Text generation**: Google Gemini 2.0 Flash, xAI Grok (with fallback)
+  - **Image generation**: Pollinations AI, Gemini Imagen 3, FAL.ai
+- Pydantic for validation, CORS middleware, `.env` driven configuration
 
-## 📁 Project Structure
+## Directory Map
 
+```
 SM-content-React-app/
-├── 📁 public/                     # Static assets and PWA files
-│   ├── index.html                # Main HTML template
-│   ├── manifest.json             # PWA manifest
-│   ├── favicon.ico               # App favicon
-│   ├── logo192.png               # App logo (192px)
-│   ├── logo512.png               # App logo (512px)
-│   └── robots.txt                # Search engine crawling rules
-├── 📁 src/                        # Frontend source code
-│   ├── 📁 components/              # React components (alphabetically organized)
-│   │   ├── AIChat.js             # 🤖 AI chat assistant interface
-│   │   ├── ContentRefiner.js     # ✨ Content improvement tool
-│   │   ├── ErrorBoundary.js      # 🛡️ Error handling wrapper
-│   │   ├── FormattedAIResponse.js # 📝 AI response formatter
-│   │   ├── GameForge/            # 🎮 Game development tools
-│   │   │   ├── CodeGenerator.js  # 💻 Code snippet generator
-│   │   │   ├── DialogueCrafter.js # 💬 Character dialogue tool
-│   │   │   ├── GameplayTuner.js  # 🎯 Mechanic balancing tool
-│   │   │   └── NarrativeBuilder.js # 📚 Game narrative creator
-│   │   ├── Header.js             # 🎯 App header with user info
-│   │   ├── IdeaGenerator.js      # 💡 Idea generation tool
-│   │   ├── Loader.js             # ⏳ Loading component
-│   │   ├── Sidebar.js            # 📋 Navigation sidebar
-│   │   └── Summarizer.js         # 📄 Text summarization tool
-│   ├── 📁 services/               # External services
-│   │   ├── firebase.js           # 🔐 Firebase configuration
-│   │   └── realApi.js            # 🔗 API integration with backend
-│   ├── App.js                    # Main app component with routing
-│   ├── index.js                  # React app entry point
-│   ├── index.css                 # Global styles and animations
-│   └── service-worker.js         # PWA service worker
-├── 📁 backend/                    # Python FastAPI backend
-│   ├── main.py                   # FastAPI application
-│   ├── requirements.txt          # Python dependencies
-│   ├── start.sh                  # Backend startup script
-│   ├── .env.template             # Environment variables template
-│   └── README.md                 # Backend documentation
-├── package.json                  # Frontend dependencies and scripts
-├── package-lock.json             # Locked dependency versions
-├── tailwind.config.js            # Tailwind CSS configuration
-├── postcss.config.js             # PostCSS configuration
-├── .gitignore                    # Git ignore rules
-└── DESIGN.md                     # Architecture documentation
+├── README.md                # This document
+├── DESIGN.md               # Product & UX decisions
+├── package.json            # Frontend scripts & deps
+├── tailwind.config.js      # Tailwind setup
+├── postcss.config.js
+├── public/                 # CRA static assets
+├── src/
+│   ├── App.js              # Routing + auth shell
+│   ├── index.js
+│   ├── index.css
+│   ├── service-worker.js
+│   ├── services/
+│   │   ├── firebase.js     # Firebase bootstrap
+│   │   └── realApi.js      # FastAPI client helpers
+│   └── components/
+│       ├── Chatbot.js
+│       ├── ContentRefiner.js
+│       ├── ErrorBoundary.js
+│       ├── FormattedAIResponse.js
+│       ├── GameForge.js
+│       ├── Header.js
+│       ├── IdeaGenerator.js
+│       ├── ImageGenerator.js
+│       ├── Loader.js
+│       ├── Sidebar.js
+│       └── Summarizer.js
+└── backend/
+    ├── main.py
+    ├── requirements.txt
+    ├── start.sh
+    ├── README.md
+    └── .env.template
+```
 
+## Prerequisites
 
-### 🗂️ File Organization Principles
+- Node.js 18+ and npm
+- Python 3.10+
+- At least one AI API key:
+  - Google Gemini API key from [AI Studio](https://aistudio.google.com/app/apikey)
+  - xAI Grok API key from [X.AI Console](https://console.x.ai/)
+- Firebase project configured for Web auth (email/password + Google)
 
-- **📁 Components**: Alphabetically organized React components with clear single responsibilities
-- **📁 Services**: External integrations (Firebase auth, API calls) 
-- **📁 Public**: Static assets, PWA configuration, and entry HTML
-- **📁 Backend**: Separate Python FastAPI service with its own documentation
-- **🧹 Clean Structure**: Removed mock/test files, keeping only production-ready code
-- **📋 Naming**: Descriptive filenames that clearly indicate component purpose
+## Backend Setup
 
-## 🚀 Quick Start
-
-### Prerequisites
-- Node.js 16+ and npm
-- Python 3.9+ and pip
-- Google Gemini API Key from [Google AI Studio](https://aistudio.google.com/app/apikey)
-- Git (for version control and updates)
-
-### Backend Setup
-
-1. **Navigate to backend directory**
-   ```bash
-   cd backend
-Run the setup script
-
-Bash
-
-./start.sh
-Or manual setup:
-
-Bash
-
-# Create virtual environment
+```bash
+cd backend
 python3 -m venv venv
-source venv/bin/activate
-
-# Install dependencies
+source venv/bin/activate   # Windows: venv\Scripts\activate
 pip install -r requirements.txt
-
-# Setup environment variables
-cp .env.template .env
-# Edit .env and add your Gemini API key
-
-# Start the server
+cp .env.template .env      # add GEMINI_API_KEY and optional settings
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
-Add your Gemini API Key to backend/.env
+```
 
-GEMINI_API_KEY=your-actual-api-key-here
-Frontend Setup
-Install dependencies
+Key environment variables (`backend/.env`):
 
-npm start
-Open your browser
-Navigate to http://localhost:3000
+```
+# === AI Model Configuration ===
+GEMINI_API_KEY=your-google-gemini-key
+GROK_API_KEY=your-xai-grok-key
 
-Running the Application
-You'll need two terminal windows:
+# Primary AI provider (gemini or grok)
+PRIMARY_AI_PROVIDER=gemini
 
-Terminal 1 (Backend):
+# Enable automatic fallback to secondary provider if primary fails
+ENABLE_AI_FALLBACK=true
 
+# === Image Generation ===
+IMAGE_API_PROVIDER=pollinations  # default (can be overridden per request)
+IMAGE_API_KEY=                   # only for fal
 
-cd backend && ./start.sh
-Terminal 2 (Frontend):
-
-npm start
-Access Points:
-
-Frontend: http://localhost:3000
-
-Backend API: http://localhost:8000
-
-API Documentation: http://localhost:8000/docs
-
-📋 API Endpoints
-Core API
-GET / - Health check
-
-GET /health - Detailed health information
-
-POST /api/summarize - Summarize text content
-
-POST /api/generate-ideas - Generate ideas for a topic
-
-POST /api/refine-content - Refine and improve content
-
-POST /api/chat - Chat with AI assistant
-
-POST /api/gamedev/narrative - Game narrative assistant
-
-POST /api/gamedev/dialogue - Game dialogue generation
-
-POST /api/gamedev/mechanics - Game mechanics tuning
-
-POST /api/gamedev/code - Game code assistant
-
-POST /api/gamedev/concept - Game concept explanation
-
-GameForge API
-POST /api/gameforge/narrative - Generate game narratives and storylines
-
-POST /api/gameforge/dialogue - Create character dialogue and interactions
-
-POST /api/gameforge/mechanics - Balance and tune gameplay mechanics
-
-POST /api/gameforge/code - Generate code snippets for game features
-
-Visit http://localhost:8000/docs for interactive API documentation.
-
-⚙️ Configuration
-Environment Variables
-Backend (backend/.env):
-
-GEMINI_API_KEY=your-gemini-api-key-here
 ENVIRONMENT=development
-Frontend (optional .env):
+```
 
+**Routing behavior:**
+- **Text AI**: If `PRIMARY_AI_PROVIDER=gemini` and `ENABLE_AI_FALLBACK=true`, requests go to Gemini first, then Grok if Gemini fails. If `PRIMARY_AI_PROVIDER=grok`, Grok is tried first with optional Gemini fallback. If only one key is set, that provider is used exclusively.
+- **Image AI**: Users select their preferred provider (Pollinations or Gemini Imagen 3) in the UI for each generation. Pollinations requires no auth; Gemini uses the same `GEMINI_API_KEY`. FAL.ai is available by setting `IMAGE_API_KEY`.
+
+API docs are available at `http://localhost:8000/docs`.
+
+## Frontend Setup
+
+```bash
+npm install
+npm start
+```
+
+Optional `.env` keys (create `.env` in the project root):
+
+```
 REACT_APP_API_URL=http://localhost:8000
-Available Scripts
+REACT_APP_FIREBASE_API_KEY=your-firebase-key
+REACT_APP_FIREBASE_AUTH_DOMAIN=project.firebaseapp.com
+(...other Firebase config values)
+```
+
+## Running the Stack Locally
+
+1. Start the FastAPI service (see “Backend Setup”).
+2. In a separate terminal, run `npm start` for the React dev server.
+3. Visit `http://localhost:3000` for the UI and ensure the backend is reachable at `http://localhost:8000`.
+
+## Available Scripts
+
+- `npm start` – CRA development server with hot reload.
+- `npm run build` – Production bundle (lints as part of the build).
+- `npm run lint` – Optional script if added for static analysis (configure in `package.json`).
+- `./backend/start.sh` – Helper script to bootstrap the API with one command.
+
+## Feature Walkthrough
+
+- **Login** – Email/password form with mode toggle and Google sign-in button, all wrapped in a glassmorphism hero that showcases `into.jpg`.
+- **Dashboard shell** – `Sidebar` for navigation, `Header` for user info/sign-out, and glass `main` container hosting active tools.
+- **Multi-model AI routing** – All text-generation endpoints intelligently route between Gemini and Grok with automatic failover if one provider is unavailable.
+- **Summarizer / Idea Generator / Content Refiner** – Text-based workflows with saved history and markdown output.
+- **Chatbot** – Streaming conversation with error-safe markdown rendering via `FormattedAIResponse`.
+- **GameForge** – Multi-card experience for narrative, dialogue, mechanics tuning, and code snippets tailored to game creators.
+- **Image Generator** – Framer Motion-enhanced prompt panel with provider selector: choose Pollinations AI for fast, creative renders or Gemini Imagen 3 for detailed, high-quality visuals.
+
+## Deployment Notes
+
 Frontend:
 
-npm start - Start development server
+```bash
+npm run build
+```
 
-npm run build - Build for production
-
-npm test - Run tests
+Deploy the `build/` folder to any static host (Netlify, Vercel, S3, etc.). Set `homepage` in `package.json` if hosting at a subpath.
 
 Backend:
 
-./start.sh - Start backend with setup
-
-uvicorn main:app --reload - Development mode
-
-uvicorn main:app - Production mode
-
-🎯 Usage
-Sign In - Use Google authentication to access the app
-
-Navigate - Use the sidebar to switch between AI tools
-
-Create Content - Use any of the AI tools powered by Gemini AI
-
-View History - All your work is automatically saved locally
-
-🎮 GameForge AI Tools
-GameForge AI provides specialized assistance for game developers:
-
-Narrative Assistant - Create compelling game stories and worlds
-
-Dialogue Crafter - Generate authentic character dialogue
-
-Mechanics Tuner - Design and balance game mechanics
-
-Code Assistant - Get help with game development code
-
-Concept Explainer - Learn about game design concepts
-
-🛡️ Features
-Error Handling - Comprehensive error boundaries and user feedback
-
-Responsive Design - Mobile-first design with beautiful gradients
-
-Real-time AI - Actual AI-generated content, not mock responses
-
-Local Storage - Client-side persistence for user convenience
-
-Markdown Rendering - Properly formatted text with code highlighting
-
-Response Streaming - Real-time display of AI responses as they generate
-
-Optimized Performance - Fast loading and response times
-
-Accessibility - WCAG-compliant components and keyboard navigation
-
-🚀 Deployment
-Frontend Production Build
-Bash
-
-npm run build
-Backend Production
-Bash
-
+```bash
 cd backend
 uvicorn main:app --host 0.0.0.0 --port 8000
-Updating the Application
-Bash
+```
 
-# Pull the latest changes
-git pull
+For production, consider `gunicorn` + `uvicorn.workers.UvicornWorker`, HTTPS termination, and secret management for Gemini/Grok/Firebase keys.
 
-# Update dependencies
-npm install
-cd backend && pip install -r requirements.txt
-🔄 Version Control
-This project uses Git for version control. To get the latest updates:
+## Troubleshooting
 
-Bash
+- **Auth issues** – Confirm Firebase web config matches the deployed domain and that Google sign-in is enabled.
+- **AI provider errors** – Check that at least one of `GEMINI_API_KEY` or `GROK_API_KEY` is set. If using fallback, ensure both keys are valid and have sufficient quota.
+- **Image generation fails** – For Pollinations (default), no key is needed; if using FAL, verify `IMAGE_API_KEY` is set and the account has credits.
+- **Markdown warning** – `FormattedAIResponse` wraps `react-markdown` without deprecated props to avoid runtime errors.
 
-git pull
-After pulling updates, remember to check for any new dependencies that need to be installed.
+## Security & Rate Limiting
 
-License
-This project is licensed under the MIT License.
+Smart Content Studio includes built-in security measures to protect against prompt injection attacks and API abuse:
 
-Note: Both frontend and backend services must be running for full functionality.
+### Prompt Injection Prevention
 
-Last Updated: August 12, 2025
+The backend automatically detects and blocks malicious inputs that attempt to:
+- Override system instructions (e.g., "ignore previous instructions")
+- Inject special tokens or admin commands
+- Execute code or scripts through prompts
+- Manipulate AI behavior via roleplay/simulation tactics
+
+**How it works:**
+1. **Pattern Detection** – Regex-based scanning identifies suspicious instruction phrases, special tokens (`<|system|>`), and repeated keywords
+2. **Input Sanitization** – Removes control characters, excessive whitespace, zero-width characters, and enforces length limits
+3. **Automatic Rejection** – Requests containing injection patterns receive a 400 error with a security-focused message
+
+**Configuration:**
+- Patterns are defined in `backend/main.py` under `SUSPICIOUS_PATTERNS`
+- Adjust `max_length` parameters in `validate_and_sanitize()` calls to change input size limits
+- All user inputs (prompts, text, messages) are validated before reaching AI models
+
+### Rate Limiting
+
+To prevent API abuse and ensure fair usage:
+
+- **Default limits**: 60 requests per minute per client
+- **Tracking**: In-memory counter keyed by client IP (configurable to use user ID in production)
+- **Headers**: Responses include `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset` for client-side awareness
+- **Graceful errors**: Rate-limited requests receive HTTP 429 with reset time
+
+**Configuration (in `backend/main.py`):**
+```python
+RATE_LIMIT_REQUESTS = 60  # requests per window
+RATE_LIMIT_WINDOW = timedelta(minutes=1)  # 1 minute
+```
+
+**Production recommendations:**
+- Replace in-memory storage with Redis or similar for multi-instance deployments
+- Implement user-based rate limits tied to Firebase authentication
+- Add tiered limits (e.g., free vs. premium users)
+- Monitor rate limit metrics for abuse detection
+
+### Best Practices
+
+1. **Environment Security**
+   - Never commit `.env` files with real API keys
+   - Rotate API keys regularly
+   - Use different keys for development/production
+
+2. **Frontend Integration**
+   - Display friendly messages when rate limits are hit
+   - Cache rate limit headers and show remaining quota to users
+   - Implement client-side throttling to prevent unnecessary requests
+
+3. **Monitoring**
+   - Log blocked injection attempts for security audits
+   - Track rate limit hits to identify legitimate high-usage patterns vs. abuse
+   - Set up alerts for unusual traffic spikes
+
+4. **API Key Protection**
+   - Gemini/Grok/FAL keys should have usage quotas configured at the provider level
+   - Consider implementing API key rotation for long-lived deployments
+
+## License
+
+MIT License – see the root `LICENSE` if present or add one for distribution.
+
+---
+
+Last updated: November 26, 2025

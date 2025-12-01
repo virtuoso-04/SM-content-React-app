@@ -79,13 +79,31 @@ export const apiCall = async (tool, input) => {
         };
         break;
         
-      case 'chatbot':
-        if (!input || typeof input !== 'string' || input.trim().length === 0) {
+      case 'chatbot': {
+        let payload = { message: '' };
+
+        if (typeof input === 'string') {
+          payload.message = input;
+        } else if (typeof input === 'object' && input !== null) {
+          payload = {
+            message: input.message || '',
+            tone: input.tone,
+            creativity: typeof input.creativity === 'number' ? input.creativity : undefined,
+          };
+        }
+
+        if (!payload.message || payload.message.trim().length === 0) {
           throw new Error('Please enter a message');
         }
+
         endpoint = '/api/chat';
-        requestData = { message: input.trim() };
+        requestData = {
+          message: payload.message.trim(),
+          ...(payload.tone ? { tone: payload.tone } : {}),
+          ...(typeof payload.creativity === 'number' ? { creativity: Math.max(0, Math.min(1, payload.creativity)) } : {}),
+        };
         break;
+      }
         
       // Handle GameForge requests - format: gamedev/endpoint
       case 'gamedev/story':
@@ -99,6 +117,36 @@ export const apiCall = async (tool, input) => {
         endpoint = `/api/${tool}`;
         requestData = { prompt: input.trim() };
         break;
+      case 'image-generator': {
+        const payload = {
+          prompt: '',
+          style: '',
+          aspectRatio: 'square',
+          provider: 'pollinations',
+        };
+
+        if (typeof input === 'string') {
+          payload.prompt = input;
+        } else if (typeof input === 'object' && input !== null) {
+          payload.prompt = input.prompt || '';
+          payload.style = input.style || '';
+          payload.aspectRatio = input.aspectRatio || 'square';
+          payload.provider = input.provider || 'pollinations';
+        }
+
+        if (!payload.prompt || payload.prompt.trim().length === 0) {
+          throw new Error('Please describe the image you want');
+        }
+
+        endpoint = '/api/generate-image';
+        requestData = {
+          prompt: payload.prompt.trim(),
+          style: payload.style.trim(),
+          aspect_ratio: payload.aspectRatio,
+          provider: payload.provider,
+        };
+        break;
+      }
         
       default:
         throw new Error('Unknown tool specified');

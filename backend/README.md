@@ -186,6 +186,10 @@ python-dotenv: Load environment variables from .env file
 
 logging: Standard Python logging for error tracking
 
+Image Generation Providers
+- Configure `IMAGE_API_PROVIDER` in `.env` to switch between providers (`pollinations` by default, free and keyless).
+- When using providers that require authentication (e.g., `fal` for FLUX/SDXL workflows), set `IMAGE_API_KEY` accordingly.
+
 Development
 Code Structure
 backend/
