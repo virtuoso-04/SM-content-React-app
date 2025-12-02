@@ -30,7 +30,8 @@ const ImageGenerator = () => {
   const [selectedStyle, setSelectedStyle] = useState(stylePresets[0].value);
   const [customStyle, setCustomStyle] = useState('');
   const [aspectRatio, setAspectRatio] = useState('square');
-  const [provider, setProvider] = useState('pollinations'); // New: image provider selection
+  const [provider, setProvider] = useState(null); // null = auto-routing
+  const [quality, setQuality] = useState('balanced'); // fast, balanced, high, ultra
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [result, setResult] = useState(null);
@@ -61,6 +62,7 @@ const ImageGenerator = () => {
         style: activeStyle,
         aspectRatio,
         provider,
+        quality,
       });
 
       const imageEntry = {
@@ -68,6 +70,7 @@ const ImageGenerator = () => {
         style: activeStyle,
         aspectRatio,
         provider: response.provider,
+        quality,
         imageUrl: response.image_url,
         createdAt: new Date().toISOString(),
       };
@@ -185,36 +188,113 @@ const ImageGenerator = () => {
             </motion.div>
 
             <motion.div className={`${glassCard} flex flex-col p-6`} initial="hidden" animate="visible" variants={subtleScale}>
-              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-300">AI Provider</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-300">Quality Tier</p>
               <div className="mt-4 space-y-3">
                 <motion.button
                   type="button"
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}
-                  onClick={() => setProvider('pollinations')}
+                  onClick={() => { setQuality('fast'); setProvider(null); }}
                   className={`w-full rounded-2xl border px-4 py-3 text-left transition-all duration-300 ${
-                    provider === 'pollinations'
+                    quality === 'fast'
                       ? 'border-emerald-300/80 bg-gradient-to-r from-emerald-400/20 via-teal-500/10 to-cyan-500/20 text-white'
                       : 'border-white/10 text-slate-200 hover:border-emerald-200/40 hover:text-white'
                   }`}
                 >
-                  <p className="font-semibold">⚡ Pollinations AI</p>
-                  <p className="text-xs text-slate-400">Fast renders • Creative variety • No auth required</p>
+                  <p className="font-semibold">⚡ Fast</p>
+                  <p className="text-xs text-slate-400">Instant results • Pollinations • Rapid iteration</p>
                 </motion.button>
                 <motion.button
                   type="button"
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}
-                  onClick={() => setProvider('gemini')}
+                  onClick={() => { setQuality('balanced'); setProvider(null); }}
                   className={`w-full rounded-2xl border px-4 py-3 text-left transition-all duration-300 ${
-                    provider === 'gemini'
+                    quality === 'balanced'
+                      ? 'border-cyan-300/80 bg-gradient-to-r from-cyan-400/20 via-blue-500/10 to-indigo-500/20 text-white'
+                      : 'border-white/10 text-slate-200 hover:border-cyan-200/40 hover:text-white'
+                  }`}
+                >
+                  <p className="font-semibold">🎯 Balanced</p>
+                  <p className="text-xs text-slate-400">Good quality • Fast • Enhanced prompting</p>
+                </motion.button>
+                <motion.button
+                  type="button"
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
+                  onClick={() => { setQuality('high'); setProvider(null); }}
+                  className={`w-full rounded-2xl border px-4 py-3 text-left transition-all duration-300 ${
+                    quality === 'high'
                       ? 'border-indigo-300/80 bg-gradient-to-r from-indigo-400/20 via-purple-500/10 to-blue-500/20 text-white'
                       : 'border-white/10 text-slate-200 hover:border-indigo-200/40 hover:text-white'
                   }`}
                 >
-                  <p className="font-semibold">✨ Gemini Imagen 3</p>
-                  <p className="text-xs text-slate-400">Production quality • Fine details • Realistic textures</p>
+                  <p className="font-semibold">✨ High</p>
+                  <p className="text-xs text-slate-400">Gemini 2.5 Flash • Detailed • Photorealistic</p>
                 </motion.button>
+                <motion.button
+                  type="button"
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
+                  onClick={() => { setQuality('ultra'); setProvider(null); }}
+                  className={`w-full rounded-2xl border px-4 py-3 text-left transition-all duration-300 ${
+                    quality === 'ultra'
+                      ? 'border-purple-300/80 bg-gradient-to-r from-purple-400/20 via-pink-500/10 to-rose-500/20 text-white'
+                      : 'border-white/10 text-slate-200 hover:border-purple-200/40 hover:text-white'
+                  }`}
+                >
+                  <p className="font-semibold">💎 Ultra</p>
+                  <p className="text-xs text-slate-400">Grok Image • Premium • Maximum detail</p>
+                </motion.button>
+              </div>
+
+              <div className="mt-6 border-t border-white/10 pt-6">
+                <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Advanced Override</p>
+                <p className="mt-2 text-xs text-slate-500">Or manually select provider:</p>
+                <div className="mt-3 grid grid-cols-3 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setProvider('pollinations')}
+                    className={`rounded-xl border px-3 py-2 text-xs font-medium transition ${
+                      provider === 'pollinations'
+                        ? 'border-emerald-300/60 bg-emerald-400/20 text-emerald-200'
+                        : 'border-white/10 text-slate-400 hover:border-white/20 hover:text-slate-300'
+                    }`}
+                  >
+                    Pollinations
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setProvider('gemini')}
+                    className={`rounded-xl border px-3 py-2 text-xs font-medium transition ${
+                      provider === 'gemini'
+                        ? 'border-indigo-300/60 bg-indigo-400/20 text-indigo-200'
+                        : 'border-white/10 text-slate-400 hover:border-white/20 hover:text-slate-300'
+                    }`}
+                  >
+                    Gemini
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setProvider('grok')}
+                    className={`rounded-xl border px-3 py-2 text-xs font-medium transition ${
+                      provider === 'grok'
+                        ? 'border-purple-300/60 bg-purple-400/20 text-purple-200'
+                        : 'border-white/10 text-slate-400 hover:border-white/20 hover:text-slate-300'
+                    }`}
+                  >
+                    Grok
+                  </button>
+                </div>
+                {provider && (
+                  <button
+                    type="button"
+                    onClick={() => setProvider(null)}
+                    className="mt-2 text-xs text-cyan-300 hover:text-cyan-200"
+                  >
+                    Reset to auto-routing
+                  </button>
+                )}
               </div>
 
               <p className="mt-6 text-sm font-semibold uppercase tracking-[0.3em] text-slate-300">Canvas</p>
@@ -244,10 +324,12 @@ const ImageGenerator = () => {
                 disabled={loading}
                 whileHover={{ scale: loading ? 1 : 1.01 }}
                 whileTap={{ scale: loading ? 1 : 0.98 }}
-                className="mt-auto flex items-center justify-center gap-2 rounded-2xl border border-transparent bg-gradient-to-r from-[#A6FFCB] via-[#12D8FA] to-[#1FA2FF] px-6 py-3 text-base font-semibold text-slate-900 shadow-2xl shadow-cyan-500/40 transition disabled:opacity-60"
+                className="mt-6 flex items-center justify-center gap-2 rounded-2xl border border-transparent bg-gradient-to-r from-[#A6FFCB] via-[#12D8FA] to-[#1FA2FF] px-6 py-3 text-base font-semibold text-slate-900 shadow-2xl shadow-cyan-500/40 transition disabled:opacity-60"
               >
                 {loading ? <Loader /> : <FaMagic />}
-                {loading ? `Creating with ${provider === 'gemini' ? 'Imagen 3' : 'Pollinations'}...` : 'Generate Image'}
+                {loading 
+                  ? `Generating ${quality.charAt(0).toUpperCase() + quality.slice(1)} quality...` 
+                  : `Generate ${quality.charAt(0).toUpperCase() + quality.slice(1)} Quality`}
               </motion.button>
               {error && <p className="mt-3 text-sm text-rose-300">{error}</p>}
             </motion.div>
@@ -290,12 +372,19 @@ const ImageGenerator = () => {
                 <span className={`rounded-full border px-3 py-1 ${
                   result.provider === 'gemini' 
                     ? 'border-indigo-300/40 bg-indigo-500/15 text-indigo-200'
+                    : result.provider === 'grok'
+                    ? 'border-purple-300/40 bg-purple-500/15 text-purple-200'
                     : result.provider === 'pollinations'
                     ? 'border-emerald-300/40 bg-emerald-500/15 text-emerald-200'
-                    : 'border-indigo-200/30 bg-indigo-500/10 text-indigo-200'
+                    : 'border-slate-200/30 bg-slate-500/10 text-slate-200'
                 }`}>
-                  {result.provider === 'gemini' ? '✨ Gemini Imagen' : result.provider === 'pollinations' ? '⚡ Pollinations' : result.provider}
+                  {result.provider === 'gemini' ? '✨ Gemini' : result.provider === 'grok' ? '💎 Grok' : result.provider === 'pollinations' ? '⚡ Pollinations' : result.provider}
                 </span>
+                {result.quality && (
+                  <span className="rounded-full border border-yellow-200/30 bg-yellow-500/10 px-3 py-1 text-yellow-200">
+                    {result.quality.charAt(0).toUpperCase() + result.quality.slice(1)}
+                  </span>
+                )}
               </div>
               <div className="flex gap-3">
                 <a

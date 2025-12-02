@@ -1,0 +1,103 @@
+{
+  "benchmark_date": "2025-12-02T00:04:10.214923",
+  "providers": [
+    "pollinations"
+  ],
+  "prompts": [
+    "a red apple on a wooden table",
+    "a fluffy white cat sleeping",
+    "a modern coffee cup",
+    "a futuristic city skyline at sunset with flying cars",
+    "a fantasy dragon perched on a mountain peak",
+    "a serene Japanese garden with cherry blossoms",
+    "an astronaut riding a horse through a nebula in space",
+    "a steampunk Victorian mansion with clockwork mechanisms",
+    "a surreal dreamscape with floating islands and waterfalls",
+    "a detailed mechanical watch with visible gears and springs",
+    "a photorealistic portrait of an elderly person with wrinkles",
+    "an intricate mandala pattern with geometric precision"
+  ],
+  "generations": {
+    "pollinations": [
+      {
+        "prompt": "a red apple on a wooden table",
+        "image_path": "benchmark_results/images/pollinations/image_001.png",
+        "image_url": "https://image.pollinations.ai/prompt/a+red+apple+on+a+wooden+table?width=1024&height=1024&nologo=true",
+        "success": true
+      },
+      {
+        "prompt": "a fluffy white cat sleeping",
+        "image_path": "benchmark_results/images/pollinations/image_002.png",
+        "image_url": "https://image.pollinations.ai/prompt/a+fluffy+white+cat+sleeping?width=1024&height=1024&nologo=true",
+        "success": true
+      },
+      {
+        "prompt": "a modern coffee cup",
+        "image_path": "benchmark_results/images/pollinations/image_003.png",
+        "image_url": "https://image.pollinations.ai/prompt/a+modern+coffee+cup?width=1024&height=1024&nologo=true",
+        "success": true
+      },
+      {
+        "prompt": "a futuristic city skyline at sunset with flying cars",
+        "image_path": "benchmark_results/images/pollinations/image_004.png",
+        "image_url": "https://image.pollinations.ai/prompt/a+futuristic+city+skyline+at+sunset+with+flying+cars?width=1024&height=1024&nologo=true",
+        "success": true
+      },
+      {
+        "prompt": "a fantasy dragon perched on a mountain peak",
+        "image_path": "benchmark_results/images/pollinations/image_005.png",
+        "image_url": "https://image.pollinations.ai/prompt/a+fantasy+dragon+perched+on+a+mountain+peak?width=1024&height=1024&nologo=true",
+        "success": true
+      },
+      {
+        "prompt": "a serene Japanese garden with cherry blossoms",
+        "image_path": "benchmark_results/images/pollinations/image_006.png",
+        "image_url": "https://image.pollinations.ai/prompt/a+serene+Japanese+garden+with+cherry+blossoms?width=1024&height=1024&nologo=true",
+        "success": true
+      },
+      {
+        "prompt": "an astronaut riding a horse through a nebula in space",
+        "image_path": "benchmark_results/images/pollinations/image_007.png",
+        "image_url": "https://image.pollinations.ai/prompt/an+astronaut+riding+a+horse+through+a+nebula+in+space?width=1024&height=1024&nologo=true",
+        "success": true
+      },
+      {
+        "prompt": "a steampunk Victorian mansion with clockwork mechanisms",
+        "image_path": "benchmark_results/images/pollinations/image_008.png",
+        "image_url": "https://image.pollinations.ai/prompt/a+steampunk+Victorian+mansion+with+clockwork+mechanisms?width=1024&height=1024&nologo=true",
+        "success": true
+      },
+      {
+        "prompt": "a surreal dreamscape with floating islands and waterfalls",
+        "image_path": "benchmark_results/images/pollinations/image_009.png",
+        "image_url": "https://image.pollinations.ai/prompt/a+surreal+dreamscape+with+floating+islands+and+waterfalls?width=1024&height=1024&nologo=true",
+        "success": true
+      },
+      {
+        "prompt": "a detailed mechanical watch with visible gears and springs",
+        "image_path": "benchmark_results/images/pollinations/image_010.png",
+        "image_url": "https://image.pollinations.ai/prompt/a+detailed+mechanical+watch+with+visible+gears+and+springs?width=1024&height=1024&nologo=true",
+        "success": true
+      },
+      {
+        "prompt": "a photorealistic portrait of an elderly person with wrinkles",
+        "image_path": "benchmark_results/images/pollinations/image_011.png",
+        "image_url": "https://image.pollinations.ai/prompt/a+photorealistic+portrait+of+an+elderly+person+with+wrinkles?width=1024&height=1024&nologo=true",
+        "success": true
+      },
+      {
+        "prompt": "an intricate mandala pattern with geometric precision",
+        "image_path": "benchmark_results/images/pollinations/image_012.png",
+        "image_url": "https://image.pollinations.ai/prompt/an+intricate+mandala+pattern+with+geometric+precision?width=1024&height=1024&nologo=true",
+        "success": true
+      }
+    ]
+  },
+  "metrics": {
+    "pollinations": {
+      "clip_score": 0.3224022388458252,
+      "successful_generations": 12,
+      "failed_generations": 0
+    }
+  }
+}

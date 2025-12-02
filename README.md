@@ -33,38 +33,62 @@ Smart Content Studio AI is a full-stack workspace that helps creative strategist
 
 ```
 SM-content-React-app/
-├── README.md                # This document
-├── DESIGN.md               # Product & UX decisions
-├── package.json            # Frontend scripts & deps
-├── tailwind.config.js      # Tailwind setup
+├── README.md                    # This document
+├── package.json                 # Frontend dependencies & scripts
+├── tailwind.config.js           # Tailwind configuration
 ├── postcss.config.js
-├── public/                 # CRA static assets
-├── src/
-│   ├── App.js              # Routing + auth shell
+├── docs/                        # Documentation
+│   ├── README.md
+│   ├── DESIGN.md               # Product & UX decisions
+│   └── BACKEND.md              # Backend setup guide
+├── scripts/                     # Utility scripts
+│   └── start.sh                # Backend startup script
+├── benchmarks/                  # Image quality evaluation
+│   ├── README.md
+│   ├── BENCHMARKING.md
+│   ├── benchmark_image_quality.py
+│   └── benchmark_requirements.txt
+├── public/                      # Static assets
+├── src/                         # Frontend source
+│   ├── App.js                  # Main app & routing
 │   ├── index.js
 │   ├── index.css
 │   ├── service-worker.js
-│   ├── services/
-│   │   ├── firebase.js     # Firebase bootstrap
-│   │   └── realApi.js      # FastAPI client helpers
-│   └── components/
-│       ├── Chatbot.js
-│       ├── ContentRefiner.js
-│       ├── ErrorBoundary.js
-│       ├── FormattedAIResponse.js
-│       ├── GameForge.js
-│       ├── Header.js
-│       ├── IdeaGenerator.js
-│       ├── ImageGenerator.js
-│       ├── Loader.js
-│       ├── Sidebar.js
-│       └── Summarizer.js
-└── backend/
-    ├── main.py
+│   ├── assets/                 # Images & media
+│   ├── components/             # React components
+│   │   ├── Chatbot.js
+│   │   ├── ContentRefiner.js
+│   │   ├── ErrorBoundary.js
+│   │   ├── FormattedAIResponse.js
+│   │   ├── GameForge.js
+│   │   ├── Header.js
+│   │   ├── IdeaGenerator.js
+│   │   ├── ImageGenerator.js
+│   │   ├── Loader.js
+│   │   ├── Sidebar.js
+│   │   └── Summarizer.js
+│   ├── services/               # API clients
+│   │   ├── firebase.js
+│   │   └── realApi.js
+│   ├── utils/                  # Helper functions
+│   ├── hooks/                  # Custom React hooks
+│   └── constants/              # Constants & config
+└── backend/                     # FastAPI backend
+    ├── app.py                  # Main application
     ├── requirements.txt
-    ├── start.sh
-    ├── README.md
-    └── .env.template
+    ├── .env.template
+    ├── api/                    # API routes
+    │   └── routes.py
+    ├── models/                 # Pydantic models
+    │   └── schemas.py
+    ├── services/               # Business logic
+    │   ├── ai_providers.py
+    │   └── image_service.py
+    ├── utils/                  # Utilities
+    │   ├── security.py
+    │   └── rate_limiter.py
+    └── config/                 # Configuration
+        └── settings.py
 ```
 
 ## Prerequisites
@@ -84,7 +108,13 @@ python3 -m venv venv
 source venv/bin/activate   # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 cp .env.template .env      # add GEMINI_API_KEY and optional settings
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+uvicorn app:app --reload --host 0.0.0.0 --port 8000
+```
+
+Or use the provided script:
+```bash
+chmod +x scripts/start.sh
+./scripts/start.sh
 ```
 
 Key environment variables (`backend/.env`):
@@ -151,6 +181,41 @@ REACT_APP_FIREBASE_AUTH_DOMAIN=project.firebaseapp.com
 - **Chatbot** – Streaming conversation with error-safe markdown rendering via `FormattedAIResponse`.
 - **GameForge** – Multi-card experience for narrative, dialogue, mechanics tuning, and code snippets tailored to game creators.
 - **Image Generator** – Framer Motion-enhanced prompt panel with provider selector: choose Pollinations AI for fast, creative renders or Gemini Imagen 3 for detailed, high-quality visuals.
+
+## Image Quality Benchmarks
+
+Smart Content Studio's multi-model router is backed by quantified quality metrics using industry-standard evaluation:
+
+### Evaluation Metrics
+- **CLIP Score**: Measures semantic alignment between prompts and generated images (higher = better prompt adherence)
+- **FID Score**: Measures image quality compared to real-world images from MS-COCO dataset (lower = better quality)
+
+### Why Multi-Model Matters
+
+Rather than locking users into a single provider, our router empowers users to select the optimal model for each use case:
+
+| Provider | Best For | Strengths |
+|----------|----------|-----------|
+| **Pollinations AI** | Quick ideation, rapid prototyping | Fast generation, creative variety, no rate limits |
+| **Gemini Imagen 3** | Production assets, professional work | Photorealistic quality, fine detail, prompt precision |
+
+### Running Benchmarks
+
+To reproduce these results and evaluate performance yourself:
+
+```bash
+cd benchmarks
+pip install -r benchmark_requirements.txt
+cd ..
+python benchmarks/benchmark_image_quality.py --quick  # Quick 4-prompt test
+python benchmarks/benchmark_image_quality.py          # Full 12-prompt benchmark
+```
+
+Results are saved to `benchmarks/benchmark_results/` with per-provider CLIP/FID scores and generated images for visual comparison.
+
+See [`benchmarks/BENCHMARKING.md`](benchmarks/BENCHMARKING.md) for detailed methodology, interpretation guide, and advanced usage.
+
+**Key Insight**: By offering provider choice rather than a one-size-fits-all approach, Smart Content Studio delivers measurably better outcomes across diverse creative workflows.
 
 ## Deployment Notes
 

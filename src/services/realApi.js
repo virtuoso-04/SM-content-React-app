@@ -122,7 +122,8 @@ export const apiCall = async (tool, input) => {
           prompt: '',
           style: '',
           aspectRatio: 'square',
-          provider: 'pollinations',
+          provider: null,
+          quality: 'balanced',
         };
 
         if (typeof input === 'string') {
@@ -131,7 +132,8 @@ export const apiCall = async (tool, input) => {
           payload.prompt = input.prompt || '';
           payload.style = input.style || '';
           payload.aspectRatio = input.aspectRatio || 'square';
-          payload.provider = input.provider || 'pollinations';
+          payload.provider = input.provider !== undefined ? input.provider : null;
+          payload.quality = input.quality || 'balanced';
         }
 
         if (!payload.prompt || payload.prompt.trim().length === 0) {
@@ -144,6 +146,7 @@ export const apiCall = async (tool, input) => {
           style: payload.style.trim(),
           aspect_ratio: payload.aspectRatio,
           provider: payload.provider,
+          quality: payload.quality,
         };
         break;
       }

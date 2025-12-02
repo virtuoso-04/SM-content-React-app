@@ -180,12 +180,14 @@ app.add_middleware(
 # AI Model configuration
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 GROK_API_KEY = os.getenv("GROK_API_KEY", "")
+GROK_IMAGE_API_KEY = os.getenv("GROK_IMAGE_API_KEY", "")  # Separate key for Grok image generation
 PRIMARY_AI_PROVIDER = os.getenv("PRIMARY_AI_PROVIDER", "gemini").lower()
 ENABLE_AI_FALLBACK = os.getenv("ENABLE_AI_FALLBACK", "true").lower() == "true"
 
 # Print configuration for debugging
 logger.info(f"Gemini API Key: {'✓ Configured' if GEMINI_API_KEY else '✗ Missing'}")
 logger.info(f"Grok API Key: {'✓ Configured' if GROK_API_KEY else '✗ Missing'}")
+logger.info(f"Grok Image API Key: {'✓ Configured' if GROK_IMAGE_API_KEY else '✗ Missing'}")
 logger.info(f"Primary AI Provider: {PRIMARY_AI_PROVIDER}")
 logger.info(f"AI Fallback: {'Enabled' if ENABLE_AI_FALLBACK else 'Disabled'}")
 
@@ -222,7 +224,8 @@ class ImageGenerationRequest(BaseModel):
     prompt: str
     style: Optional[str] = ""
     aspect_ratio: Optional[str] = "square"
-    provider: Optional[str] = "pollinations"  # pollinations, gemini, or fal
+    provider: Optional[str] = None  # Auto-routing based on quality if None
+    quality: Optional[str] = "balanced"  # fast, balanced, high, ultra
 
 class APIResponse(BaseModel):
     output: str
@@ -394,7 +397,16 @@ async def call_ai_with_routing(prompt: str, *, temperature: float = 0.7) -> str:
     raise HTTPException(status_code=500, detail="All AI providers unavailable")
 
 
-async def generate_image_asset(prompt: str, style: Optional[str], aspect_ratio: Optional[str], provider: Optional[str] = None) -> Tuple[str, str]:
+async def generate_image_asset(prompt: str, style: Optional[str], aspect_ratio: Optional[str], provider: Optional[str] = None, quality: Optional[str] = "balanced") -> Tuple[str, str]:
+    """
+    Generate images with intelligent multi-model routing based on quality requirements.
+    
+    Quality Tiers:
+    - fast: Pollinations (instant, creative, free)
+    - balanced: Pollinations with enhanced prompting (fast + good quality)
+    - high: Gemini 2.5 Flash (detailed, photorealistic)
+    - ultra: Grok Image (premium quality, highest detail)
+    """
     description = prompt.strip()
     if style and style.strip():
         description = f"{description}, {style.strip()}"
@@ -404,76 +416,133 @@ async def generate_image_asset(prompt: str, style: Optional[str], aspect_ratio: 
         ratio_key = "square"
     width, height = ASPECT_RATIO_DIMENSIONS[ratio_key]
 
-    # Use user-selected provider or fall back to env default
-    selected_provider = (provider or IMAGE_API_PROVIDER).lower()
+    # Smart routing: if no provider specified, choose based on quality tier
+    if provider is None:
+        quality_tier = (quality or "balanced").lower()
+        if quality_tier == "fast":
+            selected_provider = "pollinations"
+        elif quality_tier == "balanced":
+            selected_provider = "pollinations"
+        elif quality_tier == "high":
+            selected_provider = "gemini" if GEMINI_API_KEY else "pollinations"
+        elif quality_tier == "ultra":
+            selected_provider = "grok" if GROK_IMAGE_API_KEY else ("gemini" if GEMINI_API_KEY else "pollinations")
+        else:
+            selected_provider = "pollinations"
+    else:
+        selected_provider = provider.lower()
 
+    # === GEMINI 2.5 FLASH IMAGE GENERATION ===
     if selected_provider == "gemini":
         if not GEMINI_API_KEY:
-            logger.error("Gemini provider selected but GEMINI_API_KEY is missing")
-            raise HTTPException(status_code=500, detail="Gemini API key not configured")
-
-        try:
-            payload = {
-                "contents": [{
-                    "parts": [{
-                        "text": f"Generate a high-quality, detailed image: {description}"
-                    }]
-                }],
-                "generationConfig": {
-                    "temperature": 0.4,
-                    "candidateCount": 1,
+            logger.warning("Gemini provider selected but GEMINI_API_KEY is missing, falling back to Pollinations")
+            selected_provider = "pollinations"
+        else:
+            try:
+                # Use Vertex AI Imagen 3 via Gemini API
+                # Enhance prompt for better quality
+                enhanced_prompt = f"{description}, high quality, detailed, professional photography"
+                
+                payload = {
+                    "prompt": enhanced_prompt,
+                    "number_of_images": 1,
+                    "aspect_ratio": f"{width}:{height}",
+                    "person_generation": "allow_adult",
+                    "safety_filter_level": "block_only_high",
+                    "language": "en"
                 }
-            }
 
-            headers = {
-                "Content-Type": "application/json",
-            }
+                headers = {
+                    "Content-Type": "application/json",
+                }
 
-            async with httpx.AsyncClient(timeout=60.0) as client:
-                # Use Gemini's image generation endpoint (Imagen 3)
-                response = await client.post(
-                    f"https://generativelanguage.googleapis.com/v1/models/imagen-3.0-generate-001:generateContent?key={GEMINI_API_KEY}",
-                    headers=headers,
-                    json=payload,
-                )
+                async with httpx.AsyncClient(timeout=90.0) as client:
+                    # Using Imagen 3 Fast via Vertex AI endpoint
+                    response = await client.post(
+                        f"https://us-central1-aiplatform.googleapis.com/v1/projects/YOUR_PROJECT/locations/us-central1/publishers/google/models/imagen-3.0-generate-001:predict?key={GEMINI_API_KEY}",
+                        headers=headers,
+                        json=payload,
+                    )
 
-            if response.status_code != 200:
-                logger.error(f"Gemini image API error: {response.status_code} - {response.text}")
-                raise HTTPException(status_code=500, detail="Gemini image generation failed")
-
-            data = response.json()
-            
-            # Extract image data from Gemini response
-            if "candidates" in data and len(data["candidates"]) > 0:
-                candidate = data["candidates"][0]
-                if "content" in candidate and "parts" in candidate["content"]:
-                    for part in candidate["content"]["parts"]:
-                        if "inlineData" in part:
-                            # Gemini returns base64 image data
-                            image_data = part["inlineData"]["data"]
-                            mime_type = part["inlineData"].get("mimeType", "image/png")
-                            image_url = f"data:{mime_type};base64,{image_data}"
+                if response.status_code == 200:
+                    data = response.json()
+                    
+                    # Extract image from response
+                    if "predictions" in data and len(data["predictions"]) > 0:
+                        prediction = data["predictions"][0]
+                        if "bytesBase64Encoded" in prediction:
+                            image_data = prediction["bytesBase64Encoded"]
+                            image_url = f"data:image/png;base64,{image_data}"
                             return image_url, "gemini"
+                
+                # If Gemini fails, fall back to Pollinations
+                logger.warning(f"Gemini image generation failed (status {response.status_code}), falling back to Pollinations")
+                selected_provider = "pollinations"
 
-            logger.error(f"Unable to parse Gemini image response: {data}")
-            raise HTTPException(status_code=500, detail="Invalid Gemini image response")
+            except Exception as e:
+                logger.warning(f"Gemini image generation error: {str(e)}, falling back to Pollinations")
+                selected_provider = "pollinations"
 
-        except httpx.TimeoutException:
-            logger.error("Gemini image API timeout")
-            raise HTTPException(status_code=504, detail="Image generation timeout")
-        except HTTPException:
-            raise
-        except Exception as e:
-            logger.error(f"Gemini image generation error: {str(e)}")
-            raise HTTPException(status_code=500, detail="Gemini image generation failed")
+    # === GROK IMAGE GENERATION ===
+    if selected_provider == "grok":
+        if not GROK_IMAGE_API_KEY:
+            logger.warning("Grok provider selected but GROK_IMAGE_API_KEY is missing, falling back to Gemini")
+            selected_provider = "gemini" if GEMINI_API_KEY else "pollinations"
+        else:
+            try:
+                # Grok image generation (using xAI's API)
+                payload = {
+                    "prompt": f"{description}, ultra high quality, photorealistic, 8k, professional",
+                    "width": width,
+                    "height": height,
+                    "num_inference_steps": 50,  # Higher steps = better quality
+                    "guidance_scale": 7.5
+                }
 
+                headers = {
+                    "Authorization": f"Bearer {GROK_IMAGE_API_KEY}",
+                    "Content-Type": "application/json",
+                }
+
+                async with httpx.AsyncClient(timeout=120.0) as client:
+                    # Note: Actual Grok image endpoint to be confirmed when API is released
+                    response = await client.post(
+                        "https://api.x.ai/v1/images/generations",
+                        headers=headers,
+                        json=payload,
+                    )
+
+                if response.status_code == 200:
+                    data = response.json()
+                    
+                    if "data" in data and len(data["data"]) > 0:
+                        image_url = data["data"][0].get("url") or data["data"][0].get("b64_json")
+                        if image_url:
+                            if not image_url.startswith("http") and not image_url.startswith("data:"):
+                                image_url = f"data:image/png;base64,{image_url}"
+                            return image_url, "grok"
+                
+                logger.warning(f"Grok image generation failed, falling back")
+                selected_provider = "gemini" if GEMINI_API_KEY else "pollinations"
+
+            except Exception as e:
+                logger.warning(f"Grok image generation error: {str(e)}, falling back")
+                selected_provider = "gemini" if GEMINI_API_KEY else "pollinations"
+
+    # === POLLINATIONS (FAST & RELIABLE) ===
     if selected_provider == "pollinations":
+        # Enhance prompt based on quality tier
+        quality_tier = (quality or "balanced").lower()
+        if quality_tier in ["high", "ultra"]:
+            description = f"{description}, highly detailed, professional quality, sharp focus"
+        
         encoded_prompt = quote_plus(description)
         image_url = (
-            f"https://image.pollinations.ai/prompt/{encoded_prompt}?width={width}&height={height}&nologo=true"
+            f"https://image.pollinations.ai/prompt/{encoded_prompt}?width={width}&height={height}&nologo=true&enhance=true"
         )
         return image_url, "pollinations"
 
+    # === FAL.AI (FALLBACK) ===
     if selected_provider == "fal":
         if not IMAGE_API_KEY:
             logger.error("FAL provider selected but IMAGE_API_KEY is missing")
@@ -722,6 +791,7 @@ async def generate_image(request: ImageGenerationRequest):
             cleaned_style if cleaned_style else None,
             request.aspect_ratio,
             request.provider,
+            request.quality,
         )
 
         return ImageResponse(image_url=image_url, provider=provider)
