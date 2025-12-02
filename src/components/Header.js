@@ -1,8 +1,12 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useAuth } from '../App';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaSignOutAlt, FaUserCircle } from 'react-icons/fa';
+import Button from './Button';
 
 const Header = () => {
   const { user, signOut, authLoading, authError } = useAuth();
+  const [showProfile, setShowProfile] = useState(false);
 
   const handleSignOut = useCallback(async () => {
     try {
@@ -13,56 +17,112 @@ const Header = () => {
   }, [signOut]);
   
   return (
-    <header className="border-b border-white/10 bg-white/5 px-4 py-4 backdrop-blur-xl md:px-6">
+    <header className="sticky top-0 z-30 border-b border-white/10 bg-white/5 px-4 py-4 backdrop-blur-xl md:px-6 shadow-lg">
       <div className="flex items-center justify-between">
         <div className="ml-12 md:ml-0">
-          <h1 className="text-xl md:text-2xl font-bold tracking-tight text-transparent bg-gradient-to-r from-cyan-200 via-sky-200 to-indigo-200 bg-clip-text">
+          <motion.h1 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-xl md:text-2xl font-bold tracking-tight text-transparent bg-gradient-to-r from-cyan-200 via-sky-200 to-indigo-200 bg-clip-text"
+          >
             Smart Content Studio
-          </h1>
-          <p className="text-xs md:text-sm text-slate-300">All in one companion for creators</p>
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.1 }}
+            className="text-xs md:text-sm text-slate-300"
+          >
+            AI-Powered Creative Workspace
+          </motion.p>
         </div>
         
         <div className="flex items-center gap-2 md:gap-4">
           {user && (
-            <div className="hidden sm:flex items-center gap-3">
-              {user.photoURL && (
-                <img 
-                  src={user.photoURL} 
-                  alt="Profile" 
-                  className="h-9 w-9 rounded-full border-2 border-white/30"
-                />
-              )}
-              <div className="text-right">
-                <p className="text-sm font-medium text-slate-100">
-                  {user.displayName || user.email}
-                </p>
-                <p className="text-xs text-slate-400">Authenticated</p>
-              </div>
+            <div className="relative">
+              <button
+                onClick={() => setShowProfile(!showProfile)}
+                className="hidden sm:flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 hover:bg-white/10 transition-all"
+              >
+                {user.photoURL ? (
+                  <img 
+                    src={user.photoURL} 
+                    alt="Profile" 
+                    className="h-8 w-8 rounded-full border-2 border-cyan-400/50"
+                  />
+                ) : (
+                  <FaUserCircle className="h-8 w-8 text-cyan-400" />
+                )}
+                <div className="text-left">
+                  <p className="text-sm font-medium text-slate-100 max-w-32 truncate">
+                    {user.displayName || user.email?.split('@')[0]}
+                  </p>
+                  <p className="text-xs text-emerald-400">● Online</p>
+                </div>
+              </button>
+
+              <AnimatePresence>
+                {showProfile && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                    className="absolute right-0 mt-2 w-64 rounded-2xl border border-white/10 bg-slate-900/95 backdrop-blur-xl p-4 shadow-2xl"
+                  >
+                    <div className="flex items-center gap-3 pb-3 border-b border-white/10">
+                      {user.photoURL ? (
+                        <img 
+                          src={user.photoURL} 
+                          alt="Profile" 
+                          className="h-12 w-12 rounded-full border-2 border-cyan-400/50"
+                        />
+                      ) : (
+                        <FaUserCircle className="h-12 w-12 text-cyan-400" />
+                      )}
+                      <div>
+                        <p className="text-sm font-medium text-white">
+                          {user.displayName || 'User'}
+                        </p>
+                        <p className="text-xs text-slate-400 truncate">
+                          {user.email}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="mt-3 text-xs text-slate-400">
+                      <p>Member since: {new Date(user.metadata?.creationTime || Date.now()).toLocaleDateString()}</p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           )}
           
-          <button
+          <Button
             onClick={handleSignOut}
-            disabled={authLoading}
-            className="group relative overflow-hidden rounded-xl px-3 py-2 text-sm font-medium text-white shadow-lg transition focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-300 disabled:opacity-60 md:px-4"
-            aria-label="Sign out of account"
+            loading={authLoading}
+            variant="danger"
+            size="sm"
+            leftIcon={<FaSignOutAlt />}
+            className="shadow-lg"
           >
-            <span className="absolute inset-0 bg-gradient-to-r from-rose-500 via-pink-500 to-orange-400 opacity-90 transition group-hover:opacity-100" aria-hidden="true" />
-            <span className="relative flex items-center gap-2">
-            {authLoading && (
-              <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-            )}
-            <span className="relative">Sign Out</span>
-            </span>
-          </button>
+            <span className="hidden sm:inline">Sign Out</span>
+            <span className="sm:hidden">Exit</span>
+          </Button>
         </div>
       </div>
       
-      {authError && (
-        <div className="mt-3 rounded-2xl border border-rose-400/50 bg-rose-500/10 p-3 text-sm text-rose-200">
-          {authError}
-        </div>
-      )}
+      <AnimatePresence>
+        {authError && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="mt-3 rounded-2xl border border-rose-400/50 bg-rose-500/10 p-3 text-sm text-rose-200"
+          >
+            {authError}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };
