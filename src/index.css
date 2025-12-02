@@ -7,6 +7,31 @@ html {
   scroll-behavior: smooth;
 }
 
+body {
+  min-height: 100vh;
+  background-color: #010817;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.18), transparent 35%),
+    radial-gradient(circle at 80% 0%, rgba(99, 102, 241, 0.25), transparent 40%),
+    linear-gradient(135deg, #020617, #050f27 60%, #020617);
+  color: #e2e8f0;
+  font-feature-settings: 'liga' 1, 'calt' 1;
+}
+
+@layer components {
+  .glass-panel {
+    @apply rounded-3xl border border-white/10 bg-white/5 backdrop-blur-2xl shadow-2xl;
+  }
+
+  .glass-input {
+    @apply rounded-2xl border border-white/10 bg-white/5 text-slate-100 placeholder:text-slate-400 focus:border-cyan-300/60 focus:ring-2 focus:ring-cyan-300/30;
+  }
+
+  .glass-chip {
+    @apply rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs font-semibold tracking-wide text-cyan-100;
+  }
+}
+
 /* Custom animations */
 @layer utilities {
   .animate-fade-in {

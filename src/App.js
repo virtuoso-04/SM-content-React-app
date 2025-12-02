@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useNavig
 import { auth, provider } from './services/firebase';
 import { signInWithPopup, signOut, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { FaGoogle } from 'react-icons/fa';
-import heroWorkspace from './into.jpg';
+import heroWorkspace from './assets/into.jpg';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import Loader from './components/Loader';

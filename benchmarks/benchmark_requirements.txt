@@ -1,0 +1,9 @@
+# Benchmarking dependencies for image quality evaluation
+git+https://github.com/openai/CLIP.git
+git+https://github.com/boomb0om/text2image-benchmark
+torch>=2.0.0
+torchvision>=0.15.0
+pillow>=10.0.0
+numpy>=1.24.0
+scipy>=1.10.0
+tqdm>=4.65.0
