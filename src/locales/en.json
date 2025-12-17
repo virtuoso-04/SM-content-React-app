@@ -1,0 +1,144 @@
+{
+  "app": {
+    "title": "Smart Content Studio",
+    "subtitle": "AI-Powered Content Creation Tools"
+  },
+  "header": {
+    "title": "Smart Content Studio",
+    "subtitle": "AI-Powered Content Creation Tools"
+  },
+  "sidebar": {
+    "title": "AI Tools",
+    "summarizer": "Summarizer",
+    "ideaGenerator": "Idea Generator",
+    "contentRefiner": "Content Refiner",
+    "imageGenerator": "Image Generator",
+    "chatbot": "AI Chatbot",
+    "gameForge": "GameForge"
+  },
+  "tools": {
+    "summarizer": {
+      "title": "AI Summarizer",
+      "subtitle": "Transform lengthy content into concise summaries",
+      "placeholder": "Paste your text here to generate a summary...",
+      "button": "Generate Summary",
+      "loading": "Analyzing and summarizing...",
+      "error": "Failed to generate summary"
+    },
+    "ideaGenerator": {
+      "title": "Idea Generator",
+      "subtitle": "Spark creativity with AI-powered ideas",
+      "placeholder": "Enter a topic or prompt...",
+      "button": "Generate Ideas",
+      "loading": "Generating creative ideas...",
+      "error": "Failed to generate ideas"
+    },
+    "contentRefiner": {
+      "title": "Content Refiner",
+      "subtitle": "Polish and perfect your content",
+      "contentPlaceholder": "Paste your content here...",
+      "instructionPlaceholder": "Optional: Add specific refinement instructions...",
+      "button": "Refine Content",
+      "loading": "Refining your content...",
+      "error": "Failed to refine content"
+    },
+    "imageGenerator": {
+      "title": "Image Generator",
+      "subtitle": "Create stunning visuals with AI",
+      "promptPlaceholder": "Describe the image you want to create...",
+      "stylePlaceholder": "Optional: Specify an art style...",
+      "aspectRatio": "Aspect Ratio",
+      "quality": "Quality",
+      "provider": "Provider",
+      "button": "Generate Image",
+      "loading": "Creating your image...",
+      "error": "Failed to generate image",
+      "qualities": {
+        "draft": "Draft (Fast)",
+        "balanced": "Balanced",
+        "detailed": "Detailed",
+        "premium": "Premium (Best)"
+      },
+      "aspectRatios": {
+        "square": "Square (1:1)",
+        "portrait": "Portrait (9:16)",
+        "landscape": "Landscape (16:9)"
+      },
+      "providers": {
+        "auto": "Auto-select",
+        "pollinations": "Pollinations",
+        "fal": "Fal.ai"
+      }
+    },
+    "chatbot": {
+      "title": "AI Chatbot",
+      "subtitle": "Have a conversation with AI",
+      "placeholder": "Type your message here...",
+      "button": "Send Message",
+      "loading": "AI is thinking...",
+      "error": "Failed to send message",
+      "tone": "Conversation Tone",
+      "creativity": "Creativity Level",
+      "tones": {
+        "friendly": "Friendly",
+        "professional": "Professional",
+        "playful": "Playful",
+        "expert": "Expert"
+      }
+    },
+    "gameForge": {
+      "title": "GameForge",
+      "subtitle": "AI-powered game development assistant",
+      "placeholder": "Describe your game idea or ask a question...",
+      "button": "Generate",
+      "loading": "Creating game content...",
+      "error": "Failed to generate content",
+      "modes": {
+        "story": "Story & Lore",
+        "dialogue": "Dialogue",
+        "mechanics": "Game Mechanics",
+        "code": "Code Snippets",
+        "explain": "Concept Explainer"
+      }
+    }
+  },
+  "common": {
+    "copy": "Copy",
+    "copied": "Copied!",
+    "download": "Download",
+    "clear": "Clear",
+    "close": "Close",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "share": "Share",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "reset": "Reset",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "select": "Select",
+    "selectLanguage": "Select Language",
+    "selectTemplate": "Use Template"
+  },
+  "errors": {
+    "general": "Something went wrong. Please try again.",
+    "network": "Network error. Please check your connection.",
+    "timeout": "Request timed out. Please try again.",
+    "invalidInput": "Invalid input. Please check your data.",
+    "emptyInput": "Please enter some text.",
+    "apiError": "API service error. Please try again later."
+  },
+  "templates": {
+    "title": "Templates",
+    "selectPrompt": "Select a template to get started",
+    "custom": "Custom Prompt"
+  }
+}

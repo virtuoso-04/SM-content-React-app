@@ -1,0 +1,144 @@
+{
+  "app": {
+    "title": "Smart Content Studio",
+    "subtitle": "Ferramentas de Criação de Conteúdo com IA"
+  },
+  "header": {
+    "title": "Smart Content Studio",
+    "subtitle": "Ferramentas de Criação de Conteúdo com IA"
+  },
+  "sidebar": {
+    "title": "Ferramentas IA",
+    "summarizer": "Resumidor",
+    "ideaGenerator": "Gerador de Ideias",
+    "contentRefiner": "Refinador de Conteúdo",
+    "imageGenerator": "Gerador de Imagens",
+    "chatbot": "Chatbot IA",
+    "gameForge": "GameForge"
+  },
+  "tools": {
+    "summarizer": {
+      "title": "Resumidor IA",
+      "subtitle": "Transforme conteúdo longo em resumos concisos",
+      "placeholder": "Cole seu texto aqui para gerar um resumo...",
+      "button": "Gerar Resumo",
+      "loading": "Analisando e resumindo...",
+      "error": "Falha ao gerar resumo"
+    },
+    "ideaGenerator": {
+      "title": "Gerador de Ideias",
+      "subtitle": "Desperte a criatividade com ideias geradas por IA",
+      "placeholder": "Insira um tópico ou prompt...",
+      "button": "Gerar Ideias",
+      "loading": "Gerando ideias criativas...",
+      "error": "Falha ao gerar ideias"
+    },
+    "contentRefiner": {
+      "title": "Refinador de Conteúdo",
+      "subtitle": "Polir e aperfeiçoar seu conteúdo",
+      "contentPlaceholder": "Cole seu conteúdo aqui...",
+      "instructionPlaceholder": "Opcional: Adicione instruções específicas de refinamento...",
+      "button": "Refinar Conteúdo",
+      "loading": "Refinando seu conteúdo...",
+      "error": "Falha ao refinar conteúdo"
+    },
+    "imageGenerator": {
+      "title": "Gerador de Imagens",
+      "subtitle": "Crie visuais impressionantes com IA",
+      "promptPlaceholder": "Descreva a imagem que você quer criar...",
+      "stylePlaceholder": "Opcional: Especifique um estilo de arte...",
+      "aspectRatio": "Proporção",
+      "quality": "Qualidade",
+      "provider": "Provedor",
+      "button": "Gerar Imagem",
+      "loading": "Criando sua imagem...",
+      "error": "Falha ao gerar imagem",
+      "qualities": {
+        "draft": "Rascunho (Rápido)",
+        "balanced": "Equilibrado",
+        "detailed": "Detalhado",
+        "premium": "Premium (Melhor)"
+      },
+      "aspectRatios": {
+        "square": "Quadrado (1:1)",
+        "portrait": "Retrato (9:16)",
+        "landscape": "Paisagem (16:9)"
+      },
+      "providers": {
+        "auto": "Seleção automática",
+        "pollinations": "Pollinations",
+        "fal": "Fal.ai"
+      }
+    },
+    "chatbot": {
+      "title": "Chatbot IA",
+      "subtitle": "Converse com IA",
+      "placeholder": "Digite sua mensagem aqui...",
+      "button": "Enviar Mensagem",
+      "loading": "IA está pensando...",
+      "error": "Falha ao enviar mensagem",
+      "tone": "Tom de Conversa",
+      "creativity": "Nível de Criatividade",
+      "tones": {
+        "friendly": "Amigável",
+        "professional": "Profissional",
+        "playful": "Brincalhão",
+        "expert": "Especialista"
+      }
+    },
+    "gameForge": {
+      "title": "GameForge",
+      "subtitle": "Assistente de desenvolvimento de jogos com IA",
+      "placeholder": "Descreva sua ideia de jogo ou faça uma pergunta...",
+      "button": "Gerar",
+      "loading": "Criando conteúdo de jogo...",
+      "error": "Falha ao gerar conteúdo",
+      "modes": {
+        "story": "História e Lore",
+        "dialogue": "Diálogo",
+        "mechanics": "Mecânicas de Jogo",
+        "code": "Trechos de Código",
+        "explain": "Explicador de Conceitos"
+      }
+    }
+  },
+  "common": {
+    "copy": "Copiar",
+    "copied": "Copiado!",
+    "download": "Baixar",
+    "clear": "Limpar",
+    "close": "Fechar",
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "share": "Compartilhar",
+    "back": "Voltar",
+    "next": "Próximo",
+    "previous": "Anterior",
+    "submit": "Enviar",
+    "reset": "Resetar",
+    "search": "Pesquisar",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "select": "Selecionar",
+    "selectLanguage": "Selecionar Idioma",
+    "selectTemplate": "Usar Modelo"
+  },
+  "errors": {
+    "general": "Algo deu errado. Por favor, tente novamente.",
+    "network": "Erro de rede. Por favor, verifique sua conexão.",
+    "timeout": "Tempo de solicitação esgotado. Por favor, tente novamente.",
+    "invalidInput": "Entrada inválida. Por favor, verifique seus dados.",
+    "emptyInput": "Por favor, insira algum texto.",
+    "apiError": "Erro no serviço de API. Por favor, tente mais tarde."
+  },
+  "templates": {
+    "title": "Modelos",
+    "selectPrompt": "Selecione um modelo para começar",
+    "custom": "Prompt Personalizado"
+  }
+}

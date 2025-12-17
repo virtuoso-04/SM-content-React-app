@@ -1,0 +1,144 @@
+{
+  "app": {
+    "title": "스마트 콘텐츠 스튜디오",
+    "subtitle": "AI 기반 콘텐츠 제작 도구"
+  },
+  "header": {
+    "title": "스마트 콘텐츠 스튜디오",
+    "subtitle": "AI 기반 콘텐츠 제작 도구"
+  },
+  "sidebar": {
+    "title": "AI 도구",
+    "summarizer": "요약기",
+    "ideaGenerator": "아이디어 생성기",
+    "contentRefiner": "콘텐츠 개선",
+    "imageGenerator": "이미지 생성",
+    "chatbot": "AI 챗봇",
+    "gameForge": "게임포지"
+  },
+  "tools": {
+    "summarizer": {
+      "title": "AI 요약기",
+      "subtitle": "긴 콘텐츠를 간결한 요약으로 변환",
+      "placeholder": "요약을 생성하려면 여기에 텍스트를 붙여넣으세요...",
+      "button": "요약 생성",
+      "loading": "분석 및 요약 중...",
+      "error": "요약 생성 실패"
+    },
+    "ideaGenerator": {
+      "title": "아이디어 생성기",
+      "subtitle": "AI 기반 아이디어로 창의성 자극",
+      "placeholder": "주제 또는 프롬프트 입력...",
+      "button": "아이디어 생성",
+      "loading": "창의적인 아이디어 생성 중...",
+      "error": "아이디어 생성 실패"
+    },
+    "contentRefiner": {
+      "title": "콘텐츠 개선",
+      "subtitle": "콘텐츠를 다듬고 완벽하게 만들기",
+      "contentPlaceholder": "콘텐츠를 여기에 붙여넣으세요...",
+      "instructionPlaceholder": "선택사항: 특정 개선 지침 추가...",
+      "button": "콘텐츠 개선",
+      "loading": "콘텐츠 개선 중...",
+      "error": "콘텐츠 개선 실패"
+    },
+    "imageGenerator": {
+      "title": "이미지 생성",
+      "subtitle": "AI로 멋진 비주얼 만들기",
+      "promptPlaceholder": "만들고 싶은 이미지를 설명하세요...",
+      "stylePlaceholder": "선택사항: 아트 스타일 지정...",
+      "aspectRatio": "화면 비율",
+      "quality": "품질",
+      "provider": "제공업체",
+      "button": "이미지 생성",
+      "loading": "이미지 생성 중...",
+      "error": "이미지 생성 실패",
+      "qualities": {
+        "draft": "초안 (빠름)",
+        "balanced": "균형",
+        "detailed": "상세",
+        "premium": "프리미엄 (최고)"
+      },
+      "aspectRatios": {
+        "square": "정사각형 (1:1)",
+        "portrait": "세로 (9:16)",
+        "landscape": "가로 (16:9)"
+      },
+      "providers": {
+        "auto": "자동 선택",
+        "pollinations": "Pollinations",
+        "fal": "Fal.ai"
+      }
+    },
+    "chatbot": {
+      "title": "AI 챗봇",
+      "subtitle": "AI와 대화하기",
+      "placeholder": "메시지를 여기에 입력하세요...",
+      "button": "메시지 보내기",
+      "loading": "AI가 생각 중...",
+      "error": "메시지 전송 실패",
+      "tone": "대화 톤",
+      "creativity": "창의성 수준",
+      "tones": {
+        "friendly": "친근함",
+        "professional": "전문적",
+        "playful": "유쾌함",
+        "expert": "전문가"
+      }
+    },
+    "gameForge": {
+      "title": "게임포지",
+      "subtitle": "AI 기반 게임 개발 도우미",
+      "placeholder": "게임 아이디어를 설명하거나 질문하세요...",
+      "button": "생성",
+      "loading": "게임 콘텐츠 생성 중...",
+      "error": "콘텐츠 생성 실패",
+      "modes": {
+        "story": "스토리 & 로어",
+        "dialogue": "대화",
+        "mechanics": "게임 메카닉",
+        "code": "코드 스니펫",
+        "explain": "개념 설명"
+      }
+    }
+  },
+  "common": {
+    "copy": "복사",
+    "copied": "복사됨!",
+    "download": "다운로드",
+    "clear": "지우기",
+    "close": "닫기",
+    "loading": "로딩 중...",
+    "error": "오류",
+    "success": "성공",
+    "cancel": "취소",
+    "save": "저장",
+    "delete": "삭제",
+    "edit": "편집",
+    "share": "공유",
+    "back": "뒤로",
+    "next": "다음",
+    "previous": "이전",
+    "submit": "제출",
+    "reset": "초기화",
+    "search": "검색",
+    "filter": "필터",
+    "sort": "정렬",
+    "select": "선택",
+    "selectLanguage": "언어 선택",
+    "selectTemplate": "템플릿 사용"
+  },
+  "errors": {
+    "general": "문제가 발생했습니다. 다시 시도하세요.",
+    "network": "네트워크 오류. 연결을 확인하세요.",
+    "timeout": "요청 시간 초과. 다시 시도하세요.",
+    "invalidInput": "잘못된 입력. 데이터를 확인하세요.",
+    "emptyInput": "텍스트를 입력하세요.",
+    "apiError": "API 서비스 오류. 나중에 다시 시도하세요."
+  },
+  "templates": {
+    "title": "템플릿",
+    "selectPrompt": "시작할 템플릿 선택",
+    "custom": "맞춤 프롬프트"
+  }
+}

@@ -1,11 +1,14 @@
 import React, { useCallback, useState } from 'react';
 import { useAuth } from '../App';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaSignOutAlt, FaUserCircle } from 'react-icons/fa';
 import Button from './Button';
+import LanguageSelector from './LanguageSelector';
 
 const Header = () => {
   const { user, signOut, authLoading, authError } = useAuth();
+  const { t } = useTranslation();
   const [showProfile, setShowProfile] = useState(false);
 
   const handleSignOut = useCallback(async () => {
@@ -25,7 +28,7 @@ const Header = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-xl md:text-2xl font-bold tracking-tight text-transparent bg-gradient-to-r from-cyan-200 via-sky-200 to-indigo-200 bg-clip-text"
           >
-            Smart Content Studio
+            {t('header.title')}
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0 }}
@@ -33,11 +36,13 @@ const Header = () => {
             transition={{ delay: 0.1 }}
             className="text-xs md:text-sm text-slate-300"
           >
-            AI-Powered Creative Workspace
+            {t('header.subtitle')}
           </motion.p>
         </div>
         
         <div className="flex items-center gap-2 md:gap-4">
+          <LanguageSelector />
+          
           {user && (
             <div className="relative">
               <button

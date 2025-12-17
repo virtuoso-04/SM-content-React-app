@@ -1,0 +1,17 @@
+# Text Benchmarking Dependencies
+# Install with: pip install -r benchmarks/requirements_text.txt
+
+# Core NLP libraries
+nltk>=3.8.1
+rouge-score>=0.1.2
+textstat>=0.7.3
+
+# Semantic similarity
+sentence-transformers>=2.2.2
+torch>=2.0.0
+
+# HTTP client
+httpx>=0.25.0
+
+# Utilities
+python-dotenv>=1.0.0

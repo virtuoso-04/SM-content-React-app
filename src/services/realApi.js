@@ -41,6 +41,79 @@ const makeApiRequest = async (endpoint, data) => {
   }
 };
 
+// Helper function for streaming API requests using Server-Sent Events
+const makeStreamingRequest = async (endpoint, data, onChunk, onComplete, onError) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      if (response.status === 400) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Invalid request data');
+      } else if (response.status === 500) {
+        throw new Error('AI service is temporarily unavailable. Please try again.');
+      } else if (response.status === 504) {
+        throw new Error('Request timeout. The AI service is taking too long to respond.');
+      } else {
+        throw new Error(`Service error: ${response.status}`);
+      }
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      
+      if (done) break;
+      
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          try {
+            const data = JSON.parse(line.slice(6));
+            
+            if (data.error) {
+              onError(new Error(data.error));
+              return;
+            }
+            
+            if (data.done) {
+              onComplete();
+              return;
+            }
+            
+            if (data.chunk) {
+              onChunk(data.chunk);
+            }
+          } catch (e) {
+            console.warn('Failed to parse SSE data:', line);
+          }
+        }
+      }
+    }
+    
+    onComplete();
+    
+  } catch (error) {
+    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+      onError(new Error('Unable to connect to AI service. Please check your connection.'));
+    } else {
+      onError(error);
+    }
+  }
+};
+
 // Main API function that replaces mockApiCall
 export const apiCall = async (tool, input) => {
   try {
@@ -263,3 +336,93 @@ export const checkBackendHealth = async () => {
 
 // Export the real API call as the default
 export default apiCall;
+
+// Streaming API function for real-time responses
+export const streamApiCall = async (tool, input, onChunk, onComplete, onError) => {
+  try {
+    let endpoint;
+    let requestData;
+
+    // Map frontend tool names to streaming endpoints
+    switch (tool) {
+      case 'summarizer':
+        if (!input || typeof input !== 'string' || input.trim().length === 0) {
+          throw new Error('Please provide text to summarize');
+        }
+        endpoint = '/api/summarize/stream';
+        requestData = { text: input.trim() };
+        break;
+        
+      case 'idea-generator':
+        if (!input || typeof input !== 'string' || input.trim().length === 0) {
+          throw new Error('Please provide a topic or prompt');
+        }
+        endpoint = '/api/generate-ideas/stream';
+        requestData = { topic: input.trim() };
+        break;
+        
+      case 'content-refiner':
+        const { text, instruction } = typeof input === 'object' ? input : { text: input, instruction: '' };
+        
+        if (!text || typeof text !== 'string' || text.trim().length === 0) {
+          throw new Error('Please provide content to refine');
+        }
+        
+        endpoint = '/api/refine-content/stream';
+        requestData = { 
+          text: text.trim(), 
+          instruction: instruction ? instruction.trim() : '' 
+        };
+        break;
+        
+      case 'chatbot': {
+        let payload = { message: '' };
+
+        if (typeof input === 'string') {
+          payload.message = input;
+        } else if (typeof input === 'object' && input !== null) {
+          payload = {
+            message: input.message || '',
+            tone: input.tone,
+            creativity: typeof input.creativity === 'number' ? input.creativity : undefined,
+          };
+        }
+
+        if (!payload.message || payload.message.trim().length === 0) {
+          throw new Error('Please enter a message');
+        }
+
+        endpoint = '/api/chat/stream';
+        requestData = {
+          message: payload.message.trim(),
+          ...(payload.tone ? { tone: payload.tone } : {}),
+          ...(typeof payload.creativity === 'number' ? { creativity: Math.max(0, Math.min(1, payload.creativity)) } : {}),
+        };
+        break;
+      }
+        
+      // Handle GameForge streaming requests
+      case 'gamedev/story':
+      case 'gamedev/dialogue':
+      case 'gamedev/mechanics':
+      case 'gamedev/code':
+      case 'gamedev/explain':
+        if (!input || typeof input !== 'string' || input.trim().length === 0) {
+          throw new Error('Please enter a prompt');
+        }
+        endpoint = `/api/${tool}/stream`;
+        requestData = { prompt: input.trim() };
+        break;
+        
+      default:
+        throw new Error('Streaming not supported for this tool');
+    }
+
+    // Make the streaming request
+    await makeStreamingRequest(endpoint, requestData, onChunk, onComplete, onError);
+    
+  } catch (error) {
+    console.error(`Streaming API call failed for ${tool}:`, error);
+    onError(error);
+  }
+};
