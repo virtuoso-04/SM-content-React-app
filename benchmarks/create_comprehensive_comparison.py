@@ -13,9 +13,18 @@ from datetime import datetime
 import warnings
 warnings.filterwarnings('ignore')
 
-# Set professional style for publication
-plt.style.use('seaborn-v0_8-whitegrid')
-sns.set_palette("Set2")
+# Set clean, minimal style for publication
+plt.rcParams['font.family'] = 'sans-serif'
+plt.rcParams['font.sans-serif'] = ['Arial', 'Helvetica', 'DejaVu Sans']
+plt.rcParams['axes.linewidth'] = 1.2
+plt.rcParams['grid.linewidth'] = 0.5
+plt.rcParams['grid.alpha'] = 0.3
+plt.rcParams['axes.edgecolor'] = '#333333'
+plt.rcParams['axes.labelcolor'] = '#333333'
+plt.rcParams['text.color'] = '#333333'
+plt.rcParams['xtick.color'] = '#333333'
+plt.rcParams['ytick.color'] = '#333333'
+sns.set_style("whitegrid", {'axes.grid': True, 'grid.linestyle': ':', 'grid.linewidth': 0.5})
 
 class ComprehensiveComparison:
     """Generate publication-ready comparison charts"""
@@ -25,14 +34,14 @@ class ComprehensiveComparison:
         self.output_dir = self.results_dir / "reports"
         self.output_dir.mkdir(parents=True, exist_ok=True)
         
-        # Professional color scheme
+        # Clean, professional color scheme
         self.colors = {
-            'gemini': '#4285F4',
-            'grok': '#1DA1F2',
-            'pollinations': '#10B981',
-            'fal': '#8B5CF6',
-            'openai': '#00A67E',
-            'multi-model': '#FF6B6B'
+            'gemini': '#5B8DEE',
+            'grok': '#4ECDC4',
+            'pollinations': '#45B7D1',
+            'fal': '#A78BFA',
+            'openai': '#10B981',
+            'multi-model': '#F472B6'
         }
     
     def load_all_benchmarks(self):
@@ -89,17 +98,18 @@ class ComprehensiveComparison:
         
         all_data = self.load_all_benchmarks()
         
-        # Create figure with multiple subplots
-        fig = plt.figure(figsize=(20, 12))
-        gs = fig.add_gridspec(3, 3, hspace=0.3, wspace=0.3)
+        # Create figure with multiple subplots - cleaner spacing
+        fig = plt.figure(figsize=(20, 12), facecolor='white')
+        gs = fig.add_gridspec(3, 3, hspace=0.4, wspace=0.35, 
+                             left=0.08, right=0.96, top=0.92, bottom=0.06)
         
-        # Main title
-        fig.suptitle('🚀 Multi-Model AI System: Comprehensive Performance Analysis', 
-                     fontsize=22, fontweight='bold', y=0.98)
+        # Main title - cleaner font
+        fig.suptitle('Multi-Model AI System: Comprehensive Performance Analysis', 
+                     fontsize=24, fontweight='600', y=0.97, color='#1a1a1a')
         
-        # Subtitle with date
-        fig.text(0.5, 0.94, f'Benchmark Report - {datetime.now().strftime("%B %d, %Y")}',
-                ha='center', fontsize=14, style='italic', color='#666')
+        # Subtitle with date - more subtle
+        fig.text(0.5, 0.935, f'Benchmark Report — {datetime.now().strftime("%B %d, %Y")}',
+                ha='center', fontsize=13, color='#666666', style='italic')
         
         # === TEXT GENERATION METRICS ===
         ax1 = fig.add_subplot(gs[0, :2])
@@ -130,14 +140,15 @@ class ComprehensiveComparison:
         ax8 = fig.add_subplot(gs[2, 2])
         self.plot_overall_system_score(ax8, all_data)
         
-        # Add footer
-        fig.text(0.5, 0.02, 
-                '📊 Smart Content Studio | Multi-Model AI Router Performance Benchmarks',
-                ha='center', fontsize=11, style='italic', color='#888')
+        # Add footer - more minimal
+        fig.text(0.5, 0.015, 
+                'Smart Content Studio  •  Multi-Model AI Router Performance Benchmarks',
+                ha='center', fontsize=10, color='#999999')
         
-        # Save
+        # Save with high quality
         output_file = self.output_dir / "comprehensive_comparison.png"
-        plt.savefig(output_file, dpi=300, bbox_inches='tight', facecolor='white')
+        plt.savefig(output_file, dpi=300, bbox_inches='tight', facecolor='white', 
+                   edgecolor='none', pad_inches=0.2)
         print(f"✅ Saved: {output_file}")
         plt.close()
         
@@ -173,30 +184,33 @@ class ComprehensiveComparison:
                 }
         
         x = np.arange(len(providers))
-        width = 0.25
+        width = 0.26
         
-        colors = ['#4285F4', '#FF6B6B', '#10B981']
+        colors = ['#5B8DEE', '#45B7D1', '#10B981']
         
         for idx, (metric_name, values) in enumerate(metrics.items()):
             offset = width * (idx - 1)
             bars = ax.bar(x + offset, values, width, label=metric_name, 
-                         color=colors[idx], alpha=0.8, edgecolor='black', linewidth=1)
+                         color=colors[idx], alpha=0.85, edgecolor='white', linewidth=2)
             
-            # Add value labels
+            # Add value labels - cleaner
             for bar in bars:
                 height = bar.get_height()
-                ax.text(bar.get_x() + bar.get_width()/2., height,
-                       f'{height:.1f}', ha='center', va='bottom', 
-                       fontsize=8, fontweight='bold')
+                ax.text(bar.get_x() + bar.get_width()/2., height + 1.5,
+                       f'{height:.0f}', ha='center', va='bottom', 
+                       fontsize=9, fontweight='500', color='#333')
         
-        ax.set_xlabel('Provider', fontweight='bold', fontsize=11)
-        ax.set_ylabel('Score (%)', fontweight='bold', fontsize=11)
-        ax.set_title('📝 Text Generation Quality Metrics', fontsize=13, fontweight='bold', pad=10)
+        ax.set_xlabel('Provider', fontweight='500', fontsize=11, color='#333')
+        ax.set_ylabel('Score (%)', fontweight='500', fontsize=11, color='#333')
+        ax.set_title('Text Generation Quality Metrics', fontsize=13, fontweight='600', pad=12, color='#1a1a1a')
         ax.set_xticks(x)
-        ax.set_xticklabels(providers, fontsize=10)
-        ax.legend(loc='upper left', fontsize=9)
-        ax.set_ylim(0, 100)
-        ax.grid(axis='y', alpha=0.3, linestyle='--')
+        ax.set_xticklabels(providers, fontsize=10, color='#333')
+        ax.legend(loc='upper left', fontsize=9, frameon=True, fancybox=False, 
+                 edgecolor='#ddd', framealpha=0.95)
+        ax.set_ylim(0, 105)
+        ax.grid(axis='y', alpha=0.2, linestyle=':', linewidth=0.8)
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
     
     def plot_image_success_rate(self, ax, image_data):
         """Plot image generation success rates"""
@@ -225,25 +239,27 @@ class ComprehensiveComparison:
         colors_list = [self.colors.get(p.lower(), '#95A5A6') for p in providers]
         
         bars = ax.bar(providers, success_rates, color=colors_list, alpha=0.85, 
-                     edgecolor='black', linewidth=2)
+                     edgecolor='white', linewidth=2)
         
-        # Highlight best
+        # Highlight best with subtle glow
         if success_rates:
             best_idx = success_rates.index(max(success_rates))
-            bars[best_idx].set_edgecolor('gold')
-            bars[best_idx].set_linewidth(3)
+            bars[best_idx].set_edgecolor('#FFD700')
+            bars[best_idx].set_linewidth(2.5)
         
-        # Add value labels
+        # Add value labels - cleaner
         for bar, val in zip(bars, success_rates):
-            ax.text(bar.get_x() + bar.get_width()/2., bar.get_height(),
+            ax.text(bar.get_x() + bar.get_width()/2., bar.get_height() + 2,
                    f'{val:.1f}%', ha='center', va='bottom', 
-                   fontsize=10, fontweight='bold')
+                   fontsize=10, fontweight='500', color='#333')
         
-        ax.set_ylabel('Success Rate (%)', fontweight='bold', fontsize=11)
-        ax.set_title('🎨 Image Generation\nSuccess Rate', fontsize=13, fontweight='bold', pad=10)
+        ax.set_ylabel('Success Rate (%)', fontweight='500', fontsize=11, color='#333')
+        ax.set_title('Image Generation Success Rate', fontsize=13, fontweight='600', pad=12, color='#1a1a1a')
         ax.set_ylim(0, 110)
-        ax.grid(axis='y', alpha=0.3, linestyle='--')
-        ax.tick_params(axis='x', labelsize=9)
+        ax.grid(axis='y', alpha=0.2, linestyle=':', linewidth=0.8)
+        ax.tick_params(axis='x', labelsize=9, colors='#333')
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
     
     def plot_text_bleu_scores(self, ax, text_data):
         """Plot BLEU scores for text generation"""
@@ -455,9 +471,9 @@ class ComprehensiveComparison:
         
         all_data = self.load_all_benchmarks()
         
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
-        fig.suptitle('📊 Text vs Image Generation: Quality Benchmark Comparison', 
-                     fontsize=18, fontweight='bold', y=0.98)
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6), facecolor='white')
+        fig.suptitle('Text vs Image Generation: Quality Benchmark Comparison', 
+                     fontsize=20, fontweight='600', y=0.96, color='#1a1a1a')
         
         # LEFT: Text Generation Summary
         if all_data['text'] and 'aggregated' in all_data['text'][-1]:
@@ -483,27 +499,30 @@ class ComprehensiveComparison:
         speed_scores = [m['Speed'] for m in metrics_data]
         
         x = np.arange(len(providers_text))
-        width = 0.35
+        width = 0.36
         
         bars1 = ax1.bar(x - width/2, quality_scores, width, label='Quality Score',
-                       color='#4285F4', alpha=0.85, edgecolor='black', linewidth=1.5)
+                       color='#5B8DEE', alpha=0.85, edgecolor='white', linewidth=2)
         bars2 = ax1.bar(x + width/2, speed_scores, width, label='Speed Score',
-                       color='#FF6B6B', alpha=0.85, edgecolor='black', linewidth=1.5)
+                       color='#45B7D1', alpha=0.85, edgecolor='white', linewidth=2)
         
         for bars in [bars1, bars2]:
             for bar in bars:
                 height = bar.get_height()
-                ax1.text(bar.get_x() + bar.get_width()/2., height,
+                ax1.text(bar.get_x() + bar.get_width()/2., height + 2,
                         f'{height:.0f}', ha='center', va='bottom', 
-                        fontsize=10, fontweight='bold')
+                        fontsize=10, fontweight='500', color='#333')
         
-        ax1.set_ylabel('Score (%)', fontweight='bold', fontsize=12)
-        ax1.set_title('📝 Text Generation Performance', fontsize=14, fontweight='bold', pad=15)
+        ax1.set_ylabel('Score (%)', fontweight='500', fontsize=12, color='#333')
+        ax1.set_title('Text Generation Performance', fontsize=15, fontweight='600', pad=15, color='#1a1a1a')
         ax1.set_xticks(x)
-        ax1.set_xticklabels(providers_text, fontsize=11)
-        ax1.legend(fontsize=11, loc='upper left')
+        ax1.set_xticklabels(providers_text, fontsize=11, color='#333')
+        ax1.legend(fontsize=11, loc='upper left', frameon=True, fancybox=False, 
+                  edgecolor='#ddd', framealpha=0.95)
         ax1.set_ylim(0, 110)
-        ax1.grid(axis='y', alpha=0.3, linestyle='--')
+        ax1.grid(axis='y', alpha=0.2, linestyle=':', linewidth=0.8)
+        ax1.spines['top'].set_visible(False)
+        ax1.spines['right'].set_visible(False)
         
         # RIGHT: Image Generation Summary
         if all_data['image']:
@@ -534,30 +553,33 @@ class ComprehensiveComparison:
         x2 = np.arange(len(providers_image))
         
         bars3 = ax2.bar(x2, success_rates, color='#10B981', alpha=0.85,
-                       edgecolor='black', linewidth=2, label='Success Rate')
+                       edgecolor='white', linewidth=2, label='Success Rate')
         
-        # Highlight best
+        # Highlight best with subtle glow
         if success_rates:
             best_idx = success_rates.index(max(success_rates))
-            bars3[best_idx].set_edgecolor('gold')
-            bars3[best_idx].set_linewidth(3)
+            bars3[best_idx].set_edgecolor('#FFD700')
+            bars3[best_idx].set_linewidth(2.5)
         
         for bar, rate, count in zip(bars3, success_rates, counts):
-            ax2.text(bar.get_x() + bar.get_width()/2., bar.get_height(),
+            ax2.text(bar.get_x() + bar.get_width()/2., bar.get_height() + 2,
                     f'{rate:.1f}%\n({count} images)', ha='center', va='bottom',
-                    fontsize=10, fontweight='bold')
+                    fontsize=10, fontweight='500', color='#333')
         
-        ax2.set_ylabel('Success Rate (%)', fontweight='bold', fontsize=12)
-        ax2.set_title('🎨 Image Generation Performance', fontsize=14, fontweight='bold', pad=15)
+        ax2.set_ylabel('Success Rate (%)', fontweight='500', fontsize=12, color='#333')
+        ax2.set_title('Image Generation Performance', fontsize=15, fontweight='600', pad=15, color='#1a1a1a')
         ax2.set_xticks(x2)
-        ax2.set_xticklabels(providers_image, fontsize=11)
+        ax2.set_xticklabels(providers_image, fontsize=11, color='#333')
         ax2.set_ylim(0, 110)
-        ax2.grid(axis='y', alpha=0.3, linestyle='--')
+        ax2.grid(axis='y', alpha=0.2, linestyle=':', linewidth=0.8)
+        ax2.spines['top'].set_visible(False)
+        ax2.spines['right'].set_visible(False)
         
-        plt.tight_layout()
+        plt.tight_layout(pad=2.0)
         
         output_file = self.output_dir / "side_by_side_comparison.png"
-        plt.savefig(output_file, dpi=300, bbox_inches='tight', facecolor='white')
+        plt.savefig(output_file, dpi=300, bbox_inches='tight', facecolor='white', 
+                   edgecolor='none', pad_inches=0.2)
         print(f"✅ Saved: {output_file}")
         plt.close()
         
