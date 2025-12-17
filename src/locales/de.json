@@ -1,0 +1,144 @@
+{
+  "app": {
+    "title": "Smart Content Studio",
+    "subtitle": "KI-gestützte Content-Erstellungstools"
+  },
+  "header": {
+    "title": "Smart Content Studio",
+    "subtitle": "KI-gestützte Content-Erstellungstools"
+  },
+  "sidebar": {
+    "title": "KI-Tools",
+    "summarizer": "Zusammenfasser",
+    "ideaGenerator": "Ideengenerator",
+    "contentRefiner": "Content-Verfeinerer",
+    "imageGenerator": "Bildgenerator",
+    "chatbot": "KI-Chatbot",
+    "gameForge": "GameForge"
+  },
+  "tools": {
+    "summarizer": {
+      "title": "KI-Zusammenfasser",
+      "subtitle": "Verwandeln Sie lange Inhalte in prägnante Zusammenfassungen",
+      "placeholder": "Fügen Sie Ihren Text hier ein, um eine Zusammenfassung zu erstellen...",
+      "button": "Zusammenfassung Erstellen",
+      "loading": "Analysiere und fasse zusammen...",
+      "error": "Fehler beim Erstellen der Zusammenfassung"
+    },
+    "ideaGenerator": {
+      "title": "Ideengenerator",
+      "subtitle": "Wecken Sie Kreativität mit KI-gestützten Ideen",
+      "placeholder": "Geben Sie ein Thema oder eine Aufforderung ein...",
+      "button": "Ideen Generieren",
+      "loading": "Generiere kreative Ideen...",
+      "error": "Fehler beim Generieren von Ideen"
+    },
+    "contentRefiner": {
+      "title": "Content-Verfeinerer",
+      "subtitle": "Polieren und perfektionieren Sie Ihren Inhalt",
+      "contentPlaceholder": "Fügen Sie Ihren Inhalt hier ein...",
+      "instructionPlaceholder": "Optional: Fügen Sie spezifische Verfeinerungsanweisungen hinzu...",
+      "button": "Inhalt Verfeinern",
+      "loading": "Verfeinere Ihren Inhalt...",
+      "error": "Fehler beim Verfeinern des Inhalts"
+    },
+    "imageGenerator": {
+      "title": "Bildgenerator",
+      "subtitle": "Erstellen Sie atemberaubende Bilder mit KI",
+      "promptPlaceholder": "Beschreiben Sie das Bild, das Sie erstellen möchten...",
+      "stylePlaceholder": "Optional: Geben Sie einen Kunststil an...",
+      "aspectRatio": "Seitenverhältnis",
+      "quality": "Qualität",
+      "provider": "Anbieter",
+      "button": "Bild Generieren",
+      "loading": "Erstelle Ihr Bild...",
+      "error": "Fehler beim Generieren des Bildes",
+      "qualities": {
+        "draft": "Entwurf (Schnell)",
+        "balanced": "Ausgewogen",
+        "detailed": "Detailliert",
+        "premium": "Premium (Beste)"
+      },
+      "aspectRatios": {
+        "square": "Quadrat (1:1)",
+        "portrait": "Hochformat (9:16)",
+        "landscape": "Querformat (16:9)"
+      },
+      "providers": {
+        "auto": "Automatisch auswählen",
+        "pollinations": "Pollinations",
+        "fal": "Fal.ai"
+      }
+    },
+    "chatbot": {
+      "title": "KI-Chatbot",
+      "subtitle": "Unterhalten Sie sich mit KI",
+      "placeholder": "Geben Sie hier Ihre Nachricht ein...",
+      "button": "Nachricht Senden",
+      "loading": "KI denkt nach...",
+      "error": "Fehler beim Senden der Nachricht",
+      "tone": "Gesprächston",
+      "creativity": "Kreativitätsstufe",
+      "tones": {
+        "friendly": "Freundlich",
+        "professional": "Professionell",
+        "playful": "Verspielt",
+        "expert": "Experte"
+      }
+    },
+    "gameForge": {
+      "title": "GameForge",
+      "subtitle": "KI-gestützter Spieleentwicklungsassistent",
+      "placeholder": "Beschreiben Sie Ihre Spielidee oder stellen Sie eine Frage...",
+      "button": "Generieren",
+      "loading": "Erstelle Spielinhalte...",
+      "error": "Fehler beim Generieren von Inhalten",
+      "modes": {
+        "story": "Geschichte & Lore",
+        "dialogue": "Dialog",
+        "mechanics": "Spielmechaniken",
+        "code": "Code-Snippets",
+        "explain": "Konzepterklärung"
+      }
+    }
+  },
+  "common": {
+    "copy": "Kopieren",
+    "copied": "Kopiert!",
+    "download": "Herunterladen",
+    "clear": "Löschen",
+    "close": "Schließen",
+    "loading": "Laden...",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "share": "Teilen",
+    "back": "Zurück",
+    "next": "Weiter",
+    "previous": "Zurück",
+    "submit": "Senden",
+    "reset": "Zurücksetzen",
+    "search": "Suchen",
+    "filter": "Filtern",
+    "sort": "Sortieren",
+    "select": "Auswählen",
+    "selectLanguage": "Sprache Auswählen",
+    "selectTemplate": "Vorlage Verwenden"
+  },
+  "errors": {
+    "general": "Etwas ist schief gelaufen. Bitte versuchen Sie es erneut.",
+    "network": "Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung.",
+    "timeout": "Zeitüberschreitung. Bitte versuchen Sie es erneut.",
+    "invalidInput": "Ungültige Eingabe. Bitte überprüfen Sie Ihre Daten.",
+    "emptyInput": "Bitte geben Sie Text ein.",
+    "apiError": "API-Dienstfehler. Bitte versuchen Sie es später erneut."
+  },
+  "templates": {
+    "title": "Vorlagen",
+    "selectPrompt": "Wählen Sie eine Vorlage, um loszulegen",
+    "custom": "Benutzerdefinierte Eingabeaufforderung"
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "app": {
+    "title": "スマートコンテンツスタジオ",
+    "subtitle": "AI搭載コンテンツ作成ツール"
+  },
+  "header": {
+    "title": "スマートコンテンツスタジオ",
+    "subtitle": "AI搭載コンテンツ作成ツール"
+  },
+  "sidebar": {
+    "title": "AIツール",
+    "summarizer": "要約ツール",
+    "ideaGenerator": "アイデア生成",
+    "contentRefiner": "コンテンツ改善",
+    "imageGenerator": "画像生成",
+    "chatbot": "AIチャットボット",
+    "gameForge": "ゲームフォージ"
+  },
+  "tools": {
+    "summarizer": {
+      "title": "AI要約ツール",
+      "subtitle": "長いコンテンツを簡潔な要約に変換",
+      "placeholder": "要約を生成するためにテキストをここに貼り付けてください...",
+      "button": "要約を生成",
+      "loading": "分析と要約中...",
+      "error": "要約の生成に失敗しました"
+    },
+    "ideaGenerator": {
+      "title": "アイデア生成",
+      "subtitle": "AI搭載アイデアで創造性を刺激",
+      "placeholder": "トピックまたはプロンプトを入力...",
+      "button": "アイデアを生成",
+      "loading": "創造的なアイデアを生成中...",
+      "error": "アイデアの生成に失敗しました"
+    },
+    "contentRefiner": {
+      "title": "コンテンツ改善",
+      "subtitle": "コンテンツを磨き上げて完璧に",
+      "contentPlaceholder": "コンテンツをここに貼り付けてください...",
+      "instructionPlaceholder": "オプション：特定の改善指示を追加...",
+      "button": "コンテンツを改善",
+      "loading": "コンテンツを改善中...",
+      "error": "コンテンツの改善に失敗しました"
+    },
+    "imageGenerator": {
+      "title": "画像生成",
+      "subtitle": "AIで素晴らしいビジュアルを作成",
+      "promptPlaceholder": "作成したい画像を説明してください...",
+      "stylePlaceholder": "オプション：アートスタイルを指定...",
+      "aspectRatio": "アスペクト比",
+      "quality": "品質",
+      "provider": "プロバイダー",
+      "button": "画像を生成",
+      "loading": "画像を作成中...",
+      "error": "画像の生成に失敗しました",
+      "qualities": {
+        "draft": "下書き（高速）",
+        "balanced": "バランス",
+        "detailed": "詳細",
+        "premium": "プレミアム（最高）"
+      },
+      "aspectRatios": {
+        "square": "正方形（1:1）",
+        "portrait": "縦長（9:16）",
+        "landscape": "横長（16:9）"
+      },
+      "providers": {
+        "auto": "自動選択",
+        "pollinations": "Pollinations",
+        "fal": "Fal.ai"
+      }
+    },
+    "chatbot": {
+      "title": "AIチャットボット",
+      "subtitle": "AIと会話する",
+      "placeholder": "メッセージをここに入力...",
+      "button": "メッセージを送信",
+      "loading": "AIが考え中...",
+      "error": "メッセージの送信に失敗しました",
+      "tone": "会話のトーン",
+      "creativity": "創造性レベル",
+      "tones": {
+        "friendly": "フレンドリー",
+        "professional": "プロフェッショナル",
+        "playful": "遊び心",
+        "expert": "エキスパート"
+      }
+    },
+    "gameForge": {
+      "title": "ゲームフォージ",
+      "subtitle": "AI搭載ゲーム開発アシスタント",
+      "placeholder": "ゲームのアイデアを説明するか質問してください...",
+      "button": "生成",
+      "loading": "ゲームコンテンツを作成中...",
+      "error": "コンテンツの生成に失敗しました",
+      "modes": {
+        "story": "ストーリーと伝説",
+        "dialogue": "対話",
+        "mechanics": "ゲームメカニクス",
+        "code": "コードスニペット",
+        "explain": "コンセプト説明"
+      }
+    }
+  },
+  "common": {
+    "copy": "コピー",
+    "copied": "コピーしました！",
+    "download": "ダウンロード",
+    "clear": "クリア",
+    "close": "閉じる",
+    "loading": "読み込み中...",
+    "error": "エラー",
+    "success": "成功",
+    "cancel": "キャンセル",
+    "save": "保存",
+    "delete": "削除",
+    "edit": "編集",
+    "share": "共有",
+    "back": "戻る",
+    "next": "次へ",
+    "previous": "前へ",
+    "submit": "送信",
+    "reset": "リセット",
+    "search": "検索",
+    "filter": "フィルター",
+    "sort": "並べ替え",
+    "select": "選択",
+    "selectLanguage": "言語を選択",
+    "selectTemplate": "テンプレートを使用"
+  },
+  "errors": {
+    "general": "問題が発生しました。もう一度お試しください。",
+    "network": "ネットワークエラー。接続を確認してください。",
+    "timeout": "リクエストがタイムアウトしました。もう一度お試しください。",
+    "invalidInput": "無効な入力です。データを確認してください。",
+    "emptyInput": "テキストを入力してください。",
+    "apiError": "APIサービスエラー。後でもう一度お試しください。"
+  },
+  "templates": {
+    "title": "テンプレート",
+    "selectPrompt": "開始するテンプレートを選択",
+    "custom": "カスタムプロンプト"
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "app": {
+    "title": "Estudio de Contenido Inteligente",
+    "subtitle": "Herramientas de Creación de Contenido con IA"
+  },
+  "header": {
+    "title": "Estudio de Contenido Inteligente",
+    "subtitle": "Herramientas de Creación de Contenido con IA"
+  },
+  "sidebar": {
+    "title": "Herramientas de IA",
+    "summarizer": "Resumidor",
+    "ideaGenerator": "Generador de Ideas",
+    "contentRefiner": "Refinador de Contenido",
+    "imageGenerator": "Generador de Imágenes",
+    "chatbot": "Chatbot de IA",
+    "gameForge": "GameForge"
+  },
+  "tools": {
+    "summarizer": {
+      "title": "Resumidor de IA",
+      "subtitle": "Transforma contenido extenso en resúmenes concisos",
+      "placeholder": "Pega tu texto aquí para generar un resumen...",
+      "button": "Generar Resumen",
+      "loading": "Analizando y resumiendo...",
+      "error": "Error al generar resumen"
+    },
+    "ideaGenerator": {
+      "title": "Generador de Ideas",
+      "subtitle": "Despierta la creatividad con ideas impulsadas por IA",
+      "placeholder": "Ingresa un tema o indicación...",
+      "button": "Generar Ideas",
+      "loading": "Generando ideas creativas...",
+      "error": "Error al generar ideas"
+    },
+    "contentRefiner": {
+      "title": "Refinador de Contenido",
+      "subtitle": "Pule y perfecciona tu contenido",
+      "contentPlaceholder": "Pega tu contenido aquí...",
+      "instructionPlaceholder": "Opcional: Agrega instrucciones específicas de refinamiento...",
+      "button": "Refinar Contenido",
+      "loading": "Refinando tu contenido...",
+      "error": "Error al refinar contenido"
+    },
+    "imageGenerator": {
+      "title": "Generador de Imágenes",
+      "subtitle": "Crea imágenes impresionantes con IA",
+      "promptPlaceholder": "Describe la imagen que quieres crear...",
+      "stylePlaceholder": "Opcional: Especifica un estilo de arte...",
+      "aspectRatio": "Relación de Aspecto",
+      "quality": "Calidad",
+      "provider": "Proveedor",
+      "button": "Generar Imagen",
+      "loading": "Creando tu imagen...",
+      "error": "Error al generar imagen",
+      "qualities": {
+        "draft": "Borrador (Rápido)",
+        "balanced": "Equilibrado",
+        "detailed": "Detallado",
+        "premium": "Premium (Mejor)"
+      },
+      "aspectRatios": {
+        "square": "Cuadrado (1:1)",
+        "portrait": "Retrato (9:16)",
+        "landscape": "Paisaje (16:9)"
+      },
+      "providers": {
+        "auto": "Auto-seleccionar",
+        "pollinations": "Pollinations",
+        "fal": "Fal.ai"
+      }
+    },
+    "chatbot": {
+      "title": "Chatbot de IA",
+      "subtitle": "Conversa con IA",
+      "placeholder": "Escribe tu mensaje aquí...",
+      "button": "Enviar Mensaje",
+      "loading": "La IA está pensando...",
+      "error": "Error al enviar mensaje",
+      "tone": "Tono de Conversación",
+      "creativity": "Nivel de Creatividad",
+      "tones": {
+        "friendly": "Amigable",
+        "professional": "Profesional",
+        "playful": "Juguetón",
+        "expert": "Experto"
+      }
+    },
+    "gameForge": {
+      "title": "GameForge",
+      "subtitle": "Asistente de desarrollo de juegos con IA",
+      "placeholder": "Describe tu idea de juego o haz una pregunta...",
+      "button": "Generar",
+      "loading": "Creando contenido de juego...",
+      "error": "Error al generar contenido",
+      "modes": {
+        "story": "Historia y Lore",
+        "dialogue": "Diálogo",
+        "mechanics": "Mecánicas de Juego",
+        "code": "Fragmentos de Código",
+        "explain": "Explicador de Conceptos"
+      }
+    }
+  },
+  "common": {
+    "copy": "Copiar",
+    "copied": "¡Copiado!",
+    "download": "Descargar",
+    "clear": "Limpiar",
+    "close": "Cerrar",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "share": "Compartir",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "submit": "Enviar",
+    "reset": "Restablecer",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "select": "Seleccionar",
+    "selectLanguage": "Seleccionar Idioma",
+    "selectTemplate": "Usar Plantilla"
+  },
+  "errors": {
+    "general": "Algo salió mal. Por favor, inténtalo de nuevo.",
+    "network": "Error de red. Por favor, verifica tu conexión.",
+    "timeout": "Tiempo de espera agotado. Por favor, inténtalo de nuevo.",
+    "invalidInput": "Entrada inválida. Por favor, verifica tus datos.",
+    "emptyInput": "Por favor, ingresa algún texto.",
+    "apiError": "Error del servicio API. Por favor, inténtalo más tarde."
+  },
+  "templates": {
+    "title": "Plantillas",
+    "selectPrompt": "Selecciona una plantilla para comenzar",
+    "custom": "Indicación Personalizada"
+  }
+}

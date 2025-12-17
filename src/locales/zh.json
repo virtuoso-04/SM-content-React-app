@@ -1,0 +1,144 @@
+{
+  "app": {
+    "title": "智能内容工作室",
+    "subtitle": "AI驱动的内容创作工具"
+  },
+  "header": {
+    "title": "智能内容工作室",
+    "subtitle": "AI驱动的内容创作工具"
+  },
+  "sidebar": {
+    "title": "AI工具",
+    "summarizer": "摘要器",
+    "ideaGenerator": "创意生成器",
+    "contentRefiner": "内容优化器",
+    "imageGenerator": "图像生成器",
+    "chatbot": "AI聊天机器人",
+    "gameForge": "游戏工坊"
+  },
+  "tools": {
+    "summarizer": {
+      "title": "AI摘要器",
+      "subtitle": "将长篇内容转换为简洁摘要",
+      "placeholder": "在此粘贴您的文本以生成摘要...",
+      "button": "生成摘要",
+      "loading": "正在分析和摘要...",
+      "error": "生成摘要失败"
+    },
+    "ideaGenerator": {
+      "title": "创意生成器",
+      "subtitle": "用AI驱动的创意激发创造力",
+      "placeholder": "输入主题或提示...",
+      "button": "生成创意",
+      "loading": "正在生成创意...",
+      "error": "生成创意失败"
+    },
+    "contentRefiner": {
+      "title": "内容优化器",
+      "subtitle": "润色和完善您的内容",
+      "contentPlaceholder": "在此粘贴您的内容...",
+      "instructionPlaceholder": "可选：添加特定的优化说明...",
+      "button": "优化内容",
+      "loading": "正在优化您的内容...",
+      "error": "优化内容失败"
+    },
+    "imageGenerator": {
+      "title": "图像生成器",
+      "subtitle": "使用AI创建令人惊叹的视觉效果",
+      "promptPlaceholder": "描述您想要创建的图像...",
+      "stylePlaceholder": "可选：指定艺术风格...",
+      "aspectRatio": "宽高比",
+      "quality": "质量",
+      "provider": "提供商",
+      "button": "生成图像",
+      "loading": "正在创建您的图像...",
+      "error": "生成图像失败",
+      "qualities": {
+        "draft": "草稿（快速）",
+        "balanced": "平衡",
+        "detailed": "详细",
+        "premium": "高级（最佳）"
+      },
+      "aspectRatios": {
+        "square": "正方形（1:1）",
+        "portrait": "纵向（9:16）",
+        "landscape": "横向（16:9）"
+      },
+      "providers": {
+        "auto": "自动选择",
+        "pollinations": "Pollinations",
+        "fal": "Fal.ai"
+      }
+    },
+    "chatbot": {
+      "title": "AI聊天机器人",
+      "subtitle": "与AI对话",
+      "placeholder": "在此输入您的消息...",
+      "button": "发送消息",
+      "loading": "AI正在思考...",
+      "error": "发送消息失败",
+      "tone": "对话语调",
+      "creativity": "创造力级别",
+      "tones": {
+        "friendly": "友好",
+        "professional": "专业",
+        "playful": "俏皮",
+        "expert": "专家"
+      }
+    },
+    "gameForge": {
+      "title": "游戏工坊",
+      "subtitle": "AI驱动的游戏开发助手",
+      "placeholder": "描述您的游戏想法或提出问题...",
+      "button": "生成",
+      "loading": "正在创建游戏内容...",
+      "error": "生成内容失败",
+      "modes": {
+        "story": "故事与传说",
+        "dialogue": "对话",
+        "mechanics": "游戏机制",
+        "code": "代码片段",
+        "explain": "概念解释器"
+      }
+    }
+  },
+  "common": {
+    "copy": "复制",
+    "copied": "已复制！",
+    "download": "下载",
+    "clear": "清除",
+    "close": "关闭",
+    "loading": "加载中...",
+    "error": "错误",
+    "success": "成功",
+    "cancel": "取消",
+    "save": "保存",
+    "delete": "删除",
+    "edit": "编辑",
+    "share": "分享",
+    "back": "返回",
+    "next": "下一个",
+    "previous": "上一个",
+    "submit": "提交",
+    "reset": "重置",
+    "search": "搜索",
+    "filter": "筛选",
+    "sort": "排序",
+    "select": "选择",
+    "selectLanguage": "选择语言",
+    "selectTemplate": "使用模板"
+  },
+  "errors": {
+    "general": "出了点问题。请重试。",
+    "network": "网络错误。请检查您的连接。",
+    "timeout": "请求超时。请重试。",
+    "invalidInput": "无效输入。请检查您的数据。",
+    "emptyInput": "请输入一些文本。",
+    "apiError": "API服务错误。请稍后重试。"
+  },
+  "templates": {
+    "title": "模板",
+    "selectPrompt": "选择一个模板开始",
+    "custom": "自定义提示"
+  }
+}
